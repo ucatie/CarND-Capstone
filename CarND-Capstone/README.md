@@ -44,4 +44,20 @@ chmod +x ros_test.x86_64
 ./ros_test.x86_64
 ```
 
+### way point updater
+publishing final_waypoints
+
+### DBWNode
+sending throttle command
+
+###team members
+
+| Name                | Email                  | Slack | TimeZone |
+|:-------------------:|:----------------------:|:-----:|:--------:|
+| Frank Schneider     | frank@schneider-ip.de  |@fsc   | UTC+2   |
+| Sebastian Nietardt  | sebastian.nietardt@googlemail.com | @sebastian_n | UTC+2 |
+| Sebastiano Di Paola | sebastiano.dipaola@gmail.com | @abes975	| UTC+2 |
+| Juan Pedro Hidalgo  | juanpedro.hidalgo@hotmail.com | @jphidalgo | UTC+2 |
+| Ramiz Raja          | informramiz@gmail.com | @ramiz | UTC+5 |
+
 
