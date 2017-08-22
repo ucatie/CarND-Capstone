@@ -44,13 +44,13 @@ class WaypointUpdater(object):
         self.final_waypoints_pub = rospy.Publisher('final_waypoints', Lane, queue_size=1)
 
         # TODO: Add other member variables you need below
-        
+
         self.lane = None
-        
-        self.current_pose = None
-        
+
+        #self.current_pose = None
+
         self.traffic_waypoint = None
-        
+
         rospy.loginfo('WaypointUpdater started')
 
         rospy.spin()
@@ -66,128 +66,60 @@ class WaypointUpdater(object):
             rate.sleep()
 
     def get_yaw(self, pose1):
-        
         quaternion = (
             pose1.orientation.x,
             pose1.orientation.y,
             pose1.orientation.z,
             pose1.orientation.w)
-        euler = tf.transformations.euler_from_quaternion(quaternion)
-        roll = euler[0]
-        pitch = euler[1]
-        yaw = euler[2]    
+        roll, pitch, yaw = tf.transformations.euler_from_quaternion(quaternion)
         return yaw
-        
+
     def get_direction(self, pose1, pose2):
-        return math.atan2((pose2.position.y - pose1.position.y) , (pose2.position.x - pose1.position.x))
-        
+        return math.atan2(pose2.position.y - pose1.position.y, pose2.position.x - pose1.position.x)
+
     def is_infront(self, wp_pose1, pose2):
         direction = self.get_direction(wp_pose1, pose2)
-        
-        return direction < math.pi*0.5 and direction > (-math.pi*0.5) 
 
-        
+        return direction < math.pi * 0.5 and direction > (-math.pi * 0.5)
+
+
     def pose_cb(self, pose):
-        self.current_pose = pose
+        rospy.loginfo("Pose callback called!!!!")
+        current_pose = pose
         yaw = self.get_yaw(pose.pose)
-        
+
         if self.lane is None:
+            rospy.loginfo("XXXX ARRRGHHHHHHHHH lane is NONE!!!")
             return
-        
+
         final_waypoints = []
-        
-        (start,dir) = self.get_next_waypoint(self.lane.waypoints, self.current_pose)
-        
-        rospy.loginfo('wp %s dir %s',start,dir)
-        next_wp = start
 
-        dist = self.distance_pose_to_pose(self.lane.waypoints[next_wp].pose.pose, self.current_pose.pose)
-        dir = self.get_direction(self.lane.waypoints[next_wp].pose.pose, self.current_pose.pose)
-        inFront = self.is_infront(self.lane.waypoints[next_wp].pose.pose, self.current_pose.pose)
-        rospy.loginfo("wp %s dist: %s dir: %s ahead: %s",next_wp,dist,dir,inFront)
-        
+        start_wp, distance = self.closest_waypoint(current_pose.pose, self.lane.waypoints)
+
+        waypoints_len = len(self.lane.waypoints)
+        rospy.loginfo('Closest waypoint calculated index %s distance %s', start_wp, distance)
+
+
         for wp in range(LOOKAHEAD_WPS):
-
-            if dir == True:
-                next_wp = next_wp + 1 
-            else:
-                next_wp = next_wp - 1 
-                
-            p = Waypoint(self.lane.waypoints[next_wp].pose, self.lane.waypoints[next_wp].twist)
-            #set a default speed in 
-            p.twist.twist.linear.x = 1          
+            p = Waypoint(self.lane.waypoints[(start_wp + wp) % waypoints_len].pose, self.lane.waypoints[(start_wp + wp) % waypoints_len].twist)
+            #set a speed and play a bit around...
+            p.twist.twist.linear.x = 0.5
             final_waypoints.append(p)
-        
-#        if self.traffic_waypoint is not None and self.current_pose is not None: 
-#            distance = distance_pose_to_pose(traffic_waypoint.pose, current_pose)            
-#            direction = get_direction(self.current_pose, self.traffic_waypoint.pose)
-            
-#            is_in_front = direction < math.pi*0.5 and direction > (-math.pi*0.5) 
-#            if is_in_front and distance < 30:
-#                rospy.loginfo('need to stop. distance:',distance)
-#                decelerate(waypoints);
-#            if not is_in_front:
-#                self.traffic_waypoint = None
-#                rospy.logdebug('traffic waypoint passed')
-                
-            
-        rospy.loginfo('published final_waypoints')
-        self.publish(final_waypoints)
-        
-#        rospy.loginfo('Current pose received:%s yaw: %s',pose, yaw)
 
-    #return the index and a flag to increase the index for way points ahead
-    def get_next_waypoint(self, waypoints, position):
-        
-        next_wp = -1
-        for wp in range(len(waypoints)-1):
-            inFront1 = self.is_infront(waypoints[wp].pose.pose, position.pose)
-            inFront2 = self.is_infront(waypoints[wp+1].pose.pose, position.pose)
-            
-#            rospy.loginfo('%s %s %s',wp, inFront1, inFront2)
-            
-            if inFront1 and not inFront2:
-               return (wp,False)
-           
-            if inFront2 and not inFront1:
-               return (wp+1,True)
-        
+        rospy.loginfo('Finally published final_waypoints')
+        self.publish(final_waypoints)
+
+
     def waypoints_cb(self, lane):
         rospy.loginfo('Waypoints received %s',len(lane.waypoints))
-        
         self.lane = lane
-        
-              
-    def accelerate(self, waypoints):
-        rospy.logdebug('accelerate')
-        last = waypoints[-1]
-        last.twist.twist.linear.x = 0.
-        for wp in waypoints[:-1][::-1]:
-            dist = self.distance(wp.pose.pose.position, last.pose.pose.position)            
-            vel = math.sqrt(2 * MAX_ACCEL * dist) * 3.6
-            if vel > 1.:
-                vel = 0.
-            wp.twist.twist.linear.x = min(vel, wp.twist.twist.linear.x)
-            rospy.logdebug('accelerate:',wp.twist.twist.linear.x)
-        return waypoints
-        
-    def decelerate(self, waypoints):
-        rospy.logdebug('decelerate')
-        last = waypoints[-1]
-        last.twist.twist.linear.x = 0.
-        for wp in waypoints[:-1][::-1]:
-            dist = self.distance(wp.pose.pose.position, last.pose.pose.position)
-            vel = math.sqrt(2 * MAX_DECEL * dist) * 3.6
-            if vel < 1.:
-                vel = 0.
-            wp.twist.twist.linear.x = min(vel, wp.twist.twist.linear.x)
-            rospy.logdebug('decelerate:',wp.twist.twist.linear.x)
-        return waypoints
-        
+
+
     def traffic_cb(self, traffic_waypoint):
         self.traffic_waypoint = traffic_waypoint
         rospy.loginfo('Traffic waypoint received:%s',traffic_waypoint)
-        
+        pass
+
     def obstacle_cb(self, msg):
         # TODO: Callback for /obstacle_waypoint message. We will implement it later
         pass
@@ -203,7 +135,21 @@ class WaypointUpdater(object):
         dl = lambda a, b: math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2  + (a.z-b.z)**2)
         dist = dl(pose1.position, pose2.position)
         return dist
-        
+
+    # Find closest in front waypoint given a current pose...and a list of waypoints...
+    # Let's see if we can do better here as we should recalculate this stuff
+    # every time...
+    def closest_waypoint(self, current_pose, waypoints):
+        closest_idx = 0
+        min_dist = float('inf')
+        for i in range(len(waypoints)):
+            way_point = waypoints[i].pose.pose
+            dist = self.distance_pose_to_pose(current_pose, way_point)
+            if (self.is_infront(current_pose, way_point) and dist < min_dist):
+                min_dist = dist
+                closest_idx = i
+        return closest_idx, min_dist
+
     def distance(self, waypoints, wp1, wp2):
         dist = 0
         dl = lambda a, b: math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2  + (a.z-b.z)**2)
