@@ -44,7 +44,7 @@ chmod +x ros_test.x86_64
 ./ros_test.x86_64
 ```
 
-###team members
+### Team Members
 
 | Name                | Email                             | Slack        | TimeZone |
 |:-------------------:|:---------------------------------:|:------------:|:--------:|
@@ -73,7 +73,7 @@ chmod +x ros_test.x86_64
 |                                    |                   |              |             |                                                                       |
 |                                    |                   |              |             |                                                                       |
 
-###Module stories, issues, questions or open points
+### Module stories, issues, questions or open points
 
 #### way point updater
 publishing 200 final_waypoints. Dummy velocity set, periodically update seems to be buggy. 
