@@ -201,17 +201,16 @@ class TLDetector(object):
 
 #        rospy.loginfo('base_link received trans %s rot %s',trans,rot)
         
-        laser_point=PointStamped()
-        laser_point.header.frame_id = "/world"
-        laser_point.header.stamp =rospy.Time(0)
-        laser_point.point.x=point_in_world.x
-        laser_point.point.y=point_in_world.y
-        laser_point.point.z=point_in_world.z
-        p = self.listener.transformPoint("/base_link",laser_point)
+        camera_point=PointStamped()
+        camera_point.header.frame_id = "/world"
+        camera_point.header.stamp =rospy.Time(0)
+        camera_point.point.x=point_in_world.x
+        camera_point.point.y=point_in_world.y
+        camera_point.point.z=point_in_world.z
+        p = self.listener.transformPoint("/base_link",camera_point)
         
         (x,y) = self.cam_model.project3dToPixel((p.point.x, p.point.y, p.point.z))	
 #        rospy.loginfo('3D map (%s %s) camera (%s %s %s) pixel (%s %s)',point_in_world.x,point_in_world.y,p.point.x, p.point.y, p.point.z, x,y)
-
 		
         return (int(x), int(y))
 
