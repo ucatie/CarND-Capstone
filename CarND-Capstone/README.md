@@ -56,39 +56,36 @@ chmod +x ros_test.x86_64
 
 ### task break down table
 
-| task                               | module            |owner         | status      | description                                                         |
-|:----------------------------------:|:-----------------:|:------------:|:-----------:|:-------------------------------------------------------------------:|
-|create waypoint list                | way point updater |              | started     | list of 200 points ahead published having correct target velocity|
-|react on traffic waypoint event     | way point updater |              | started     | if a traffic waypoint has been received and its close, car has to stop. Waypoint list target velocities have to reflect slow done until the car stops in front of the traffic light. When to accelerate again? When the traffic waypoint message is not received anymore?|
-|react on obstacle waypoint event    | way point updater |              | not started | if a obstacle waypoint has been received and its close, car has to stop. |
-|create break and throttle commands  | twist_controller  |              | not started | use pid and lowpass or own pid code to smoothly accelerate and break following subscribed twist messages.|
-|create steering commands            | yaw_controller    |              | not started | create smooth steering commands by converting target linear and angular velocity following subscribed twist messages.|
-|Traffic Light Detection             | tl_classifier     |              | not started | create a FCN classifier similar to Scene Segmentation to detect traffic lights |
-|Obstacle Detection                  | obstacle_classifier|             | not started | requirement unclear |
-|create TL ground thruth             | helper tool       |              | not started | let the car drive around  and record ground truth images required to train the classifier. |
-|create training data TL Detection   | helper tool       |              | not started | let the car drive around  and record train images required to train the classifier. |
-|train TL Detection                  | tl_classifier     |              | not started | create a FCN classifier similar to Scene Segmentation to detect traffic lights |
-|                                    |                   |              |             |                                                                       |
-|                                    |                   |              |             |                                                                       |
-|                                    |                   |              |             |                                                                       |
-|                                    |                   |              |             |                                                                       |
+task break down and management is done at:
 
-### Module stories, issues, questions or open points
+[https://waffle.io/ucatie/CarND-Capstone](https://waffle.io/ucatie/CarND-Capstone)
+
+### Node description
 
 #### way point updater
-publishing 200 final_waypoints. Dummy velocity set, periodically update seems to be buggy. 
-Subscribed to obstacle_waypoints. No callback
+Publishes 200 final_waypoints. Dummy velocity set, periodically update seems to be buggy. 
+Subscribed to obstacle_waypoints. 
 Subscribed to base_waypoints. Callback stores lane message
 Subscribed to traffic waypoint. Callback stores traffic waypoint message
 Subscribed to current_pose. Callback publishes final waypoint list having 200 wp ahead.
-Next steps: test call back current pose. Set velocity. React on traffic message
 
 #### twist_controller
+simple default implementation for dummy behaviour
 
 #### yaw_controller
 
 #### DBWNode
-sending only dummy throttle command
+sending directly throttle and steering command. No PID yet
+
+#### tl_detector
+Subscribed to base_waypoints. Callback stores lane message
+Subscribed to current_pose. Callback publishes final waypoint list having 200 wp ahead.
+Subscribed to vehicle traffic_lights. 
+Subscribed camera images.
+Publishing cropped images of traffic lights for testing
+Publishes upcoming traffic light waypoint
+Publishes upcoming red traffic light waypoint
+
 
 #### tl_classifier
 
