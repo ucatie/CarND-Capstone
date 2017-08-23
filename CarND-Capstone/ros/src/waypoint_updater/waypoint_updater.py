@@ -40,6 +40,7 @@ class WaypointUpdater(object):
         rospy.Subscriber('/obstacle_waypoints', PoseStamped, self.obstacle_cb)
         rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
 
+        self.velocity = rospy.get_param('~velocity')/3.6*0.27778 #in m/s 
 
         self.final_waypoints_pub = rospy.Publisher('final_waypoints', Lane, queue_size=1)
 
@@ -56,14 +57,11 @@ class WaypointUpdater(object):
         rospy.spin()
 
     def publish(self, waypoints):
-        rate = rospy.Rate(40)
-        while not rospy.is_shutdown():
-            lane = Lane()
-            lane.header.frame_id = '/world'
-            lane.header.stamp = rospy.Time(0)
-            lane.waypoints = waypoints
-            self.final_waypoints_pub.publish(lane)
-            rate.sleep()
+        lane = Lane()
+        lane.header.frame_id = '/world'
+        lane.header.stamp = rospy.Time(0)
+        lane.waypoints = waypoints
+        self.final_waypoints_pub.publish(lane)
 
     def get_yaw(self, pose1):
         
@@ -84,8 +82,7 @@ class WaypointUpdater(object):
     def is_infront(self, wp_pose1, pose2):
         direction = self.get_direction(wp_pose1, pose2)
         
-        return direction < math.pi*0.5 and direction > (-math.pi*0.5) 
-
+        return abs(direction) < math.pi*0.5 
         
     def pose_cb(self, pose):
         self.current_pose = pose
@@ -115,7 +112,7 @@ class WaypointUpdater(object):
                 
             p = Waypoint(self.lane.waypoints[next_wp].pose, self.lane.waypoints[next_wp].twist)
             #set a default speed in 
-            p.twist.twist.linear.x = 1          
+            p.twist.twist.linear.x = self.velocity          
             final_waypoints.append(p)
         
 #        if self.traffic_waypoint is not None and self.current_pose is not None: 
