@@ -56,14 +56,11 @@ class WaypointUpdater(object):
         rospy.spin()
 
     def publish(self, waypoints):
-        rate = rospy.Rate(40)
-        while not rospy.is_shutdown():
-            lane = Lane()
-            lane.header.frame_id = '/world'
-            lane.header.stamp = rospy.Time(0)
-            lane.waypoints = waypoints
-            self.final_waypoints_pub.publish(lane)
-            rate.sleep()
+        l = Lane()
+        l.header.frame_id = '/world'
+        l.header.stamp = rospy.Time.now()
+        l.waypoints = waypoints
+        self.final_waypoints_pub.publish(l)
 
     def get_yaw(self, pose1):
         quaternion = (
@@ -84,12 +81,11 @@ class WaypointUpdater(object):
 
 
     def pose_cb(self, pose):
-        rospy.loginfo("Pose callback called!!!!")
+        #rospy.loginfo("Pose callback called!!!!")
         current_pose = pose
-        yaw = self.get_yaw(pose.pose)
+        yaw = self.get_yaw(current_pose.pose)
 
         if self.lane is None:
-            rospy.loginfo("XXXX ARRRGHHHHHHHHH lane is NONE!!!")
             return
 
         final_waypoints = []
@@ -99,8 +95,8 @@ class WaypointUpdater(object):
         waypoints_len = len(self.lane.waypoints)
         rospy.loginfo('Closest waypoint calculated index %s distance %s', start_wp, distance)
 
-
         for wp in range(LOOKAHEAD_WPS):
+            #rospy.loginfo("Adding waypoint at index %s", (start_wp + wp) % waypoints_len)
             p = Waypoint(self.lane.waypoints[(start_wp + wp) % waypoints_len].pose, self.lane.waypoints[(start_wp + wp) % waypoints_len].twist)
             #set a speed and play a bit around...
             p.twist.twist.linear.x = 0.5
@@ -140,12 +136,13 @@ class WaypointUpdater(object):
     # Let's see if we can do better here as we should recalculate this stuff
     # every time...
     def closest_waypoint(self, current_pose, waypoints):
-        closest_idx = 0
+        closest_idx = -1
         min_dist = float('inf')
         for i in range(len(waypoints)):
             way_point = waypoints[i].pose.pose
             dist = self.distance_pose_to_pose(current_pose, way_point)
             if (self.is_infront(current_pose, way_point) and dist < min_dist):
+                rospy.loginfo("Point %s is infront and has dist %s ", i, dist)
                 min_dist = dist
                 closest_idx = i
         return closest_idx, min_dist

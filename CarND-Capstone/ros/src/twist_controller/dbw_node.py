@@ -58,8 +58,8 @@ class DBWNode(object):
 
         # TODO: Subscribe to all the topics you need to
         rospy.Subscriber('/twist_cmd', TwistStamped, self.twist_cb)
-        
-        self.throttle = 1
+
+        self.throttle = 0
         self.brake = 0
         self.steer = 0
 
@@ -67,8 +67,8 @@ class DBWNode(object):
 
     def twist_cb(self, twistStamped):
         self.throttle = twistStamped.twist.linear.x
-        
-        
+        self.steer = twistStamped.twist.angular.z
+
     def loop(self):
         rate = rospy.Rate(50) # 50Hz
         while not rospy.is_shutdown():
