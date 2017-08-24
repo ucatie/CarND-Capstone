@@ -40,6 +40,7 @@ class WaypointUpdater(object):
         rospy.Subscriber('/obstacle_waypoints', PoseStamped, self.obstacle_cb)
         rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
 
+        self.velocity = rospy.get_param('~velocity')/3.6*0.27778 #in m/s 
 
         self.final_waypoints_pub = rospy.Publisher('final_waypoints', Lane, queue_size=1)
 
@@ -76,10 +77,8 @@ class WaypointUpdater(object):
 
     def is_infront(self, wp_pose1, pose2):
         direction = self.get_direction(wp_pose1, pose2)
-
-        return direction < math.pi * 0.5 and direction > (-math.pi * 0.5)
-
-
+        return abs(direction) < math.pi*0.5 
+        
     def pose_cb(self, pose):
         #rospy.loginfo("Pose callback called!!!!")
         current_pose = pose
@@ -99,7 +98,7 @@ class WaypointUpdater(object):
             #rospy.loginfo("Adding waypoint at index %s", (start_wp + wp) % waypoints_len)
             p = Waypoint(self.lane.waypoints[(start_wp + wp) % waypoints_len].pose, self.lane.waypoints[(start_wp + wp) % waypoints_len].twist)
             #set a speed and play a bit around...
-            p.twist.twist.linear.x = 0.5
+            p.twist.twist.linear.x = self.velocity          
             final_waypoints.append(p)
 
         rospy.loginfo('Finally published final_waypoints')

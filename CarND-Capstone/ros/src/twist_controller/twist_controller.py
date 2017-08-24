@@ -1,14 +1,16 @@
+import math
 
 GAS_DENSITY = 2.858
 ONE_MPH = 0.44704
 
 
 class Controller(object):
-    def __init__(self, *args, **kwargs):
-        # TODO: Implement
-        pass
-
-    def control(self, *args, **kwargs):
-        # TODO: Change the arg, kwarg list to suit your needs
-        # Return throttle, brake, steer
-        return 1., 0., 0.
+    def __init__(self, wheel_base):
+        self.wheel_base = wheel_base
+        
+    def control_steering(self, velocity, omega):
+        if omega == 0 or velocity == 0:
+            return 0
+        radius = velocity / omega
+        
+        return math.atan2(self.wheel_base , radius)
