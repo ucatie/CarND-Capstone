@@ -37,7 +37,7 @@ class WaypointUpdater(object):
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
 
         # TODO: Add a subscriber for /traffic_waypoint and /obstacle_waypoint below
-        rospy.Subscriber('/obstacle_waypoints', PoseStamped, self.obstacle_cb)
+        rospy.Subscriber('/obstacle_waypoint', PoseStamped, self.obstacle_cb)
         rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
 
         self.velocity = rospy.get_param('~velocity')/3.6*0.27778 #in m/s 
