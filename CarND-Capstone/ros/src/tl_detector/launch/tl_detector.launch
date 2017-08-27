@@ -1,7 +1,13 @@
 <?xml version="1.0"?>
 <launch>
     <node pkg="tl_detector" type="tl_detector.py" name="tl_detector" output="screen" cwd="node">
-        <param name="traffic_light_is_close" value="50.0" />        
+        <param name="traffic_light_is_close" value="30.0" />        
+        <param name="create_ground_truth" value="False" />        
+        <param name="ground_truth_dir" value="/home/frank/selfdriving/sdc_course/CarND-Capstone/ros/data_gt" />        
+        <param name="ground_truth_start_number" value="1" />        
+        <param name="create_train_data" value="False" />        
+        <param name="train_data_dir" value="/home/frank/selfdriving/sdc_course/CarND-Capstone/ros/data_train" />        
+        <param name="train_data_start_number" value="1" />        
     </node>
         
 </launch>

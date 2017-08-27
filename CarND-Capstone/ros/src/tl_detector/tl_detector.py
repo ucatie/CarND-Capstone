@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 import rospy
+import os
 import image_geometry
 from std_msgs.msg import Int32
 from geometry_msgs.msg import PoseStamped, Pose, PointStamped
 from styx_msgs.msg import TrafficLightArray, TrafficLight
 from styx_msgs.msg import Lane
 from sensor_msgs.msg import Image
-from sensor_msgs.msg import CameraInfo
 from cv_bridge import CvBridge
 from light_classification.tl_classifier import TLClassifier
 from traffic_light_config import config
@@ -23,9 +23,22 @@ class TLDetector(object):
         self.current_pose = None
         self.lane = None
         self.camera_image = None
-        self.lights = []
+        self.gt_lights = []
         self.traffic_light_is_close = rospy.get_param('~traffic_light_is_close', 50)
         
+        self.create_ground_truth = rospy.get_param('~create_ground_truth', False)
+        self.ground_truth_dir = rospy.get_param('~ground_truth_dir', '/home/frank/selfdriving/sdc_course/CarND-Capstone/ros/data_gt')
+        self.ground_truth_start_number = rospy.get_param('~ground_truth_start_number', 1)
+        if self.create_ground_truth == True and not os.path.exists(self.ground_truth_dir):
+            os.makedirs(self.ground_truth_dir)        
+
+        self.create_train_data = rospy.get_param('~create_train_data', False)
+        self.train_data_dir = rospy.get_param('~train_data_dir', '/home/frank/selfdriving/sdc_course/CarND-Capstone/ros/data_train')
+        self.train_data_start_number = rospy.get_param('~train_data_start_number', 1)
+        if self.create_train_data == True and not os.path.exists(self.train_data_dir):
+            os.makedirs(self.train_data_dir)        
+        
+
         sub1 = rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         sub2 = rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
 
@@ -36,12 +49,16 @@ class TLDetector(object):
         help you work on another single component of the node. This topic won't be available when
         testing your solution in real life so don't rely on it in the final submission.
         '''
-        sub3 = rospy.Subscriber('/vehicle/traffic_lights', TrafficLightArray, self.traffic_cb)
+        sub3 = None
+        if self.create_ground_truth:
+            sub3 = rospy.Subscriber('/vehicle/traffic_lights', TrafficLightArray, self.traffic_cb)
+            
         sub6 = rospy.Subscriber('/camera/image_raw', Image, self.image_cb)
 
         self.upcoming_red_light_pub = rospy.Publisher('/traffic_waypoint', Int32, queue_size=1)
+        #puplish the sub images for testing, can be viewed in rviz tool 
         self.upcoming_traffic_light_pub = rospy.Publisher('/traffic_light', Image, queue_size=1)
-
+        
         self.bridge = CvBridge()
         self.light_classifier = TLClassifier()
         self.listener = tf.TransformListener()
@@ -51,48 +68,6 @@ class TLDetector(object):
         self.last_wp = -1
         self.state_count = 0
 		
-		#https://en.wikipedia.org/wiki/Pinhole_camera_model#The_geometry_and_mathematics_of_the_pinhole_camera		
-        self.cam_model = image_geometry.PinholeCameraModel()		
-        self.config = config
-        ci = self.config.camera_info
-        rospy.loginfo('config data available')
-        # Intrinsic camera matrix for the raw (distorted) images.
-        #     [fx  0 cx]
-        # K = [ 0 fy cy]
-        #     [ 0  0  1]		
-        k = [[ ci.focal_length_x,      0,          ci.image_width*0.5],
-             [        0,            ci.focal_length_x, ci.image_height*0.5],
-             [        0,                  0,                   1         ]]
-        
-        # Projection/camera matrix
-        #     [fx'  0  cx' Tx]
-        # P = [ 0  fy' cy' Ty]
-        #     [ 0   0   1   0]
-        # For monocular cameras, Tx = Ty = 0. 
-        p = [[ ci.focal_length_x,      0,             ci.image_width*0.5,      0],
-             [        0,            ci.focal_length_x, ci.image_height*0.5,    0],
-             [        0,                  0,                    1,             0]]
-        
-        # 3x3 row-major matrix		
-        r = [[ 1,0,0],
-        	 [0,1,0],
-        	 [0,0,1]]#no rotation
-        
-        cam_info_msg = CameraInfo()
-        cam_info_msg.header.frame_id = 'camera'
-        cam_info_msg.width = ci.image_width
-        cam_info_msg.height = ci.image_height
-        cam_info_msg.distortion_model ='plumb_bob'
-        cam_info_msg.D = [0,0,0,0,0]#no distortion
-        cam_info_msg.K = k
-        cam_info_msg.P = p
-        cam_info_msg.R = r
-        cam_info_msg.binning_x=1
-        cam_info_msg.binning_y=1
-        
-        self.cam_model.fromCameraInfo( cam_info_msg)       
-        rospy.loginfo('camera info %s',cam_info_msg)
-        
         rospy.spin()
         
     def pose_cb(self, msg):
@@ -106,7 +81,7 @@ class TLDetector(object):
 
     def traffic_cb(self, msg):
 #        rospy.loginfo('traffic light received')
-        self.lights = msg.lights
+        self.gt_lights = msg.lights
 
     def image_cb(self, msg):
         """Identifies red lights in the incoming camera image and publishes the index
@@ -169,7 +144,7 @@ class TLDetector(object):
             if inFront2 and not inFront1:
                return (wp+1,True)
  		
-    def project_to_image_plane(self, point_in_world, point_in_car):
+    def project_to_image_plane(self, point_in_world):
         """Project point from 3D world coordinates to 2D camera image location
 
         Args:
@@ -204,17 +179,21 @@ class TLDetector(object):
         camera_point=PointStamped()
         camera_point.header.frame_id = "/world"
         camera_point.header.stamp =rospy.Time(0)
-        camera_point.point.x=point_in_world.x
-        camera_point.point.y=point_in_world.y
-        camera_point.point.z=point_in_world.z
+        camera_point.point.x = point_in_world.x
+        camera_point.point.y = point_in_world.y
+        camera_point.point.z = point_in_world.z
         p = self.listener.transformPoint("/base_link",camera_point)
         
-        (x,y) = self.cam_model.project3dToPixel((p.point.x, p.point.y, p.point.z))	
-#        rospy.loginfo('3D map (%s %s) camera (%s %s %s) pixel (%s %s)',point_in_world.x,point_in_world.y,p.point.x, p.point.y, p.point.z, x,y)
+        #https://en.wikipedia.org/wiki/Pinhole_camera_model#The_geometry_and_mathematics_of_the_pinhole_camera        
+        x = -p.point.y / p.point.x * fx + image_width*0.5
+        #experiments showed that there are 62 pixel offset of the cam 
+        y = 62 + image_height - (p.point.z / p.point.x * fy + image_height*0.5) 
+        	
+        rospy.loginfo('3D map (%s %s) camera (%s %s %s) pixel (%s %s)',point_in_world.x,point_in_world.y,p.point.x, p.point.y, p.point.z, x,y)
 		
         return (int(x), int(y))
 
-    def get_light_state(self, world_light, car_light):
+    def get_light_state(self, world_light, distance):
         """Determines the current color of the traffic light
 
         Args:
@@ -231,33 +210,65 @@ class TLDetector(object):
         self.camera_image.encoding = "rgb8"
         cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "bgr8")
 
-        x, y = self.project_to_image_plane(world_light.pose.position, car_light.pose.position)
+        x, y = self.project_to_image_plane(world_light.pose.position)
 		
         image_width = config.camera_info.image_width
         image_height = config.camera_info.image_height
 		
-              #use light location to zoom in on traffic light in image
-        x1 = x-128
+        #use light location to zoom in on traffic light in image
+        x1 = x-128 
         y1 = y-128
-        x2 = x+128
+        x2 = x+128 
         y2 = y+128
         if x1 < 0 or x2 > image_width or y1 < 0 or y2 > image_height:
         	rospy.loginfo('outside image %s',world_light.pose.position)
         	return TrafficLight.UNKNOWN
         	
-        resized = cv2.resize(cv_image, (image_height, image_width,), interpolation = cv2.INTER_AREA)            
-        region = resized[x1:x2, y1:y2]
-#        rospy.loginfo('region %s %s %s %s org: %s region:%s',x1,y1,x2,y2, resized.shape, region.shape)
+        shape = cv_image.shape
+        if shape[0] != image_height or shape[1] !=  image_width:
+            cv_image = cv2.resize(cv_image, (image_height, image_width), interpolation = cv2.INTER_AREA)
+#            rosspy("resize %s %s ", shape, (image_height, image_width))
+            
+        region = cv_image[y1:y2, x1:x2]
+        rospy.loginfo('region %s %s %s %s org: %s region:%s',x1,y1,x2,y2, cv_image.shape, region.shape)
         
         self.camera_image.encoding = "rgb8"
         traffic_image = self.bridge.cv2_to_imgmsg(region, "bgr8")
         
         self.upcoming_traffic_light_pub.publish(traffic_image);
+        
 #        rospy.loginfo('traffic light image published')
         
         
-        #Get classification
-        return self.light_classifier.get_classification(cv_image)
+        #Get ground truth classification and save it as part of the image name 
+        #heads up the traffic light messages are received delayed, classifications are wrong at least the first 6 pictures
+        #dont forget to delete these mismatched images!!!!!
+        if self.create_ground_truth:
+            state = TrafficLight.UNKNOWN
+            for i in range(len(self.gt_lights)):
+                dist = self.distance_pose_to_pose(self.gt_lights[i].pose.pose, world_light.pose)
+                #correct mismatch of traffic light positions
+                dist = math.fabs(dist - 24)
+#                rospy.loginfo('gt traffic light state %s %s',dist, self.gt_lights[i].state)
+                if dist < 1.0:
+                    state = self.gt_lights[i].state
+                    rospy.loginfo('gt traffic light state %s',state)
+                    break
+            gt_image_path = os.path.join(self.ground_truth_dir,'{1}_{0}.jpg'.format(state,self.ground_truth_start_number))
+            cv2.imwrite(gt_image_path, region)
+            rospy.loginfo('saved gt data %s',gt_image_path)
+            self.ground_truth_start_number = self.ground_truth_start_number + 1
+
+
+        #save the image as training data 
+        if self.create_train_data:
+            train_image_path = os.path.join(self.train_data_dir,'{0}.jpg'.format(self.train_data_start_number))
+            cv2.imwrite(train_image_path, region)
+            rospy.loginfo('saved train data %s',train_image_path)
+            self.train_data_start_number = self.train_data_start_number + 1
+            
+            
+        return self.light_classifier.get_classification(region)
         
     def process_traffic_lights(self):
         """Finds closest visible traffic light, if one exists, and determines its
@@ -268,42 +279,48 @@ class TLDetector(object):
             int: ID of traffic light color (specified in styx_msgs/TrafficLight)
 
         """
-        light = None
+        world_light = None
         light_positions = config.light_positions
         if(self.current_pose is None):
             return -1, TrafficLight.UNKNOWN
         
         min_distance = 9999.0
-        light = None
         for wp in range(len(light_positions)):
             pose = PoseStamped()
-            pose.pose.position.x = self.config.light_positions[wp][0]
-            pose.pose.position.y = self.config.light_positions[wp][1]
+
+            pose.pose.position.x = config.light_positions[wp][0]
+            pose.pose.position.y = config.light_positions[wp][1]
+            pose.pose.position.z = 7
             dist = self.distance_pose_to_pose(self.current_pose.pose, pose.pose)
-#            rospy.loginfo('traffic light: %s %s %s', pose.pose.position.x, pose.pose.position.y, dist)
+#            rospy.loginfo('traffic light: %s %s %s %s',self.gt_lights[wp].header.frame_id, pose.pose.position.x, pose.pose.position.y, dist)
              
             if dist < min_distance:
                 min_distance = dist 
-                light = pose
+                world_light = pose
 
-        dir = self.get_direction(self.current_pose.pose,light.pose)
+        dir = self.get_direction(self.current_pose.pose,world_light.pose)
+        
+        #get the orientation of the car
+        quaternion = (
+            self.current_pose.pose.orientation.x,
+            self.current_pose.pose.orientation.y,
+            self.current_pose.pose.orientation.z,
+            self.current_pose.pose.orientation.w)        
+        euler = tf.transformations.euler_from_quaternion(quaternion)
+        roll = euler[0]
+        pitch = euler[1]
+        yaw = euler[2]        
+        #add orientation pf car !!!
         if abs(dir) < math.pi*0.5 and min_distance < self.traffic_light_is_close:
-            rospy.loginfo('traffic light close: %s', min_distance) 
+            rospy.loginfo('traffic light close: %s dir %s car yaw %s', min_distance,dir,yaw) 
         else:
             return -1, TrafficLight.UNKNOWN
 
         #TODO find the closest visible traffic light (if one exists)
         
-        if light is not None:
-            x = min_distance*math.cos(dir)
-            y = min_distance*math.sin(dir)
-            car_pose = PoseStamped()
-            car_pose.pose.position.x = x
-            car_pose.pose.position.y = y
-            car_pose.pose.position.z = 0
-#            rospy.loginfo('traffic light local: %s %s', x,y) 
-            state = self.get_light_state(light, car_pose)
-            return light, state
+        if world_light is not None:
+            state = self.get_light_state(world_light, min_distance)
+            return world_light, state
         
         return -1, TrafficLight.UNKNOWN
 

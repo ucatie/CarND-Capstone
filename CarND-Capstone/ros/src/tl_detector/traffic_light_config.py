@@ -2,10 +2,15 @@ from attrdict import AttrDict
 
 config = AttrDict({
     'camera_info': {
-      'focal_length_x':0.97428,
-      'focal_length_y':1.73205,
-      'image_width': 2560,
-      'image_height': 1280
+      'focal_length_x':330,
+      'focal_length_y':51,
+      'image_width': 800,
+      'image_height': 600
+#    'camera_info': {
+#      'focal_length_x':0.97428,
+#      'focal_length_y':1.73205,
+#      'image_width': 2560,
+#      'image_height': 1280
     },
     'light_positions': [
         (1148.56, 1184.65),
