@@ -80,12 +80,16 @@ sending directly throttle and steering command. No PID yet
 #### tl_detector
 Subscribed to base_waypoints. Callback stores lane message
 Subscribed to current_pose. Callback publishes final waypoint list having 200 wp ahead.
-Subscribed to vehicle traffic_lights. 
-Subscribed camera images.
-Publishing cropped images of traffic lights for testing
-Publishes upcoming traffic light waypoint
-Publishes upcoming red traffic light waypoint
+Subscribed to vehicle/traffic_lights. 
+Subscribed camera/image_raw.
+Publishes cropped images of traffic lights for testing on 'traffic_light_image'
+Publishes upcoming traffic light (TrafficLight) on '/traffic_light'
+Publishes upcoming red traffic light waypoint to '/traffic_waypoint' (way point index)
 
+parameters are used to define to create ground truth and / or training data. Please check launch file
+
+#### tl_detector_train
+node to train a svm for four states (red, green, yellow, unknown'.data is read as define d by parameters. Shoudl be the same as tl_detector parameters. Parameter task allows different operations on the svm training.
 
 #### tl_classifier
 

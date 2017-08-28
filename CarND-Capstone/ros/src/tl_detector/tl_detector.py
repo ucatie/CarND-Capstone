@@ -13,6 +13,7 @@ from traffic_light_config import config
 import tf
 import cv2
 import math
+import std_msgs
 
 STATE_COUNT_THRESHOLD = 3
 
@@ -24,20 +25,42 @@ class TLDetector(object):
         self.lane = None
         self.camera_image = None
         self.gt_lights = []
-        self.traffic_light_is_close = rospy.get_param('~traffic_light_is_close', 50)
+        self.run_dir = rospy.get_param('/run_dir')
+        rospy.loginfo("run_dir:%s",self.run_dir)
         
         self.create_ground_truth = rospy.get_param('~create_ground_truth', False)
-        self.ground_truth_dir = rospy.get_param('~ground_truth_dir', '/home/frank/selfdriving/sdc_course/CarND-Capstone/ros/data_gt')
-        self.ground_truth_start_number = rospy.get_param('~ground_truth_start_number', 1)
-        if self.create_ground_truth == True and not os.path.exists(self.ground_truth_dir):
-            os.makedirs(self.ground_truth_dir)        
+        rospy.loginfo("create_ground_truth:%s",self.create_ground_truth)
+               
+        if self.create_ground_truth:               
+            self.ground_truth_dir = os.path.join(self.run_dir, rospy.get_param('~ground_truth_dir'))
+            rospy.loginfo("ground_truth_dir:%s",self.ground_truth_dir)
+            
+            self.ground_truth_start_number = rospy.get_param('~ground_truth_start_number', 1)
+            rospy.loginfo("ground_truth_start_number:%s",self.ground_truth_start_number)
+                
+            if not os.path.exists(self.ground_truth_dir):
+                os.makedirs(self.ground_truth_dir)        
+                os.makedirs(os.path.join(self.ground_truth_dir,'0'))        
+                os.makedirs(os.path.join(self.ground_truth_dir,'1'))        
+                os.makedirs(os.path.join(self.ground_truth_dir,'2'))        
+                os.makedirs(os.path.join(self.ground_truth_dir,'4'))        
 
-        self.create_train_data = rospy.get_param('~create_train_data', False)
-        self.train_data_dir = rospy.get_param('~train_data_dir', '/home/frank/selfdriving/sdc_course/CarND-Capstone/ros/data_train')
-        self.train_data_start_number = rospy.get_param('~train_data_start_number', 1)
-        if self.create_train_data == True and not os.path.exists(self.train_data_dir):
-            os.makedirs(self.train_data_dir)        
-        
+        self.create_train_data = rospy.get_param('~create_train_data', False) 
+        rospy.loginfo("create_train_data:%s",self.create_train_data)
+
+        if self.create_train_data:               
+            self.train_data_dir = os.path.join(self.run_dir,rospy.get_param('~train_data_dir'))
+            rospy.loginfo("train_data_dir:%s",self.train_data_dir)
+            
+            self.train_data_start_number = rospy.get_param('~train_data_start_number', 1)
+            rospy.loginfo("train_data_start_number:%s",self.train_data_start_number)
+            
+            if self.create_train_data == True and not os.path.exists(self.train_data_dir):
+                os.makedirs(self.train_data_dir)        
+                
+        self.traffic_light_is_close = rospy.get_param('~traffic_light_is_close', 50)
+        rospy.loginfo("traffic_light_is_close:%f",self.traffic_light_is_close)
+                
 
         sub1 = rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         sub2 = rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
@@ -56,8 +79,9 @@ class TLDetector(object):
         sub6 = rospy.Subscriber('/camera/image_raw', Image, self.image_cb)
 
         self.upcoming_red_light_pub = rospy.Publisher('/traffic_waypoint', Int32, queue_size=1)
+        self.upcoming_traffic_light_pub = rospy.Publisher('/traffic_light', TrafficLight, queue_size=1)
         #puplish the sub images for testing, can be viewed in rviz tool 
-        self.upcoming_traffic_light_pub = rospy.Publisher('/traffic_light', Image, queue_size=1)
+        self.upcoming_traffic_light_image_pub = rospy.Publisher('/traffic_light_image', Image, queue_size=1)
         
         self.bridge = CvBridge()
         self.light_classifier = TLClassifier()
@@ -106,9 +130,12 @@ class TLDetector(object):
         if self.state != state:
             self.state_count = 0
             self.state = state
+            
         elif self.state_count >= STATE_COUNT_THRESHOLD:
             self.last_state = self.state
+            
             light_wp = light_wp if state == TrafficLight.RED else -1
+            
             self.last_wp = light_wp
             self.upcoming_red_light_pub.publish(Int32(light_wp))
         else:
@@ -235,7 +262,7 @@ class TLDetector(object):
         self.camera_image.encoding = "rgb8"
         traffic_image = self.bridge.cv2_to_imgmsg(region, "bgr8")
         
-        self.upcoming_traffic_light_pub.publish(traffic_image);
+        self.upcoming_traffic_light_image_pub.publish(traffic_image);
         
 #        rospy.loginfo('traffic light image published')
         
@@ -254,7 +281,8 @@ class TLDetector(object):
                     state = self.gt_lights[i].state
                     rospy.loginfo('gt traffic light state %s',state)
                     break
-            gt_image_path = os.path.join(self.ground_truth_dir,'{1}_{0}.jpg'.format(state,self.ground_truth_start_number))
+            #write the to sub folder using state info. easier to move, if the state has changed slower than the image has ben received
+            gt_image_path = os.path.join(os.path.join(self.ground_truth_dir,'{0}'.format(state)),'{0}.jpg'.format(self.ground_truth_start_number))
             cv2.imwrite(gt_image_path, region)
             rospy.loginfo('saved gt data %s',gt_image_path)
             self.ground_truth_start_number = self.ground_truth_start_number + 1
@@ -320,6 +348,12 @@ class TLDetector(object):
         
         if world_light is not None:
             state = self.get_light_state(world_light, min_distance)
+            
+            header = std_msgs.msg.Header()
+            header.frame_id = '/world'
+            header.stamp = rospy.Time.now()
+            self.upcoming_traffic_light_pub.publish(TrafficLight(header,world_light,state))
+            
             return world_light, state
         
         return -1, TrafficLight.UNKNOWN
