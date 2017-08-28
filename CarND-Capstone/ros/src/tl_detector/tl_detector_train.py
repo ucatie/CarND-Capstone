@@ -39,8 +39,10 @@ class TLDetector_Train(object):
         self.train_data_dir = os.path.join(self.run_dir,rospy.get_param('~train_data_dir'))
         rospy.loginfo("train_data_dir:%s",self.train_data_dir)
         
-        self.task = rospy.get_param('~task','trainList1')
+        self.task = rospy.get_param('~task','best')
         rospy.loginfo("task:%s",self.task)
+        
+        self.SVC_PATH =  os.path.join(self.run_dir,rospy.get_param('~SVC_PATH','svc.p'))       
 
 #        rospy.spin()
 
@@ -51,19 +53,19 @@ class TLDetector_Train(object):
       green = []
       yellow = []
       unknown = []
-      red_gt_images = glob.glob(os.path.join(self.ground_truth_dir,'*_0.jpg'))
+      red_gt_images = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'0'),'*.jpg'))
       for image in red_gt_images:
         red.append(image)
     
-      green_gt_images = glob.glob(os.path.join(self.ground_truth_dir,'*_2.jpg'))
+      green_gt_images = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'2'),'*.jpg'))
       for image in  green_gt_images:
         green.append(image)
         
-      yellow_gt_images = glob.glob(os.path.join(self.ground_truth_dir,'*_1.jpg'))
+      yellow_gt_images = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'1'),'*.jpg'))
       for image in  yellow_gt_images:
         yellow.append(image)
         
-      unknown = glob.glob(os.path.join(self.ground_truth_dir,'*_4.jpg'))
+      unknown = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'4'),'*.jpg'))
       for image in  unknown:
         unknown.append(image)
         
@@ -121,19 +123,19 @@ class TLDetector_Train(object):
       yellow = []
       unknown = []
 #      rospy.loginfo("red path:%s",os.path.join(self.ground_truth_dir,'*_0.jpg'))
-      red_gt_images = glob.glob(os.path.join(self.ground_truth_dir,'*_0.jpg'))
+      red_gt_images = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'0'),'*.jpg'))
       for image in red_gt_images:
         red.append(image)
     
-      green_gt_images = glob.glob(os.path.join(self.ground_truth_dir,'*_2.jpg'))
+      green_gt_images = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'2'),'*.jpg'))
       for image in  green_gt_images:
         green.append(image)
         
-      yellow_gt_images = glob.glob(os.path.join(self.ground_truth_dir,'*_1.jpg'))
+      yellow_gt_images = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'1'),'*.jpg'))
       for image in  yellow_gt_images:
         yellow.append(image)
         
-      unknown_gt_images = glob.glob(os.path.join(self.ground_truth_dir,'*_4.jpg'))
+      unknown_gt_images = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'4'),'*.jpg'))
       for image in  unknown_gt_images:
         unknown.append(image)
     
@@ -144,13 +146,22 @@ class TLDetector_Train(object):
         print("read sample database")
         np.random.seed(1)
       # Reduce the sample size for fast testing
-        sample_size = 10
-        random_indizes = np.arange(sample_size)
+        sample_size = 100
+
+        random_indizes = np.arange(min(sample_size, len(red)))
         np.random.shuffle(random_indizes)
-    
         red = np.array(red)[random_indizes]
+        
+        random_indizes = np.arange(min(sample_size, len(green)))
+        np.random.shuffle(random_indizes)
         green = np.array(green)[random_indizes]
+        
+        random_indizes = np.arange(min(sample_size, len(yellow)))
+        np.random.shuffle(random_indizes)
         yellow = np.array(yellow)[random_indizes]
+        
+        random_indizes = np.arange(min(sample_size, len(unknown)))
+        np.random.shuffle(random_indizes)       
         unknown = np.array(unknown)[random_indizes]
         
       else:
@@ -258,7 +269,7 @@ class TLDetector_Train(object):
         key = params[i]
         accuracy = results[key]
         
-        (color_space,hog_channel,spatial_feat,hist_feat,hog_feat) = key
+        (color_space,hog_channel,spatial_feat,hist_feat,hog_feat,cell_per_block) = key
     
         if key in best:
           rospy.loginfo("| %s | %s | %s | %s | %s | ** %s ** |",color_space,hog_channel,spatial_feat,hist_feat,hog_feat,accuracy)
@@ -282,7 +293,6 @@ class TLDetector_Train(object):
                             cell_per_block=cell_per_block, 
                             hog_channel=hog_channel, spatial_feat=spatial_feat, 
                             hist_feat=hist_feat, hog_feat=hog_feat,feature_vec=True)
-      rospy.loginfo(np.shape(red_features))
     
       green_features = fd.extractFeatures(green, color_space=color_space, 
                             spatial_size=spatial_size, hist_bins=hist_bins, 
@@ -290,21 +300,20 @@ class TLDetector_Train(object):
                             cell_per_block=cell_per_block, 
                             hog_channel=hog_channel, spatial_feat=spatial_feat, 
                             hist_feat=hist_feat, hog_feat=hog_feat,feature_vec=True)
-      rospy.loginfo(np.shape(green_features))
+
       yellow_features = fd.extractFeatures(yellow, color_space=color_space, 
                             spatial_size=spatial_size, hist_bins=hist_bins, 
                             orient=orient, pix_per_cell=pix_per_cell, 
                             cell_per_block=cell_per_block, 
                             hog_channel=hog_channel, spatial_feat=spatial_feat, 
                             hist_feat=hist_feat, hog_feat=hog_feat,feature_vec=True)
-      rospy.loginfo(np.shape(yellow_features))
+
       unknown_features = fd.extractFeatures(unknown, color_space=color_space, 
                             spatial_size=spatial_size, hist_bins=hist_bins, 
                             orient=orient, pix_per_cell=pix_per_cell, 
                             cell_per_block=cell_per_block, 
                             hog_channel=hog_channel, spatial_feat=spatial_feat, 
                             hist_feat=hist_feat, hog_feat=hog_feat,feature_vec=True)
-      rospy.loginfo(np.shape(unknown_features))
     
       X = np.vstack((red_features, green_features, yellow_features, unknown_features)).astype(np.float64)      
       
@@ -338,7 +347,6 @@ class TLDetector_Train(object):
     
       return (X_scaler,svc,accuracy)
     
-    SVC_PATH = "./svc.p"
     #load a pickle file and return the model dictionary  containg the keys X_scaler and svc
     def getModelData(self):
       data = {}
@@ -393,7 +401,7 @@ class TLDetector_Train(object):
     
       elif self.task == 'trainList1':
         #read a sample
-        (red,green,yellow,unknown) = self.readDatabase(False)
+        (red,green,yellow,unknown) = self.readDatabase(True)
         #train a list of params for optimization
         self.trainParamlist(red,green,yellow,unknown,self.getParamlist1())
     
@@ -413,7 +421,7 @@ class TLDetector_Train(object):
         #read all
         (red,green,yellow,unknown) = self.readDatabase(False)
         #train the best choice
-        param = ("YCrCb","0,1",True,False,True,3)
+        param = ("RGB","ALL",False,True,False,3)
         (X_scaler,svc,acccuracy) = self.train(param,red,green,yellow,unknown)
     
         #save the calibration in a pickle file
@@ -421,8 +429,10 @@ class TLDetector_Train(object):
         data["X_scaler"] = X_scaler
         data["svc"] = svc
         data["param"] = param
-        with open(SVC_PATH, 'wb') as f:
-          pickle.dump(data, file=f)    
+        with open(self.SVC_PATH, 'wb') as f:
+          pickle.dump(data, file=f)
+          
+        rospy.loginfo("saved trained svc in %s",self.SVC_PATH)    
         
       elif self.task == 'gridSearch':
         #read a sample
@@ -436,6 +446,7 @@ if __name__ == '__main__':
     try:
         tlt = TLDetector_Train()
         tlt.run_task()
+        rospy.loginfo("finished")
         
         
     except rospy.ROSInterruptException:

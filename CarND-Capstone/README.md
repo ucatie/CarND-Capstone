@@ -89,7 +89,13 @@ Publishes upcoming red traffic light waypoint to '/traffic_waypoint' (way point 
 parameters are used to define to create ground truth and / or training data. Please check launch file
 
 #### tl_detector_train
-node to train a svm for four states (red, green, yellow, unknown'.data is read as define d by parameters. Shoudl be the same as tl_detector parameters. Parameter task allows different operations on the svm training.
+node to train a svc for four states (red, green, yellow, unknown'.data is read as define d by parameters. Shoudl be the same as tl_detector parameters. Parameter task allows different operations on the svm training.
+
+rosrun tl_detector tl_detector_train.py
+
+if task "best" is executed a trained svc.p file is written, which could be used in the tl_classifier.
+Using RGB, All channels, Histogram only for feature space I got 97% accuracy on red 1290 green 213 yellow 203 unknown 56
+images.
 
 #### tl_classifier
 
