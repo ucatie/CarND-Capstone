@@ -67,6 +67,8 @@ class WaypointUpdater(object):
 
         first_wpt_index = -1
         min_wpt_distance_squared = float('inf')
+        num_waypoints_in_list = len(waypoints.waypoints)
+
         # iterate through the complete set of waypoints received
         for index, waypoint in enumerate(waypoints.waypoints):
             try:
@@ -90,7 +92,7 @@ class WaypointUpdater(object):
         else:
             rospy.loginfo('WaypointUpdater::waypoints_cb - Found the index %s to be the next waypoint', first_wpt_index)
             # now let's only leave these points in the list
-            waypoints.waypoints = waypoints.waypoints[first_wpt_index:first_wpt_index + LOOKAHEAD_WPS]
+            waypoints.waypoints = waypoints.waypoints[first_wpt_index:(first_wpt_index + LOOKAHEAD_WPS) % num_waypoints_in_list]
             rospy.loginfo('WaypointUpdater::waypoints_cb - Left only %s waypoints in the list', len(waypoints.waypoints))
             # then, for the first stage of the implementation, set a dummy velocity to all these waypoints
             # so that the car is intructed to drive around the track
@@ -124,7 +126,6 @@ class WaypointUpdater(object):
             dist += dl(waypoints[wp1].pose.pose.position, waypoints[i].pose.pose.position)
             wp1 = i
         return dist
-
 
 if __name__ == '__main__':
     try:
