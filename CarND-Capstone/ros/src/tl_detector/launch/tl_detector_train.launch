@@ -4,6 +4,7 @@
         <param name="traffic_light_is_close" value="30.0" />        
         <param name="ground_truth_dir" value="data_gt" />        
         <param name="train_data_dir" value="data_train" />        
-        <param name="task" value="trainList1" />                
+        <param name="task" value="best" />                
+        <param name="SVC_PATH" value="svc.p" />
     </node>
 </launch>

@@ -1,3 +1,4 @@
+import rospy
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
@@ -58,8 +59,10 @@ def extractFeatures(imgs, color_space='RGB', spatial_size=(32, 32),
         file_features = []
         # Read in each one by one
         image = mpimg.imread(file)
+        normImage = image.copy().astype("float32") / 255.0
         
-        img_features = singleImgFeatures(image,color_space,spatial_size,hist_bins,orient, 
+        
+        img_features = singleImgFeatures(normImage,color_space,spatial_size,hist_bins,orient, 
                         pix_per_cell,cell_per_block,hog_channel,
                         spatial_feat,hist_feat,hog_feat,feature_vec)        
         
@@ -151,12 +154,19 @@ def slideWindow(img, x_start_stop=[None, None], y_start_stop=[None, None],
     # Compute the span of the region to be searched    
     xspan = x_start_stop[1] - x_start_stop[0]    
     yspan = y_start_stop[1] - y_start_stop[0]
+    nx_windows = 1
+    ny_windows = 1
     # Compute the number of pixels per step in x/y
-    nx_pix_per_step = xy_window[0]*(1 - xy_overlap[0])
-    ny_pix_per_step = xy_window[1]*(1 - xy_overlap[1])
     # Compute the number of windows in x/y
-    nx_windows = int((xspan - xy_window[0])/nx_pix_per_step+1)
-    ny_windows = int((yspan - xy_window[1])/ny_pix_per_step+1)
+    nx_pix_per_step = xy_window[0]*(1 - xy_overlap[0])
+    if nx_pix_per_step == 0:
+        nx_pix_per_step = xy_window[0]
+        nx_windows = int((xspan - xy_window[0])/nx_pix_per_step+1)
+        
+    ny_pix_per_step = xy_window[1]*(1 - xy_overlap[1])
+    if ny_pix_per_step == 0:
+        ny_pix_per_step = xy_window[1]        
+        ny_windows = int((yspan - xy_window[1])/ny_pix_per_step+1)
 
     # Initialize a list to append window positions to
     window_list = []
@@ -184,74 +194,11 @@ def slideWindow(img, x_start_stop=[None, None], y_start_stop=[None, None],
             if xs == nx_windows-1 and endx < x_start_stop[1]-1:
               print("extend endx:",endx, x_start_stop[1],(endx - x_start_stop[1]),xy_window[0])
             # Append window position to list
+            rospy.loginfo("search window %s %s",(startx, starty), (endx, endy))
+            
             window_list.append(((startx, starty), (endx, endy)))
     # Return the list of windows
     return window_list
-
-# Define a function you will pass an image 
-# and the list of windows to be searched (output of slide_windows())
-def searchWindowsOptimized(img, windows, clf, scaler, color_space='RGB', 
-                    spatial_size=(32, 32), hist_bins=32, 
-                    hist_range=(0, 256), orient=9, 
-                    pix_per_cell=8, cell_per_block=2, 
-                    hog_channel=0, spatial_feat=True, 
-                    hist_feat=True, hog_feat=True, hardNegative=False):
-    global image_counter
-    #1) Create an empty list to receive positive detection windows
-    on_windows = []
-
-    if hog_feat:
-      hog_features = single_img_features(img, color_space=color_space, 
-                          spatial_size=spatial_size, hist_bins=hist_bins, 
-                          orient=orient, pix_per_cell=pix_per_cell, 
-                          cell_per_block=cell_per_block, 
-                          hog_channel=hog_channel, spatial_feat=False, 
-                          hist_feat=False, hog_feat=True,feature_vec=False)
-      array = np.concatenate(hog_features)
-    
-    #2) Iterate over all windows in the list
-    for window in windows:
-        #3) Extract the test window from original image
-        features = []
-        test_img = cv2.resize(img[window[0][1]:window[1][1], window[0][0]:window[1][0]], (64, 64))      
-        #4) Extract features for that window using single_img_features()       
-        features = singleImgFeatures(test_img, color_space=color_space, 
-                          spatial_size=spatial_size, hist_bins=hist_bins, 
-                          orient=orient, pix_per_cell=pix_per_cell, 
-                          cell_per_block=cell_per_block, 
-                          hog_channel=hog_channel, spatial_feat=spatial_feat, 
-                          hist_feat=hist_feat, hog_feat=False,feature_vec=True)   
-        
-        if hog_feat:
-          start_x_block = int(window[0][0] /  pix_per_cell)
-          end_x_block = int(window[1][0] /  pix_per_cell)-1
-          start_y_block = int(window[0][1] / pix_per_cell)
-          end_y_block = int(window[1][1] /  pix_per_cell)-1
-
-          sub_hog_features = []
-          for i in range(array.shape[0]):
-            single_hog_feature = array[i,start_y_block:end_y_block,start_x_block:end_x_block,:,:,:]
-                
-            sub_hog_features.append(single_hog_feature)
-          sub_hog_features = np.ravel(sub_hog_features)   
-          features.append(sub_hog_features)
-            
-        features = np.concatenate(features)
-        #5) Scale extracted features to be fed to classifier
-        test_features = scaler.transform(np.array(features).reshape(1, -1))
-#check numy datatype for fats processing        
-#        print(test_features.flags['C_CONTIGUOUS'])
-        #6) Predict using your classifier       
-        prediction = clf.predict(test_features)
-
-        #7) If positive (prediction == 1) then save the window
-        if prediction == 1:
-            on_windows.append(window)
-            if hardNegative:
-              image_counter +=1
-              saveImageAndReturn(test_img,"test",image_counter)
-    #8) Return windows for positive detections
-    return on_windows
 
 # Define a function you will pass an image 
 # and the list of windows to be searched (output of slide_windows())
@@ -261,16 +208,19 @@ def searchWindows(img, windows, clf, scaler, color_space='RGB',
                     pix_per_cell=8, cell_per_block=2, 
                     hog_channel=0, spatial_feat=True, 
                     hist_feat=True, hog_feat=True,hardNegative=False):
-    global image_counter
 
     #1) Create an empty list to receive positive detection windows
     on_windows = []
+    #create 5 state list
+    for i in range(5):
+        on_windows.append([])
+    
     #2) Iterate over all windows in the list
     for window in windows:
         #3) Extract the test window from original image
-        test_img = cv2.resize(img[window[0][1]:window[1][1], window[0][0]:window[1][0]], (64, 64))      
+#        test_img = cv2.resize(img[window[0][1]:window[1][1], window[0][0]:window[1][0]], (64, 64))      
         #4) Extract features for that window using single_img_features()
-        features = singleImgFeatures(test_img, color_space=color_space, 
+        features = singleImgFeatures(img, color_space=color_space, 
                             spatial_size=spatial_size, hist_bins=hist_bins, 
                             orient=orient, pix_per_cell=pix_per_cell, 
                             cell_per_block=cell_per_block, 
@@ -280,15 +230,11 @@ def searchWindows(img, windows, clf, scaler, color_space='RGB',
         #5) Scale extracted features to be fed to classifier
         test_features = scaler.transform(np.array(features).reshape(1, -1))
         #6) Predict using your classifier
-        prediction = clf.predict(test_features)
-        #7) If positive (prediction == 1) then save the window
-        if prediction == 1:
-            on_windows.append(window)
-            #for hard negative mining
-            if hardNegative:
-              image_counter +=1
-              saveImageAndReturn(test_img,"test",image_counter)
-    #8) Return windows for positive detections
+        prediction = int(clf.predict(test_features))
+#        rospy.loginfo("window %s prediction %s", window, prediction)
+        #7) for each state the window is stored in a list 
+        on_windows[prediction].append(window)
+    #8) Return windows off detections
     return on_windows
         
 

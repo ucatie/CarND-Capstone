@@ -97,7 +97,21 @@ if task "best" is executed a trained svc.p file is written, which could be used 
 Using RGB, All channels, Histogram only for feature space I got 97% accuracy on red 1290 green 213 yellow 203 unknown 56
 images.
 
+might require installation of these packages: 
+sudo pip install -U scikit-learn
+sudo pip install -U scikit-image
+sudo pip install -U Pillow
+sudo pip install -U matplotlib
+
 #### tl_classifier
+node to classify images using the trained svc.
+parameters are used to define the svc model file.
+
+#### tl_classifier_test
+node to classify images of the data_gt or data_test folder. Uses the trained svc and calls tl_classifier code.
+parameters are used to define the data folder and svc model file.
+
+roslaunch tl_detector test_classifier.launch 
 
 #### helper tool  
 

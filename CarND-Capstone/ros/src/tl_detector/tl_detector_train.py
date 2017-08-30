@@ -123,22 +123,11 @@ class TLDetector_Train(object):
       yellow = []
       unknown = []
 #      rospy.loginfo("red path:%s",os.path.join(self.ground_truth_dir,'*_0.jpg'))
-      red_gt_images = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'0'),'*.jpg'))
-      for image in red_gt_images:
-        red.append(image)
-    
-      green_gt_images = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'2'),'*.jpg'))
-      for image in  green_gt_images:
-        green.append(image)
-        
-      yellow_gt_images = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'1'),'*.jpg'))
-      for image in  yellow_gt_images:
-        yellow.append(image)
-        
-      unknown_gt_images = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'4'),'*.jpg'))
-      for image in  unknown_gt_images:
-        unknown.append(image)
-    
+      red = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'0'),'*.jpg'))  
+      green = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'2'),'*.jpg'))
+      yellow = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'1'),'*.jpg'))
+      unknown = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'4'),'*.jpg'))
+      
       image = mpimg.imread(red[0])
       rospy.loginfo("min: %s max: %s",np.min(image[0]),np.max(image[0]))
       
@@ -255,12 +244,12 @@ class TLDetector_Train(object):
       #train the list
       for i in range(len(params)):
         key = params[i]
-#        try:
-        (scaler,svc,accuracy) = self.train(params[i],red,green,yellow,unknown)
-        results[key] = accuracy
-#        except ValueError: 
- #         rospy.loginfo("error in train {0}".format(key))
-  #        results[key] = 0
+        try:
+            (scaler,svc,accuracy) = self.train(params[i],red,green,yellow,unknown)
+            results[key] = accuracy
+        except ValueError: 
+            rospy.loginfo("error in train {0}".format(key))
+            results[key] = 0
     
       #print result as wiki table
       rospy.loginfo("|Color space| Channels | Spatial | Histogram | HOG | Accuracy |")
@@ -421,7 +410,7 @@ class TLDetector_Train(object):
         #read all
         (red,green,yellow,unknown) = self.readDatabase(False)
         #train the best choice
-        param = ("RGB","ALL",False,True,False,3)
+        param = ("HSV","ALL",False,True,False,3)
         (X_scaler,svc,acccuracy) = self.train(param,red,green,yellow,unknown)
     
         #save the calibration in a pickle file
@@ -446,8 +435,7 @@ if __name__ == '__main__':
     try:
         tlt = TLDetector_Train()
         tlt.run_task()
-        rospy.loginfo("finished")
-        
+        rospy.signal_shutdown("finished")      
         
     except rospy.ROSInterruptException:
         rospy.logerr('Could not run tl detector train node.')

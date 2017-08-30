@@ -14,6 +14,7 @@ import tf
 import cv2
 import math
 import std_msgs
+import matplotlib.image as mpimg
 
 STATE_COUNT_THRESHOLD = 3
 
@@ -61,6 +62,8 @@ class TLDetector(object):
         self.traffic_light_is_close = rospy.get_param('~traffic_light_is_close', 50)
         rospy.loginfo("traffic_light_is_close:%f",self.traffic_light_is_close)
                 
+        self.SVC_PATH =  os.path.join(self.run_dir,rospy.get_param('~SVC_PATH','svc.p'))       
+        rospy.loginfo("SVC_PATH:%s",self.SVC_PATH)
 
         sub1 = rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         sub2 = rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
@@ -84,7 +87,7 @@ class TLDetector(object):
         self.upcoming_traffic_light_image_pub = rospy.Publisher('/traffic_light_image', Image, queue_size=1)
         
         self.bridge = CvBridge()
-        self.light_classifier = TLClassifier()
+        self.light_classifier = TLClassifier(self.SVC_PATH)
         self.listener = tf.TransformListener()
 
         self.state = TrafficLight.UNKNOWN
@@ -120,7 +123,7 @@ class TLDetector(object):
         self.has_image = True
         self.camera_image = msg
         light_wp, state = self.process_traffic_lights()
-
+ 
         '''
         Publish upcoming red lights at camera frequency.
         Each predicted state has to occur `STATE_COUNT_THRESHOLD` number
@@ -134,12 +137,13 @@ class TLDetector(object):
         elif self.state_count >= STATE_COUNT_THRESHOLD:
             self.last_state = self.state
             
-            light_wp = light_wp if state == TrafficLight.RED else -1
+            if state != TrafficLight.RED:
+                light_wp = -1
             
             self.last_wp = light_wp
-            self.upcoming_red_light_pub.publish(Int32(light_wp))
+            self.upcoming_red_light_pub.publish(int(light_wp))
         else:
-            self.upcoming_red_light_pub.publish(Int32(self.last_wp))
+            self.upcoming_red_light_pub.publish(int(self.last_wp))
         self.state_count += 1
 
     def distance_pose_to_pose(self, pose1, pose2):
@@ -294,9 +298,11 @@ class TLDetector(object):
             cv2.imwrite(train_image_path, region)
             rospy.loginfo('saved train data %s',train_image_path)
             self.train_data_start_number = self.train_data_start_number + 1
+#            image = mpimg.imread(train_image_path)
+#            self.light_classifier.get_classification(image)            
             
-            
-        return self.light_classifier.get_classification(region)
+        rgbregion = cv2.cvtColor(region, cv2.COLOR_BGR2RGB)
+        return self.light_classifier.get_classification(rgbregion)
         
     def process_traffic_lights(self):
         """Finds closest visible traffic light, if one exists, and determines its
@@ -313,6 +319,7 @@ class TLDetector(object):
             return -1, TrafficLight.UNKNOWN
         
         min_distance = 9999.0
+        light_wp = -1
         for wp in range(len(light_positions)):
             pose = PoseStamped()
 
@@ -325,6 +332,7 @@ class TLDetector(object):
             if dist < min_distance:
                 min_distance = dist 
                 world_light = pose
+                light_wp = wp
 
         dir = self.get_direction(self.current_pose.pose,world_light.pose)
         
@@ -354,7 +362,7 @@ class TLDetector(object):
             header.stamp = rospy.Time.now()
             self.upcoming_traffic_light_pub.publish(TrafficLight(header,world_light,state))
             
-            return world_light, state
+            return light_wp, state
         
         return -1, TrafficLight.UNKNOWN
 
