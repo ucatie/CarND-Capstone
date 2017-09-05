@@ -80,14 +80,38 @@ sending directly throttle and steering command. No PID yet
 #### tl_detector
 Subscribed to base_waypoints. Callback stores lane message
 Subscribed to current_pose. Callback publishes final waypoint list having 200 wp ahead.
-Subscribed to vehicle traffic_lights. 
-Subscribed camera images.
-Publishing cropped images of traffic lights for testing
-Publishes upcoming traffic light waypoint
-Publishes upcoming red traffic light waypoint
+Subscribed to vehicle/traffic_lights. 
+Subscribed camera/image_raw.
+Publishes cropped images of traffic lights for testing on 'traffic_light_image'
+Publishes upcoming traffic light (TrafficLight) on '/traffic_light'
+Publishes upcoming red traffic light waypoint to '/traffic_waypoint' (way point index)
 
+parameters are used to define to create ground truth and / or training data. Please check launch file
+
+#### tl_detector_train
+node to train a svc for four states (red, green, yellow, unknown'.data is read as defined by parameters. Should be the same as tl_detector parameters. Parameter task allows different operations on the svm training.
+
+rosrun tl_detector tl_detector_train.py
+
+if task "best" is executed a trained svc.p file is written, which could be used in the tl_classifier.
+Using HSV, All channels, Histogram only for feature space I got 93% accuracy on red 1290 green 213 yellow 203 unknown 56
+images.
+
+might require installation of these packages: 
+sudo pip install -U scikit-learn
+sudo pip install -U scikit-image
+sudo pip install -U Pillow
+sudo pip install -U matplotlib
 
 #### tl_classifier
+node to classify images using the trained svc.
+parameters are used to define the svc model file.
+
+#### tl_classifier_test
+node to classify images of the data_gt or data_test folder. Uses the trained svc and calls tl_classifier code.
+parameters are used to define the data folder and svc model file.
+
+roslaunch tl_detector test_classifier.launch 
 
 #### helper tool  
 

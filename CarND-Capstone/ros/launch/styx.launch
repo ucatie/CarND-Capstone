@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <launch>
+    <param name="run_dir" value="/home/frank/selfdriving/sdc_course/CarND-Capstone/ros" />        
+
     <!-- Simulator Bridge -->
     <include file="$(find styx)/launch/server.launch" />
 
@@ -17,4 +19,5 @@
 
     <!--Traffic Light Detector Node -->
     <include file="$(find tl_detector)/launch/tl_detector.launch"/>
+    
 </launch>
