@@ -26,54 +26,62 @@ TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 
 LOOKAHEAD_WPS = 200 # Number of waypoints we will publish. You can change this number
 TIMEOUT_VALUE = 10.0
+ONE_MPH = 0.44704
 
 class WaypointUpdater(object):
     def __init__(self):
         rospy.loginfo('WaypointUpdater::__init__ - Start')
         rospy.init_node('waypoint_updater')
-        rospy.loginfo('WaypointUpdater::__init__ - subscribing to /current_pose')
+        #rospy.loginfo('WaypointUpdater::__init__ - subscribing to /current_pose')
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
-        rospy.loginfo('WaypointUpdater::__init__ - subscribing to /base_waypoints')
+        #rospy.loginfo('WaypointUpdater::__init__ - subscribing to /base_waypoints')
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
 
         # TODO: Add a subscriber for /traffic_waypoint and /obstacle_waypoint below
-        rospy.loginfo('WaypointUpdater::__init__ - subscribing to /traffic_waypoint')
+        #rospy.loginfo('WaypointUpdater::__init__ - subscribing to /traffic_waypoint')
         rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
         # commenting the two below for the time being until clarification about whether
         # is needed or not
         #rospy.loginfo('WaypointUpdater::__init__ - subscribing to /obstacle_waypoint')
         #rospy.Subscriber('/obstacle_waypoint', , self.obstacle_cb)
 
-        rospy.loginfo('WaypointUpdater::__init__ - publishing to /final_waypoints')
+        #rospy.loginfo('WaypointUpdater::__init__ - publishing to /final_waypoints')
         self.final_waypoints_pub = rospy.Publisher('final_waypoints', Lane, queue_size=1)
 
         # TODO: Add other member variables you need below
         self.tf_listener = tf.TransformListener()
 
-        self.default_velocity = rospy.get_param('~velocity', 0)
+        self.default_velocity = rospy.get_param('~velocity', 0) * ONE_MPH
 
-        rospy.loginfo('WaypointUpdater::__init__ - End (just before executing spin())')
+        #rospy.loginfo('WaypointUpdater::__init__ - End (just before executing spin())')
         rospy.spin()
 
     def pose_cb(self, msg):
-        rospy.loginfo('WaypointUpdater::pose_cb - Start')
-        rospy.loginfo('WaypointUpdater::pose_cb - Pose rcvd X:%s, Y:%s, Z:%s, rX:%s, rY:%s, rZ:%s, rW:%s for frame %s', msg.pose.position.x, msg.pose.position.y, msg.pose.position.z, msg.pose.orientation.x, msg.pose.orientation.y, msg.pose.orientation.z, msg.pose.orientation.w, msg.header.frame_id)
-        rospy.loginfo('WaypointUpdater::pose_cb - End')
+        #rospy.loginfo('WaypointUpdater::pose_cb - Start')
+        #rospy.loginfo('WaypointUpdater::pose_cb - Pose rcvd X:%s, Y:%s, Z:%s, rX:%s, rY:%s, rZ:%s, rW:%s for frame %s', msg.pose.position.x, msg.pose.position.y, msg.pose.position.z, msg.pose.orientation.x, msg.pose.orientation.y, msg.pose.orientation.z, msg.pose.orientation.w, msg.header.frame_id)
+        #rospy.loginfo('WaypointUpdater::pose_cb - End')
+        pass
 
     def waypoints_cb(self, waypoints):
         # let's log some information about the received list of waypoints
-        rospy.loginfo('WaypointUpdater::waypoints_cb - Start')
-        rospy.loginfo('WaypointUpdater::waypoints_cb - Rcvd list of %s waypoints on frame %s', len(waypoints.waypoints), waypoints.header.frame_id)
+        #rospy.loginfo('WaypointUpdater::waypoints_cb - Start')
+        #rospy.loginfo('WaypointUpdater::waypoints_cb - Rcvd list of %s waypoints on frame %s', len(waypoints.waypoints), waypoints.header.frame_id)
 
         first_wpt_index = -1
         min_wpt_distance_squared = float('inf')
         num_waypoints_in_list = len(waypoints.waypoints)
+
+        lane = Lane()
+        lane.header.frame_id = waypoints.header.frame_id
+        lane.header.stamp = rospy.Time(0)
+        lane.waypoints = []
 
         # iterate through the complete set of waypoints received
         for index, waypoint in enumerate(waypoints.waypoints):
             try:
                 # I need to make sure that the header part of each PoseStamped element in the waypoints list is correctly
                 # initialized... for some reason they are not
+
                 waypoint.pose.header.frame_id = waypoints.header.frame_id
                 self.tf_listener.waitForTransform("/base_link", "/world", rospy.Time(0), rospy.Duration(TIMEOUT_VALUE))
                 transformed_waypoint = self.tf_listener.transformPose("/base_link", waypoint.pose)
@@ -90,20 +98,32 @@ class WaypointUpdater(object):
         if first_wpt_index == -1:
             rospy.logwarn('WaypointUpdater::waypoints_cb - No waypoints ahead of ego were found... seems that the car went off course')
         else:
-            rospy.loginfo('WaypointUpdater::waypoints_cb - Found the index %s to be the next waypoint', first_wpt_index)
+            for num_wp in range(LOOKAHEAD_WPS):
+                wp = Waypoint()
+                wp.pose = waypoints.waypoints[(first_wpt_index + num_wp) % len(waypoints.waypoints)].pose
+                wp.twist = waypoints.waypoints[(first_wpt_index + num_wp) % len(waypoints.waypoints)].twist
+                wp.twist.twist.linear.x = self.default_velocity
+                wp.twist.twist.linear.y = 0.0
+                wp.twist.twist.linear.z = 0.0
+                wp.twist.twist.angular.x = 0.0
+                wp.twist.twist.angular.y = 0.0
+                wp.twist.twist.angular.z = 0.0
+                lane.waypoints.append(wp)
+            #rospy.loginfo('WaypointUpdater::waypoints_cb - Found the index %s to be the next waypoint', first_wpt_index)
             # now let's only leave these points in the list
-            waypoints.waypoints = waypoints.waypoints[first_wpt_index:(first_wpt_index + LOOKAHEAD_WPS) % num_waypoints_in_list]
-            rospy.loginfo('WaypointUpdater::waypoints_cb - Left only %s waypoints in the list', len(waypoints.waypoints))
+            #waypoints.waypoints = waypoints.waypoints[first_wpt_index:(first_wpt_index + LOOKAHEAD_WPS) % num_waypoints_in_list]
+            #rospy.loginfo('WaypointUpdater::waypoints_cb - Left only %s waypoints in the list', len(waypoints.waypoints))
             # then, for the first stage of the implementation, set a dummy velocity to all these waypoints
             # so that the car is intructed to drive around the track
-            rospy.loginfo('WaypointUpdater::waypoints_cb - Setting waypoints twist.linear.x = %s', self.default_velocity)
-            for waypoint in waypoints.waypoints:
-                waypoint.twist.twist.linear.x = self.default_velocity
+            #rospy.loginfo('WaypointUpdater::waypoints_cb - Setting waypoints twist.linear.x = %s', self.default_velocity)
+            #for waypoint in waypoints.waypoints:
+            #    waypoint.twist.twist.linear.x = self.default_velocity
 
         # finally, publish waypoints as modified on /final_waypoints topic
-        rospy.loginfo('WaypointUpdater::waypoints_cb - publishing new waypoint list on /final_waypoints')
-        self.final_waypoints_pub.publish(waypoints)
-        rospy.loginfo('WaypointUpdater::waypoints_cb - End')
+        #rospy.loginfo('WaypointUpdater::waypoints_cb - publishing new waypoint list on /final_waypoints')
+        #self.final_waypoints_pub.publish(waypoints)
+        self.final_waypoints_pub.publish(lane)
+        #rospy.loginfo('WaypointUpdater::waypoints_cb - End')
 
     def traffic_cb(self, traffic_waypoint):
         # TODO: Callback for /traffic_waypoint message. Implement
