@@ -7,7 +7,6 @@ from styx_msgs.msg import Lane, Waypoint
 import tf
 
 import math
-import tf
 
 '''
 This node will publish waypoints from the car's current position to some `x` distance ahead.
@@ -24,7 +23,7 @@ as well as to verify your TL classifier.
 TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 '''
 
-LOOKAHEAD_WPS = 200 # Number of waypoints we will publish. You can change this number
+LOOKAHEAD_WPS = 50 # Number of waypoints we will publish. You can change this number
 TIMEOUT_VALUE = 10.0
 ONE_MPH = 0.44704
 
@@ -51,6 +50,9 @@ class WaypointUpdater(object):
         # TODO: Add other member variables you need below
         self.tf_listener = tf.TransformListener()
 
+        # The car's current position
+        self.pose = None
+
         self.default_velocity = rospy.get_param('~velocity', 0) * ONE_MPH
 
         #rospy.loginfo('WaypointUpdater::__init__ - End (just before executing spin())')
@@ -60,9 +62,13 @@ class WaypointUpdater(object):
         #rospy.loginfo('WaypointUpdater::pose_cb - Start')
         #rospy.loginfo('WaypointUpdater::pose_cb - Pose rcvd X:%s, Y:%s, Z:%s, rX:%s, rY:%s, rZ:%s, rW:%s for frame %s', msg.pose.position.x, msg.pose.position.y, msg.pose.position.z, msg.pose.orientation.x, msg.pose.orientation.y, msg.pose.orientation.z, msg.pose.orientation.w, msg.header.frame_id)
         #rospy.loginfo('WaypointUpdater::pose_cb - End')
-        pass
+        self.pose = msg
 
     def waypoints_cb(self, waypoints):
+        # We cannot produce waypoints without the car's position
+        if self.pose == None:
+            return
+
         # let's log some information about the received list of waypoints
         #rospy.loginfo('WaypointUpdater::waypoints_cb - Start')
         #rospy.loginfo('WaypointUpdater::waypoints_cb - Rcvd list of %s waypoints on frame %s', len(waypoints.waypoints), waypoints.header.frame_id)
@@ -71,37 +77,41 @@ class WaypointUpdater(object):
         min_wpt_distance_squared = float('inf')
         num_waypoints_in_list = len(waypoints.waypoints)
 
+        # Gererate an empty lane to store the final_waypoints
         lane = Lane()
         lane.header.frame_id = waypoints.header.frame_id
         lane.header.stamp = rospy.Time(0)
         lane.waypoints = []
 
-        # iterate through the complete set of waypoints received
+        # Iterate through the complete set of waypoints until we found the closest
+        distance_decreased = False
         for index, waypoint in enumerate(waypoints.waypoints):
-            try:
-                # I need to make sure that the header part of each PoseStamped element in the waypoints list is correctly
-                # initialized... for some reason they are not
-
-                waypoint.pose.header.frame_id = waypoints.header.frame_id
-                self.tf_listener.waitForTransform("/base_link", "/world", rospy.Time(0), rospy.Duration(TIMEOUT_VALUE))
-                transformed_waypoint = self.tf_listener.transformPose("/base_link", waypoint.pose)
-                # all waypoints in front of the car should have positive X coordinate in car coordinate frame
-                # let's find the one with the smallest positive X coordinate and store it's index in the waypoint list
-                current_wpt_distance_squared = transformed_waypoint.pose.position.x**2 + transformed_waypoint.pose.position.y**2
-                if transformed_waypoint.pose.position.x > 0.0 and current_wpt_distance_squared < min_wpt_distance_squared:
-                    min_wpt_distance_squared = current_wpt_distance_squared
-                    first_wpt_index = index
-
-            except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-                rospy.logerr('WaypointUpdater::waypoints_cb - could not get coordinate frame transform!!!')
+            current_wpt_distance_squared = (self.pose.pose.position.x - waypoint.pose.pose.position.x)**2 + (self.pose.pose.position.y - waypoint.pose.pose.position.y)**2
+            if distance_decreased and current_wpt_distance_squared > min_wpt_distance_squared:
+                break
+            if current_wpt_distance_squared < min_wpt_distance_squared:
+                min_wpt_distance_squared = current_wpt_distance_squared
+                first_wpt_index = index
+                distance_decreased = True
 
         if first_wpt_index == -1:
             rospy.logwarn('WaypointUpdater::waypoints_cb - No waypoints ahead of ego were found... seems that the car went off course')
         else:
+            # Transform first waypoint to car coordinates
+            waypoints.waypoints[first_wpt_index].pose.header.frame_id = waypoints.header.frame_id
+            self.tf_listener.waitForTransform("/base_link", "/world", rospy.Time(0), rospy.Duration(TIMEOUT_VALUE))
+            transformed_waypoint = self.tf_listener.transformPose("/base_link", waypoints.waypoints[first_wpt_index].pose)
+
+            # All waypoints in front of the car should have positive X coordinate in car coordinate frame
+            # If the closest waypoint is behind the car, skip this waypoint
+            if transformed_waypoint.pose.position.x <= 0.0:
+                first_wpt_index += 1
+
+            # Fill the lane with the final waypoints
             for num_wp in range(LOOKAHEAD_WPS):
                 wp = Waypoint()
-                wp.pose = waypoints.waypoints[(first_wpt_index + num_wp) % len(waypoints.waypoints)].pose
-                wp.twist = waypoints.waypoints[(first_wpt_index + num_wp) % len(waypoints.waypoints)].twist
+                wp.pose = waypoints.waypoints[(first_wpt_index + num_wp) % num_waypoints_in_list].pose
+                wp.twist = waypoints.waypoints[(first_wpt_index + num_wp) % num_waypoints_in_list].twist
                 wp.twist.twist.linear.x = self.default_velocity
                 wp.twist.twist.linear.y = 0.0
                 wp.twist.twist.linear.z = 0.0
