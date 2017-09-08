@@ -9,7 +9,7 @@ from styx_msgs.msg import Lane
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from light_classification.tl_classifier import TLClassifier
-from traffic_light_config import config
+import yaml
 import tf
 import cv2
 import math
@@ -80,6 +80,10 @@ class TLDetector(object):
             sub3 = rospy.Subscriber('/vehicle/traffic_lights', TrafficLightArray, self.traffic_cb)
             
         sub6 = rospy.Subscriber('/camera/image_raw', Image, self.image_cb)
+        sub6 = rospy.Subscriber('/image_color', Image, self.image_cb)
+
+        config_string = rospy.get_param("/traffic_light_config")
+        self.config = yaml.load(config_string)
 
         self.upcoming_red_light_pub = rospy.Publisher('/traffic_waypoint', Int32, queue_size=1)
         self.upcoming_traffic_light_pub = rospy.Publisher('/traffic_light', TrafficLight, queue_size=1)
@@ -187,11 +191,10 @@ class TLDetector(object):
 
         """
 
-        fx = config.camera_info.focal_length_x
-        fy = config.camera_info.focal_length_y
-
-        image_width = config.camera_info.image_width
-        image_height = config.camera_info.image_height
+        fx = self.config['camera_info']['focal_length_x']
+        fy = self.config['camera_info']['focal_length_y']
+        image_width = self.config['camera_info']['image_width']
+        image_height = self.config['camera_info']['image_height']
 
         # get transform between pose of camera and world frame
         trans = None
@@ -243,8 +246,8 @@ class TLDetector(object):
 
         x, y = self.project_to_image_plane(world_light.pose.position)
 		
-        image_width = config.camera_info.image_width
-        image_height = config.camera_info.image_height
+        image_width = self.config['camera_info']['image_width']
+        image_height = self.config['camera_info']['image_height']
 		
         #use light location to zoom in on traffic light in image
         x1 = x-128 
@@ -314,7 +317,7 @@ class TLDetector(object):
 
         """
         world_light = None
-        light_positions = config.light_positions
+        light_positions = self.config['light_positions']
         if(self.current_pose is None):
             return -1, TrafficLight.UNKNOWN
         
@@ -323,8 +326,8 @@ class TLDetector(object):
         for wp in range(len(light_positions)):
             pose = PoseStamped()
 
-            pose.pose.position.x = config.light_positions[wp][0]
-            pose.pose.position.y = config.light_positions[wp][1]
+            pose.pose.position.x = light_positions[wp][0]
+            pose.pose.position.y = light_positions[wp][1]
             pose.pose.position.z = 7
             dist = self.distance_pose_to_pose(self.current_pose.pose, pose.pose)
 #            rospy.loginfo('traffic light: %s %s %s %s',self.gt_lights[wp].header.frame_id, pose.pose.position.x, pose.pose.position.y, dist)
