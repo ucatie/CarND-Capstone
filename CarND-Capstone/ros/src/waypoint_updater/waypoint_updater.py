@@ -7,6 +7,7 @@ from styx_msgs.msg import Lane, Waypoint
 import tf
 
 import math
+import time
 
 '''
 This node will publish waypoints from the car's current position to some `x` distance ahead.
@@ -23,7 +24,7 @@ as well as to verify your TL classifier.
 TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 '''
 
-LOOKAHEAD_WPS = 50 # Number of waypoints we will publish. You can change this number
+LOOKAHEAD_WPS = 100 # Number of waypoints we will publish. You can change this number
 TIMEOUT_VALUE = 10.0
 ONE_MPH = 0.44704
 
@@ -53,6 +54,9 @@ class WaypointUpdater(object):
         # The car's current position
         self.pose = None
 
+        # The former first waypoint index at the last iteration
+        self.former_first_wpt_index = 0
+
         self.default_velocity = rospy.get_param('~velocity', 0) * ONE_MPH
 
         #rospy.loginfo('WaypointUpdater::__init__ - End (just before executing spin())')
@@ -69,10 +73,6 @@ class WaypointUpdater(object):
         if self.pose == None:
             return
 
-        # let's log some information about the received list of waypoints
-        #rospy.loginfo('WaypointUpdater::waypoints_cb - Start')
-        #rospy.loginfo('WaypointUpdater::waypoints_cb - Rcvd list of %s waypoints on frame %s', len(waypoints.waypoints), waypoints.header.frame_id)
-
         first_wpt_index = -1
         min_wpt_distance_squared = float('inf')
         num_waypoints_in_list = len(waypoints.waypoints)
@@ -85,7 +85,9 @@ class WaypointUpdater(object):
 
         # Iterate through the complete set of waypoints until we found the closest
         distance_decreased = False
-        for index, waypoint in enumerate(waypoints.waypoints):
+        rospy.loginfo('Started at waypoint index: %s', self.former_first_wpt_index)
+        start_time = time.time()
+        for index, waypoint in enumerate(waypoints.waypoints[self.former_first_wpt_index:] + waypoints.waypoints[:self.former_first_wpt_index], start=self.former_first_wpt_index):
             current_wpt_distance_squared = (self.pose.pose.position.x - waypoint.pose.pose.position.x)**2 + (self.pose.pose.position.y - waypoint.pose.pose.position.y)**2
             if distance_decreased and current_wpt_distance_squared > min_wpt_distance_squared:
                 break
@@ -93,6 +95,11 @@ class WaypointUpdater(object):
                 min_wpt_distance_squared = current_wpt_distance_squared
                 first_wpt_index = index
                 distance_decreased = True
+        first_wpt_index %= num_waypoints_in_list
+
+        rospy.loginfo('Calculation to find the waypoint index: %s', time.time() - start_time)
+        rospy.loginfo('Ended at waypoint index: %s', first_wpt_index)
+        rospy.loginfo('Squared distance to waypoint: %s', min_wpt_distance_squared)
 
         if first_wpt_index == -1:
             rospy.logwarn('WaypointUpdater::waypoints_cb - No waypoints ahead of ego were found... seems that the car went off course')
@@ -106,6 +113,7 @@ class WaypointUpdater(object):
             # If the closest waypoint is behind the car, skip this waypoint
             if transformed_waypoint.pose.position.x <= 0.0:
                 first_wpt_index += 1
+            self.former_first_wpt_index = first_wpt_index % num_waypoints_in_list
 
             # Fill the lane with the final waypoints
             for num_wp in range(LOOKAHEAD_WPS):
