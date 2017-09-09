@@ -56,6 +56,8 @@ private:
   const double KAPPA_MIN_;
 
   bool linear_interpolate_;
+  
+  bool updated_;
 
   // config topic
   int param_flag_;              // 0 = waypoint, 1 = Dialog
@@ -93,6 +95,7 @@ public:
     : RADIUS_MAX_(9e10)
     , KAPPA_MIN_(1/RADIUS_MAX_)
     , linear_interpolate_(linear_interpolate_mode)
+    , updated_(false)
     , param_flag_(0)
     , const_lookahead_distance_(4.0)
     , initial_velocity_(5.0)

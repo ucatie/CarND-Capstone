@@ -39,18 +39,21 @@ void PurePursuit::callbackFromCurrentPose(const geometry_msgs::PoseStampedConstP
   current_pose_.header = msg->header;
   current_pose_.pose = msg->pose;
   pose_set_ = true;
+  updated_ = true;
 }//processing frequency
 
 void PurePursuit::callbackFromCurrentVelocity(const geometry_msgs::TwistStampedConstPtr &msg)
 {
   current_velocity_ = *msg;
   velocity_set_ = true;
+  updated_ = true;
 }
 
 void PurePursuit::callbackFromWayPoints(const styx_msgs::LaneConstPtr &msg)
 {
   current_waypoints_.setPath(*msg);
   waypoint_set_ = true;
+  updated_ = true;
   // ROS_INFO_STREAM("waypoint subscribed");
 }
 
@@ -237,15 +240,15 @@ bool PurePursuit::verifyFollowing() const
   getLinearEquation(current_waypoints_.getWaypointPosition(1), current_waypoints_.getWaypointPosition(2), &a, &b, &c);
   double displacement = getDistanceBetweenLineAndPoint(current_pose_.pose.position, a, b, c);
   double relative_angle = getRelativeAngle(current_waypoints_.getWaypointPose(1), current_pose_.pose);
-  //ROS_ERROR("side diff : %lf , angle diff : %lf",displacement,relative_angle);
+  ROS_INFO("side diff : %lf , angle diff : %lf",displacement,relative_angle);
   if (displacement < displacement_threshold_ && relative_angle < relative_angle_threshold_)
   {
-    // ROS_INFO("Following : True");
+    ROS_INFO("Following : True");
     return true;
   }
   else
   {
-    // ROS_INFO("Following : False");
+    ROS_INFO("Following : False");
     return false;
   }
 }
@@ -264,6 +267,7 @@ geometry_msgs::Twist PurePursuit::calcTwist(double curvature, double cmd_velocit
   {
     //ROS_ERROR_STREAM("Not following");
     twist.angular.z = current_velocity_.twist.linear.x * curvature;
+    ROS_INFO("not following %lf",twist.angular.z);
   }
   else
   {
@@ -334,7 +338,7 @@ geometry_msgs::TwistStamped PurePursuit::outputTwist(geometry_msgs::Twist t) con
 
   if(fabs(omega) < ERROR){
 
-    ROS_INFO("send twist1");
+    ROS_INFO("outputTwist x %lf z %lf ",twist.twist.linear.x,twist.twist.angular.z);
     return twist;
   }
 
@@ -348,12 +352,16 @@ geometry_msgs::TwistStamped PurePursuit::outputTwist(geometry_msgs::Twist t) con
                     : v;
   twist.twist.angular.z = omega;
 
-  ROS_INFO("send twist2");
+  ROS_INFO("outputTwist x %lf z %lf ",twist.twist.linear.x,twist.twist.angular.z);
   return twist;
 }
 
 geometry_msgs::TwistStamped PurePursuit::go()
 {
+  if(!updated_)
+    return outputZero();
+    
+  updated_=false;
   if(!pose_set_ || !waypoint_set_ || !velocity_set_){
     if(!pose_set_) {
        ROS_WARN("position is missing");
