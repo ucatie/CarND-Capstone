@@ -5,7 +5,6 @@ from std_msgs.msg import Int32
 from geometry_msgs.msg import PoseStamped
 from styx_msgs.msg import Lane, Waypoint
 import tf
-
 import math
 from control_msgs.msg import _SingleJointPositionResult
 
@@ -36,7 +35,7 @@ class WaypointUpdater(object):
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
 
-        # TODO: Add a subscriber for /traffic_waypoint and /obstacle_waypoint below
+        #Add a subscriber for /traffic_waypoint and /obstacle_waypoint below
         rospy.Subscriber('/obstacle_waypoint', PoseStamped, self.obstacle_cb)
         rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
 
@@ -44,13 +43,15 @@ class WaypointUpdater(object):
 
         self.final_waypoints_pub = rospy.Publisher('final_waypoints', Lane, queue_size=1)
 
-        # TODO: Add other member variables you need below
+        #Add other member variables you need below
         
         self.lane = None
         
         self.current_pose = None
         
         self.traffic_waypoint = None
+        
+        self.next_wp_index = None
         
         rospy.loginfo('WaypointUpdater started')
 
@@ -85,6 +86,7 @@ class WaypointUpdater(object):
         return abs(direction) < math.pi*0.5 
         
     def pose_cb(self, pose):
+#        rate = rospy.Rate(10)
         self.current_pose = pose
         yaw = self.get_yaw(pose.pose)
         
@@ -94,15 +96,24 @@ class WaypointUpdater(object):
         final_waypoints = []
         
         (start,dir) = self.get_next_waypoint(self.lane.waypoints, self.current_pose)
+        if self.next_wp_index is not None and start == self.next_wp_index:
+          return
         
-        rospy.loginfo('wp %s dir %s',start,dir)
+        self.next_wp_index = start
+        rospy.loginfo("current_pose %s %s %s",pose.header.stamp, pose.pose.position.x, pose.pose.position.y)
+        rospy.loginfo('wp %s dir %s', start,dir)
         next_wp = start
 
         dist = self.distance_pose_to_pose(self.lane.waypoints[next_wp].pose.pose, self.current_pose.pose)
         dir = self.get_direction(self.lane.waypoints[next_wp].pose.pose, self.current_pose.pose)
         inFront = self.is_infront(self.lane.waypoints[next_wp].pose.pose, self.current_pose.pose)
-        rospy.loginfo("wp %s dist: %s dir: %s ahead: %s",next_wp,dist,dir,inFront)
+        rospy.loginfo("wp start %s dist: %s dir: %s ahead: %s",next_wp,dist,dir,inFront)
+
+        dist2 = self.distance_pose_to_pose(self.lane.waypoints[next_wp+LOOKAHEAD_WPS-1].pose.pose, self.current_pose.pose)
+        dir2 = self.get_direction(self.lane.waypoints[next_wp+LOOKAHEAD_WPS-1].pose.pose, self.current_pose.pose)
+        rospy.loginfo("wp end %s dist: %s dir: %s",next_wp+LOOKAHEAD_WPS-1,dist2,dir2)
         
+        rospy.loginfo("x,y")
         for wp in range(LOOKAHEAD_WPS):
 
             if dir == True:
@@ -114,6 +125,7 @@ class WaypointUpdater(object):
             #set a default speed in 
             p.twist.twist.linear.x = self.velocity          
             final_waypoints.append(p)
+#            rospy.loginfo("%s,%s",p.pose.pose.position.x,p.pose.pose.position.y)
         
 #        if self.traffic_waypoint is not None and self.current_pose is not None: 
 #            distance = distance_pose_to_pose(traffic_waypoint.pose, current_pose)            
@@ -130,6 +142,7 @@ class WaypointUpdater(object):
             
         rospy.loginfo('published final_waypoints')
         self.publish(final_waypoints)
+#        rate.sleep()
         
 #        rospy.loginfo('Current pose received:%s yaw: %s',pose, yaw)
 
