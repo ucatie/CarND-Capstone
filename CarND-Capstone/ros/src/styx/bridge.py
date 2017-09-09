@@ -19,6 +19,7 @@ from io import BytesIO
 import base64
 
 import math
+import rospy
 
 TYPE = {
     'bool': Bool,
@@ -41,6 +42,7 @@ class Bridge(object):
         self.vel = 0.
         self.yaw = None
         self.angular_vel = 0.
+        self.old_data = None
         self.bridge = CvBridge()
 
         self.callbacks = {
@@ -127,13 +129,27 @@ class Bridge(object):
             name,
             "world")
 
+    def data_has_changed(self,data):
+        if self.old_data == None:
+          self.old_data = data
+          return True
+    
+        if data['x'] != self.old_data['x'] or data['y'] != self.old_data['y'] or data['z'] != self.old_data['z'] or data['yaw'] != self.old_data['yaw']:
+          self.old_data = data
+          return True
+          
     def publish_odometry(self, data):
+    
+        if not self.data_has_changed(data):
+          return
+          
         pose = self.create_pose(data['x'], data['y'], data['z'], data['yaw'])
 
         position = (data['x'], data['y'], data['z'])
         orientation = tf.transformations.quaternion_from_euler(0, 0, math.pi * data['yaw']/180.)
         self.broadcast_transform("base_link", position, orientation)
 
+        rospy.loginfo("current_pose %s %s %s",pose.header.stamp, pose.pose.position.x, pose.pose.position.y)
         self.publishers['current_pose'].publish(pose)
         self.vel = data['velocity']* 0.44704
         self.angular = self.calc_angular(data['yaw'] * math.pi/180.)
