@@ -13,7 +13,7 @@ import rospy
 sio = socketio.Server()
 app = Flask(__name__)
 bridge = Bridge(conf)
-msgs = []
+msgs = {}
 
 dbw_enable = False
 
@@ -24,7 +24,7 @@ def connect(sid, environ):
 def send(topic, data):
     s = 1
     rospy.loginfo("send %s",topic)
-    msgs.append((topic, data))
+    msgs[topic] = data
     #sio.emit(topic, data=json.dumps(data), skip_sid=True)
 
 bridge.register_server(send)
@@ -32,13 +32,16 @@ bridge.register_server(send)
 @sio.on('telemetry')
 def telemetry(sid, data):
     global dbw_enable
-    if data.has_key("dbw_enable") and data["dbw_enable"] != dbw_enable:
+    if data["dbw_enable"] != dbw_enable:
         dbw_enable = data["dbw_enable"]
         bridge.publish_dbw_status(dbw_enable)
         rospy.loginfo("publish dbw_enable %s",dbw_enable)
     bridge.publish_odometry(data)
+    if len(msgs) == 0:
+      return
+    rospy.loginfo("telemetry %s messages",len(msgs))
     for i in range(len(msgs)):
-        topic, data = msgs.pop(0)
+        topic, data = msgs.popitem()
         sio.emit(topic, data=data, skip_sid=True)
   
 @sio.on('control')
@@ -67,8 +70,8 @@ def trafficlights(sid, data):
 @sio.on('image')
 def image(sid, data):
 #    rospy.loginfo("image")
-    bridge.publish_camera(data)
-#    pass
+#    bridge.publish_camera(data)
+    pass
 
 if __name__ == '__main__':
 
