@@ -240,7 +240,6 @@ class TLDetector(object):
             self.prev_light_loc = None
             return False
 
-        self.camera_image.encoding = "rgb8"
         cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "bgr8")
 
         x, y = self.project_to_image_plane(world_light.pose.position)
@@ -265,7 +264,6 @@ class TLDetector(object):
         region = cv_image[y1:y2, x1:x2]
         rospy.loginfo('region %s %s %s %s org: %s region:%s',x1,y1,x2,y2, cv_image.shape, region.shape)
         
-        self.camera_image.encoding = "rgb8"
         traffic_image = self.bridge.cv2_to_imgmsg(region, "bgr8")
         
         self.upcoming_traffic_light_image_pub.publish(traffic_image);
