@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <launch>
-    <param name="run_dir" value="/home/frank/selfdriving/sdc_course/CarND-Capstone/ros" />        
+    <param name="run_dir" value="$(env PWD)"/>
 
     <!-- Simulator Bridge -->
-    <include file="$(find styx)/launch/server.launch" />
+    <include file="$(find styx)/launch/server.launch"/>
 
     <!--DBW Node -->
     <include file="$(find twist_controller)/launch/dbw_sim.launch"/>
@@ -21,5 +21,5 @@
     <include file="$(find tl_detector)/launch/tl_detector.launch"/>
 
     <!--Traffic Light Locations and Camera Config -->
-    <param name="traffic_light_config" textfile="$(find tl_detector)/sim_traffic_light_config.yaml" />
+    <param name="traffic_light_config" textfile="$(find tl_detector)/sim_traffic_light_config.yaml"/>
 </launch>
