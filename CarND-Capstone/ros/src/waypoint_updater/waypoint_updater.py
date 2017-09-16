@@ -8,7 +8,6 @@ import tf
 
 import math
 import time
-import yaml
 
 '''
 This node will publish waypoints from the car's current position to some `x` distance ahead.
@@ -66,13 +65,10 @@ class WaypointUpdater(object):
         # Define how many seconds we wait to start driving after we did not receive a traffic_waypoint
         self.red_light_threshold = 0.2
 
-        # Load traffic light positions
-        config_string = rospy.get_param("/traffic_light_config")
-        config = yaml.load(config_string)
-        self.light_positions = config['light_positions']
-        self.light_position = None
+        # The index of the waypoint in the base_waypoints list, which is closest to the traffic light
+        self.light_waypoint_index = None
         # The approximate distance from the stop line to the traffic light
-        self.light_distance_threshold = 5.0
+        self.light_distance_threshold = 30.0
 
         # The car's distance to the traffic light when the car started the slowing down process
         self.car_distance_to_tl_when_car_started_to_slow_down = None
@@ -156,10 +152,12 @@ class WaypointUpdater(object):
             slow_down = False
             reached_zero_velocity = False
             car_distance_to_tl = -1.
+            light_waypoint = None
             # If the last traffic_waypoint message is newer than the threshold, we might need to the car.
             if time.time() - self.traffic_waypoint_timestamp < self.red_light_threshold:
-                car_distance_to_tl = math.sqrt((self.pose.pose.position.x - self.light_position[0])**2 \
-                                            + (self.pose.pose.position.y - self.light_position[1])**2) \
+                light_waypoint = waypoints.waypoints[self.light_waypoint_index]
+                car_distance_to_tl = math.sqrt((self.pose.pose.position.x - light_waypoint.pose.pose.position.x)**2 \
+                                            + (self.pose.pose.position.y - light_waypoint.pose.pose.position.y)**2) \
                                     - self.light_distance_threshold # The approximate distance from the stop line to the traffic light
                 if car_distance_to_tl > 0:
                     # Estimate whether the car cannot cross the stop line on yellow (in less than one and a half seconds). Otherwise don't slow down.
@@ -182,8 +180,8 @@ class WaypointUpdater(object):
                     wp.twist.twist.linear.x = 0.0
                 elif slow_down:
                     # Calculate the distance between the waypoint and the traffic light's stop line
-                    wp_distance_to_tl = math.sqrt((self.light_position[0] - wp.pose.pose.position.x)**2 \
-                                                    + (self.light_position[1] - wp.pose.pose.position.y)**2) \
+                    wp_distance_to_tl = math.sqrt((light_waypoint.pose.pose.position.x - wp.pose.pose.position.x)**2 \
+                                                    + (light_waypoint.pose.pose.position.y - wp.pose.pose.position.y)**2) \
                                         - self.light_distance_threshold # The approximate distance from the stop line to the traffic light
                     # Calculate the distance between the car and the waypoint
                     car_distance_to_wp = math.sqrt((self.pose.pose.position.x - wp.pose.pose.position.x)**2 \
@@ -194,7 +192,7 @@ class WaypointUpdater(object):
                     #rospy.loginfo('Car distance to waypoint: %s', car_distance_to_wp)
 
                     # Stop the car in a safe distance before the stop line to give the simulator space to adapt velocity
-                    if car_distance_to_tl > wp_distance_to_tl and car_distance_to_tl > car_distance_to_wp and wp_distance_to_tl > 3:
+                    if car_distance_to_tl > wp_distance_to_tl and car_distance_to_tl > car_distance_to_wp and wp_distance_to_tl > 4:
                         # Estimate what speed the car should have at the waypoint
                         velocity_fraction = wp_distance_to_tl / self.car_distance_to_tl_when_car_started_to_slow_down
                         if velocity_fraction > 0 and velocity_fraction <= 1:
@@ -250,7 +248,7 @@ class WaypointUpdater(object):
         # Callback for /traffic_waypoint message.
         # Store the timestamp and the traffic light position to use them for final_waypoints in waypoints_cb
         self.traffic_waypoint_timestamp = time.time()
-        self.light_position = self.light_positions[traffic_waypoint.data]
+        self.light_waypoint_index = traffic_waypoint.data
 
     def obstacle_cb(self, msg):
         # TODO: Callback for /obstacle_waypoint message. We will implement it later
