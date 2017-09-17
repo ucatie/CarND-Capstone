@@ -1,0 +1,60 @@
+- annotations:
+  - {class: Green, height: 55.0, width: 20.0, x: 649.0, y: 418.0}
+  class: image
+  filename: green/left0000.jpg
+- annotations:
+  - {class: Green, height: 55.0, width: 23.0, x: 644.0, y: 418.0}
+  class: image
+  filename: green/left0024.jpg
+- annotations:
+  - {class: Green, height: 204.0, width: 89.0, x: 139.0, y: 332.0}
+  class: image
+  filename: green/left0265.jpg
+- annotations:
+  - {class: Green, height: 166.0, width: 61.0, x: 345.0, y: 362.0}
+  class: image
+  filename: green/left0577.jpg
+- annotations:
+  - {class: Red, height: 109.0, width: 46.0, x: 523.0, y: 385.0}
+  class: image
+  filename: red/left0140.jpg
+- annotations:
+  - {class: Red, height: 249.0, width: 39.0, x: 0.0, y: 303.0}
+  class: image
+  filename: red/left0252.jpg
+- annotations:
+  - {class: Red, height: 81.0, width: 26.0, x: 639.0, y: 412.0}
+  class: image
+  filename: red/left0496.jpg
+- annotations:
+  - {class: Red, height: 155.0, width: 56.0, x: 400.0, y: 362.0}
+  class: image
+  filename: red/left0572.jpg
+- annotations:
+  - {class: Yellow, height: 64.0, width: 29.0, x: 632.0, y: 419.0}
+  class: image
+  filename: yellow/left0079.jpg
+- annotations:
+  - {class: Yellow, height: 89.0, width: 31.0, x: 583.0, y: 405.0}
+  class: image
+  filename: yellow/left0120.jpg
+- annotations:
+  - {class: Yellow, height: 81.0, width: 34.0, x: 637.0, y: 409.0}
+  class: image
+  filename: yellow/left0414.jpg
+- annotations:
+  - {class: Yellow, height: 177.0, width: 69.0, x: 255.0, y: 355.0}
+  class: image
+  filename: yellow/left0709.jpg
+- annotations:
+  - {class: Yellow, height: 66.0, width: 24.0, x: 636.0, y: 418.0}
+  class: image
+  filename: unidentified/left0078.jpg
+- annotations:
+  - {class: Unknown, height: 178.0, width: 65.0, x: 255.0, y: 358.0}
+  class: image
+  filename: unidentified/left0699.jpg
+- annotations:
+  - {class: Unknown, height: 88.0, width: 36.0, x: 624.0, y: 405.0}
+  class: image
+  filename: unidentified/left0389.jpg
