@@ -3,8 +3,11 @@
 import rospy
 from std_msgs.msg import Bool
 from dbw_mkz_msgs.msg import ThrottleCmd, SteeringCmd, BrakeCmd, SteeringReport
-from geometry_msgs.msg import TwistStamped
+from geometry_msgs.msg import TwistStamped, PoseStamped
+from styx_msgs.msg import Lane
 import math
+import numpy as np
+import tf
 
 from twist_controller import Controller
 
@@ -31,6 +34,7 @@ that we have created in the `__init__` function.
 
 '''
 UPDATE_RATE = 4.0
+TIMEOUT_VALUE = 10.0
 
 class DBWNode(object):
     def __init__(self):
@@ -47,7 +51,7 @@ class DBWNode(object):
         self.wheel_base = rospy.get_param('~wheel_base', 2.8498)
         self.steer_ratio = rospy.get_param('~steer_ratio', 14.8)
         self.max_lat_accel = rospy.get_param('~max_lat_accel', 3.)
-        self.max_steer_angle = math.radians(rospy.get_param('~max_steer_angle', 8.))
+        self.max_steer_angle = rospy.get_param('~max_steer_angle', 8.)
 
         rospy.loginfo('DBWNode::__init__ - creating publisher to /vehicle/steering_cmd')
         self.steer_pub = rospy.Publisher('/vehicle/steering_cmd', SteeringCmd, queue_size=1)
@@ -63,7 +67,11 @@ class DBWNode(object):
         rospy.loginfo('DBWNode::__init__ - subscribing to /current_velocity')
         rospy.Subscriber('/current_velocity', TwistStamped, self.current_velocity_cb)
         #rospy.loginfo('DBWNode::__init__ - subscribing to /current_pose')
-        #rospy.Subscriber('/current_pose', PoseStamped, self.current_pose_cb)
+        rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
+        rospy.Subscriber('/final_waypoints', Lane, self.waypoints_cb)
+
+        self.cte_counter = 0
+        self.tot_cte = 0
 
         #create `TwistController` object
         #rospy.loginfo('DBWNode::__init__ - instantiating controller object')
@@ -73,6 +81,10 @@ class DBWNode(object):
         self.current_velocity = None
         self.dbw_enable_status = True
         self.time_last_cmd = None
+        self.pose = None
+        self.waypoints = None
+
+        self.tf_listener = tf.TransformListener()
 
         rospy.loginfo('DBWNode::__init__ - entering loop')
         self.loop()
@@ -93,6 +105,12 @@ class DBWNode(object):
             raw_accel = UPDATE_RATE * (msg.twist.linear.x - self.current_velocity.twist.linear.x)
             self.controller.filter_accel_value(raw_accel)
         self.current_velocity = msg
+
+    def pose_cb(self, msg):
+        self.pose = msg
+
+    def waypoints_cb(self, msg):
+        self.waypoints = msg
         
     def loop(self):
         rate = rospy.Rate(UPDATE_RATE) # 50Hz
@@ -106,7 +124,34 @@ class DBWNode(object):
 
             # no need to test time_last_cmd since it is assigned together with twist_cmd
             if self.twist_cmd != None and self.current_velocity != None:
-                throttle_val, brake_val, steering_val = self.controller.control(current_time, self.time_last_cmd, float(1.0/UPDATE_RATE), self.twist_cmd, self.current_velocity, self.dbw_enable_status, self.brake_deadband)
+                
+                # Create lists of x and y values of the next waypoints to fit a polynomial
+                x = []
+                y = []
+                i = -1
+                # Due to race conditions, we need to store the waypoints temporary
+                temp_waypoints = self.waypoints
+                while len(x)<15:
+                    i += 1
+                    # Transform first waypoint to car coordinates
+                    temp_waypoints.waypoints[i].pose.header.frame_id = temp_waypoints.header.frame_id
+                    self.tf_listener.waitForTransform("/base_link", "/world", rospy.Time(0), rospy.Duration(TIMEOUT_VALUE))
+                    transformed_waypoint = self.tf_listener.transformPose("/base_link", temp_waypoints.waypoints[i].pose)
+                    if transformed_waypoint.pose.position.x >= 0.0:
+                        x.append(transformed_waypoint.pose.position.x)
+                        y.append(transformed_waypoint.pose.position.y)
+                #rospy.loginfo('x: %s', x)
+                #rospy.loginfo('y: %s', y)
+                coefficients = np.polyfit(x, y, 3)
+                # We have to calculate the cte for a position ahead, due to delay
+                cte = np.polyval(coefficients, 15.0) # TODO This should be set depending on speed! This value seems to be about right for 50 mph.
+                cte *= abs(cte)
+                rospy.loginfo('cte: %s', cte)
+                self.tot_cte += abs(cte)
+                self.cte_counter += 1
+                rospy.loginfo('avg_cte: %s', self.tot_cte / self.cte_counter)
+                throttle_val, brake_val, steering_val = self.controller.control(current_time, self.time_last_cmd, float(1.0/UPDATE_RATE), self.twist_cmd, \
+                                                        self.current_velocity, self.dbw_enable_status, self.brake_deadband, cte)
                 if self.dbw_enable_status == True:
                     self.publish(throttle_val, brake_val, steering_val)
                 else:
@@ -140,3 +185,4 @@ class DBWNode(object):
 
 if __name__ == '__main__':
     DBWNode()
+

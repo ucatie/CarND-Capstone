@@ -9,8 +9,7 @@ import math
 GAS_DENSITY = 2.858
 ONE_MPH = 0.44704
 WEIGHT_PERSON = 75
-MIN_SPEED = 5.0 * ONE_MPH
-STEER_KP = 0
+MIN_SPEED = 1.0 * ONE_MPH
 
 VELOCITY_Kp = 2.0
 VELOCITY_Ki = 0.0
@@ -20,6 +19,10 @@ ACCEL_Ki = 0.1
 ACCEL_Kd = 0.0
 ACCEL_Tau = 0.5
 ACCEL_Ts = 0.02
+STEER_Kp = 0.8
+STEER_Ki = 0.1
+STEER_Kd = 0.3
+
 
 class Controller(object):
     def __init__(self, *args, **kwargs):
@@ -36,6 +39,7 @@ class Controller(object):
 
         self.velocity_pid_ = PID(VELOCITY_Kp, VELOCITY_Ki, VELOCITY_Kd, -abs(self.decel_limit), abs(self.accel_limit))
         self.accel_pid_ = PID(ACCEL_Kp, ACCEL_Ki, ACCEL_Kd)
+        self.steer_pid_ = PID(STEER_Kp, STEER_Ki, STEER_Ki, -abs(self.max_steer_angle), abs(self.max_steer_angle))
         self.steering_cntrl = YawController(self.wheel_base, self.steer_ratio, MIN_SPEED, self.max_lat_accel, self.max_steer_angle)
 
         self.accel_lpf_ = LowPassFilter(ACCEL_Tau, ACCEL_Ts)
@@ -48,6 +52,7 @@ class Controller(object):
         current_velocity = args[4]
         dbw_enabled = args[5]
         brake_deadband = args[6]
+        cte = args[7]
 
         if (current_time - last_cmd_time) > 10 * control_period:
             self.velocity_pid_.reset()
@@ -81,7 +86,8 @@ class Controller(object):
             else:
                 brake_val = 0
 
-            steering_val = self.steering_cntrl.get_steering(twist_cmd.twist.linear.x, twist_cmd.twist.angular.z, current_velocity.twist.linear.x) + STEER_KP * (twist_cmd.twist.angular.z - current_velocity.twist.angular.z)
+            steering_val = self.steering_cntrl.get_steering(twist_cmd.twist.linear.x, twist_cmd.twist.angular.z, current_velocity.twist.linear.x) \
+                            + self.steer_pid_.step(cte, control_period)
             return throttle_val, brake_val, steering_val
         else:
             self.velocity_pid_.reset()
@@ -93,3 +99,4 @@ class Controller(object):
 
     def get_filtered_accel(self):
         return self.accel_lpf_.get()
+
