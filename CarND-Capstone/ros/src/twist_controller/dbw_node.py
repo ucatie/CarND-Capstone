@@ -8,6 +8,7 @@ from styx_msgs.msg import Lane
 import math
 import numpy as np
 import tf
+import copy
 
 from twist_controller import Controller
 
@@ -123,20 +124,21 @@ class DBWNode(object):
               continue
 
             # no need to test time_last_cmd since it is assigned together with twist_cmd
-            if self.twist_cmd != None and self.current_velocity != None:
+            if self.waypoints != None and self.twist_cmd != None and self.current_velocity != None:
                 
                 # Create lists of x and y values of the next waypoints to fit a polynomial
                 x = []
                 y = []
                 i = -1
                 # Due to race conditions, we need to store the waypoints temporary
-                temp_waypoints = self.waypoints
-                while len(x)<15:
+                temp_waypoints = copy.deepcopy(self.waypoints)
+                while len(x) < 30 and i < len(temp_waypoints.waypoints):
                     i += 1
-                    # Transform first waypoint to car coordinates
+                    # Transform waypoint to car coordinates
                     temp_waypoints.waypoints[i].pose.header.frame_id = temp_waypoints.header.frame_id
                     self.tf_listener.waitForTransform("/base_link", "/world", rospy.Time(0), rospy.Duration(TIMEOUT_VALUE))
                     transformed_waypoint = self.tf_listener.transformPose("/base_link", temp_waypoints.waypoints[i].pose)
+                    # Just add the x coordinate if the car did not pass the waypoint yet
                     if transformed_waypoint.pose.position.x >= 0.0:
                         x.append(transformed_waypoint.pose.position.x)
                         y.append(transformed_waypoint.pose.position.y)
@@ -144,7 +146,8 @@ class DBWNode(object):
                 #rospy.loginfo('y: %s', y)
                 coefficients = np.polyfit(x, y, 3)
                 # We have to calculate the cte for a position ahead, due to delay
-                cte = np.polyval(coefficients, 15.0) # TODO This should be set depending on speed! This value seems to be about right for 50 mph.
+                cte = np.polyval(coefficients, 0.7 * self.current_velocity.twist.linear.x)
+                #rospy.loginfo('x coordinate: %s', 0.7 * self.current_velocity.twist.linear.x)
                 cte *= abs(cte)
                 rospy.loginfo('cte: %s', cte)
                 self.tot_cte += abs(cte)
