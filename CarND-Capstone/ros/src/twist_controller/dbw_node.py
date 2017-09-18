@@ -98,7 +98,7 @@ class DBWNode(object):
         rospy.loginfo('DBWNode::dwb_enable_cb - received DBW enable message: %s', msg.data)
         if msg != None:
             self.dbw_enable_status = msg.data
-        
+
     def current_velocity_cb(self, msg):
 #        rospy.loginfo('DBWNode::current_velocity_cb - received current velocity message: linear %s, angular %s', msg.twist.linear.x, msg.twist.angular.z)
         if self.current_velocity != None:
@@ -111,7 +111,7 @@ class DBWNode(object):
 
     def waypoints_cb(self, msg):
         self.waypoints = msg
-        
+
     def loop(self):
         rate = rospy.Rate(UPDATE_RATE) # 50Hz
         rospy.loginfo("start loop %s",UPDATE_RATE)
@@ -123,15 +123,15 @@ class DBWNode(object):
               continue
 
             # no need to test time_last_cmd since it is assigned together with twist_cmd
-            if self.twist_cmd != None and self.current_velocity != None:
-                
+            if self.twist_cmd != None and self.current_velocity != None and self.waypoints != None:
+
                 # Create lists of x and y values of the next waypoints to fit a polynomial
                 x = []
                 y = []
                 i = -1
                 # Due to race conditions, we need to store the waypoints temporary
                 temp_waypoints = self.waypoints
-                while len(x)<15:
+                while len(x)< 50 and i < len(temp_waypoints.waypoints):
                     i += 1
                     # Transform first waypoint to car coordinates
                     temp_waypoints.waypoints[i].pose.header.frame_id = temp_waypoints.header.frame_id
@@ -185,4 +185,3 @@ class DBWNode(object):
 
 if __name__ == '__main__':
     DBWNode()
-

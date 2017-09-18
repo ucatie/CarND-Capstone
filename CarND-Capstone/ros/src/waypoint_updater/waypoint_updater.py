@@ -24,28 +24,24 @@ as well as to verify your TL classifier.
 TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 '''
 
-LOOKAHEAD_WPS = 100 # Number of waypoints we will publish. You can change this number
+LOOKAHEAD_WPS = 400 # Number of waypoints we will publish. You can change this number
 TIMEOUT_VALUE = 10.0
 ONE_MPH = 0.44704
 
 class WaypointUpdater(object):
     def __init__(self):
         rospy.loginfo('WaypointUpdater::__init__ - Start')
+
         rospy.init_node('waypoint_updater')
-        #rospy.loginfo('WaypointUpdater::__init__ - subscribing to /current_pose')
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
-        #rospy.loginfo('WaypointUpdater::__init__ - subscribing to /base_waypoints')
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
 
         # TODO: Add a subscriber for /traffic_waypoint and /obstacle_waypoint below
-        #rospy.loginfo('WaypointUpdater::__init__ - subscribing to /traffic_waypoint')
         rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
         # commenting the two below for the time being until clarification about whether
         # is needed or not
-        #rospy.loginfo('WaypointUpdater::__init__ - subscribing to /obstacle_waypoint')
         #rospy.Subscriber('/obstacle_waypoint', , self.obstacle_cb)
 
-        #rospy.loginfo('WaypointUpdater::__init__ - publishing to /final_waypoints')
         self.final_waypoints_pub = rospy.Publisher('final_waypoints', Lane, queue_size=1)
 
         # TODO: Add other member variables you need below
@@ -63,42 +59,35 @@ class WaypointUpdater(object):
         self.traffic_waypoint_timestamp = 0.0
 
         # Define how many seconds we wait to start driving after we did not receive a traffic_waypoint
-        self.red_light_threshold = 0.2
+        self.red_light_tresh = 0.2
 
         # The index of the waypoint in the base_waypoints list, which is closest to the traffic light
         self.light_waypoint_index = None
         # The approximate distance from the stop line to the traffic light
-        self.light_distance_threshold = 30.0
+        self.light_distance_thresh = 30.0
 
         # The car's distance to the traffic light when the car started the slowing down process
         self.car_distance_to_tl_when_car_started_to_slow_down = None
         self.car_velocity_when_car_started_to_slow_down = None
 
-        # The former first waypoint index at the last iteration
-        self.former_first_wpt_index = 0
+        # first waypoint index at the previous iteration
+        self.prev_first_wpt_index = 0
 
-        self.default_velocity = rospy.get_param('~velocity', 0) * ONE_MPH
+        self.default_velocity = rospy.get_param('~velocity', 1) * ONE_MPH
 
-        #rospy.loginfo('WaypointUpdater::__init__ - End (just before executing spin())')
         rospy.spin()
 
     def pose_cb(self, msg):
-        #rospy.loginfo('WaypointUpdater::pose_cb - Start')
-        #rospy.loginfo('WaypointUpdater::pose_cb - Pose rcvd X:%s, Y:%s, Z:%s, rX:%s, rY:%s, rZ:%s, rW:%s for frame %s', msg.pose.position.x, msg.pose.position.y, msg.pose.position.z, msg.pose.orientation.x, msg.pose.orientation.y, msg.pose.orientation.z, msg.pose.orientation.w, msg.header.frame_id)
-        #rospy.loginfo('WaypointUpdater::pose_cb - End')
-        pose_timestamp = msg.header.stamp.secs + msg.header.stamp.nsecs / 1000000000.
+        pose_timestamp = msg.header.stamp.secs + msg.header.stamp.nsecs / 1.0e9
         if self.pose != None:
-            # Estimate the current speed
+            # Estimate the current speed (what is 0.2??)
             if pose_timestamp - self.velocity_timestamp > 0.2:
-                distance = math.sqrt((self.velocity_timestamp_position[0] - msg.pose.position.x)**2 + (self.velocity_timestamp_position[1] - msg.pose.position.y)**2)
+                distance = self.distance(self.velocity_timestamp_position, msg.pose.position)
                 time_diff = (pose_timestamp - self.velocity_timestamp)
                 self.velocity = distance / time_diff
-                self.velocity_timestamp = pose_timestamp
-                self.velocity_timestamp_position = (msg.pose.position.x, msg.pose.position.y)
-                #rospy.loginfo('Velocity: %s', self.velocity / ONE_MPH)
-        else:
-            self.velocity_timestamp = pose_timestamp
-            self.velocity_timestamp_position = (msg.pose.position.x, msg.pose.position.y)
+
+        self.velocity_timestamp = pose_timestamp
+        self.velocity_timestamp_position = msg.pose.position
         self.pose = msg
 
     def waypoints_cb(self, waypoints):
@@ -107,7 +96,7 @@ class WaypointUpdater(object):
             return
 
         first_wpt_index = -1
-        min_wpt_distance_squared = float('inf')
+        min_wpt_distance = float('inf')
         num_waypoints_in_list = len(waypoints.waypoints)
 
         # Gererate an empty lane to store the final_waypoints
@@ -118,21 +107,20 @@ class WaypointUpdater(object):
 
         # Iterate through the complete set of waypoints until we found the closest
         distance_decreased = False
-        #rospy.loginfo('Started at waypoint index: %s', self.former_first_wpt_index)
+        #rospy.loginfo('Started at waypoint index: %s', self.prev_first_wpt_index)
         #start_time = time.time()
-        for index, waypoint in enumerate(waypoints.waypoints[self.former_first_wpt_index:] + waypoints.waypoints[:self.former_first_wpt_index], start=self.former_first_wpt_index):
-            current_wpt_distance_squared = (self.pose.pose.position.x - waypoint.pose.pose.position.x)**2 + (self.pose.pose.position.y - waypoint.pose.pose.position.y)**2
-            if distance_decreased and current_wpt_distance_squared > min_wpt_distance_squared:
+        for index, waypoint in enumerate(waypoints.waypoints[self.prev_first_wpt_index:] + waypoints.waypoints[:self.prev_first_wpt_index], start=self.prev_first_wpt_index):
+            current_wpt_distance = self.distance(self.pose.pose.position, waypoint.pose.pose.position)
+            if distance_decreased and current_wpt_distance > min_wpt_distance:
                 break
-            if current_wpt_distance_squared < min_wpt_distance_squared:
-                min_wpt_distance_squared = current_wpt_distance_squared
+            if current_wpt_distance > 0 and current_wpt_distance < min_wpt_distance:
+                min_wpt_distance = current_wpt_distance
                 first_wpt_index = index
                 distance_decreased = True
-        first_wpt_index %= num_waypoints_in_list
 
-        #rospy.loginfo('Calculation to find the waypoint index: %s', time.time() - start_time)
-        #rospy.loginfo('Ended at waypoint index: %s', first_wpt_index)
-        #rospy.loginfo('Squared distance to waypoint: %s', min_wpt_distance_squared)
+        if first_wpt_index >= num_waypoints_in_list:
+            rospy.loginfo("BUUUGGG %s total %s", first_wpt_index, num_waypoints_in_list)
+            first_wpt_index %= num_waypoints_in_list
 
         if first_wpt_index == -1:
             rospy.logwarn('WaypointUpdater::waypoints_cb - No waypoints ahead of ego were found... seems that the car went off course')
@@ -142,11 +130,7 @@ class WaypointUpdater(object):
             self.tf_listener.waitForTransform("/base_link", "/world", rospy.Time(0), rospy.Duration(TIMEOUT_VALUE))
             transformed_waypoint = self.tf_listener.transformPose("/base_link", waypoints.waypoints[first_wpt_index].pose)
 
-            # All waypoints in front of the car should have positive X coordinate in car coordinate frame
-            # If the closest waypoint is behind the car, skip this waypoint
-            if transformed_waypoint.pose.position.x <= 0.0:
-                first_wpt_index += 1
-            self.former_first_wpt_index = first_wpt_index % num_waypoints_in_list
+            self.prev_first_wpt_index = first_wpt_index
 
             # Prepare for calculating velocity:
             slow_down = False
@@ -154,16 +138,15 @@ class WaypointUpdater(object):
             car_distance_to_tl = -1.
             light_waypoint = None
             # If the last traffic_waypoint message is newer than the threshold, we might need to the car.
-            if time.time() - self.traffic_waypoint_timestamp < self.red_light_threshold:
+            if time.time() - self.traffic_waypoint_timestamp < self.red_light_tresh:
                 light_waypoint = waypoints.waypoints[self.light_waypoint_index]
-                car_distance_to_tl = math.sqrt((self.pose.pose.position.x - light_waypoint.pose.pose.position.x)**2 \
-                                            + (self.pose.pose.position.y - light_waypoint.pose.pose.position.y)**2) \
-                                    - self.light_distance_threshold # The approximate distance from the stop line to the traffic light
+                # The approximate distance from the stop line to the traffic light
+                car_distance_to_tl = self.distance(self.pose.position, light_waypoint.pose.pose.position) - self.light_distance_thresh
                 if car_distance_to_tl > 0:
                     # Estimate whether the car cannot cross the stop line on yellow (in less than one and a half seconds). Otherwise don't slow down.
                     if self.velocity / car_distance_to_tl < 1.5:
                         slow_down = True
-                        if self.car_distance_to_tl_when_car_started_to_slow_down == None:
+                        if self.car_distance_to_tl_when_car_started_to_slow_down is None:
                             self.car_distance_to_tl_when_car_started_to_slow_down = car_distance_to_tl
                             self.car_velocity_when_car_started_to_slow_down = self.velocity
                         #rospy.loginfo('Stopping the car')
@@ -180,16 +163,9 @@ class WaypointUpdater(object):
                     wp.twist.twist.linear.x = 0.0
                 elif slow_down:
                     # Calculate the distance between the waypoint and the traffic light's stop line
-                    wp_distance_to_tl = math.sqrt((light_waypoint.pose.pose.position.x - wp.pose.pose.position.x)**2 \
-                                                    + (light_waypoint.pose.pose.position.y - wp.pose.pose.position.y)**2) \
-                                        - self.light_distance_threshold # The approximate distance from the stop line to the traffic light
+                    wp_distance_to_tl = self.distance(wp.pose.pose.position, light_waypoint.pose.pose.position) - self.light_distance_thresh
                     # Calculate the distance between the car and the waypoint
-                    car_distance_to_wp = math.sqrt((self.pose.pose.position.x - wp.pose.pose.position.x)**2 \
-                                                    + (self.pose.pose.position.y - wp.pose.pose.position.y)**2)
-
-                    #rospy.loginfo('Waypoint distance to traffic light: %s', wp_distance_to_tl)
-                    #rospy.loginfo('Car distance to traffic light: %s', car_distance_to_tl)
-                    #rospy.loginfo('Car distance to waypoint: %s', car_distance_to_wp)
+                    car_distance_to_wp = self.distance(self.pose.pose.position, wp.pose.pose.position)
 
                     # Stop the car in a safe distance before the stop line to give the simulator space to adapt velocity
                     if car_distance_to_tl > wp_distance_to_tl and car_distance_to_tl > car_distance_to_wp and wp_distance_to_tl > 4:
@@ -197,7 +173,6 @@ class WaypointUpdater(object):
                         velocity_fraction = wp_distance_to_tl / self.car_distance_to_tl_when_car_started_to_slow_down
                         if velocity_fraction > 0 and velocity_fraction <= 1:
                             # Slowing down
-                            #rospy.loginfo('Velocity fraction: %s', velocity_fraction)
                             wp.twist.twist.linear.x = velocity_fraction * self.car_velocity_when_car_started_to_slow_down
                         else:
                             # The car is already beyond the traffic light
@@ -217,10 +192,6 @@ class WaypointUpdater(object):
                     self.car_distance_to_tl_when_car_started_to_slow_down = None
                     self.car_velocity_when_car_started_to_slow_down = None
                     wp.twist.twist.linear.x = self.default_velocity
-                rospy.loginfo('Setting velocity of wpt %s (total wpt %s) to: %s', \
-                                num_wp, \
-                                (first_wpt_index + num_wp) % num_waypoints_in_list, \
-                                wp.twist.twist.linear.x / ONE_MPH)
 
                 wp.twist.twist.linear.y = 0.0
                 wp.twist.twist.linear.z = 0.0
@@ -228,21 +199,9 @@ class WaypointUpdater(object):
                 wp.twist.twist.angular.y = 0.0
                 wp.twist.twist.angular.z = 0.0
                 lane.waypoints.append(wp)
-            #rospy.loginfo('WaypointUpdater::waypoints_cb - Found the index %s to be the next waypoint', first_wpt_index)
-            # now let's only leave these points in the list
-            #waypoints.waypoints = waypoints.waypoints[first_wpt_index:(first_wpt_index + LOOKAHEAD_WPS) % num_waypoints_in_list]
-            #rospy.loginfo('WaypointUpdater::waypoints_cb - Left only %s waypoints in the list', len(waypoints.waypoints))
-            # then, for the first stage of the implementation, set a dummy velocity to all these waypoints
-            # so that the car is intructed to drive around the track
-            #rospy.loginfo('WaypointUpdater::waypoints_cb - Setting waypoints twist.linear.x = %s', self.default_velocity)
-            #for waypoint in waypoints.waypoints:
-            #    waypoint.twist.twist.linear.x = self.default_velocity
 
         # finally, publish waypoints as modified on /final_waypoints topic
-        #rospy.loginfo('WaypointUpdater::waypoints_cb - publishing new waypoint list on /final_waypoints')
-        #self.final_waypoints_pub.publish(waypoints)
         self.final_waypoints_pub.publish(lane)
-        #rospy.loginfo('WaypointUpdater::waypoints_cb - End')
 
     def traffic_cb(self, traffic_waypoint):
         # Callback for /traffic_waypoint message.
@@ -267,6 +226,9 @@ class WaypointUpdater(object):
             dist += dl(waypoints[wp1].pose.pose.position, waypoints[i].pose.pose.position)
             wp1 = i
         return dist
+
+    def distance(self, pose1, pose2):
+        return math.sqrt((pose1.x-pose2.x)**2 + (pose1.y-pose2.y)**2  + (pose1.z-pose2.z)**2)
 
 if __name__ == '__main__':
     try:
