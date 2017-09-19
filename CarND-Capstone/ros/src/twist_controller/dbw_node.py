@@ -132,7 +132,7 @@ class DBWNode(object):
                 i = -1
                 # Due to race conditions, we need to store the waypoints temporary
                 temp_waypoints = copy.deepcopy(self.waypoints)
-                while len(x) < 30 and i < len(temp_waypoints.waypoints):
+                while len(x) < 50 and i < len(temp_waypoints.waypoints):
                     i += 1
                     # Transform waypoint to car coordinates
                     temp_waypoints.waypoints[i].pose.header.frame_id = temp_waypoints.header.frame_id

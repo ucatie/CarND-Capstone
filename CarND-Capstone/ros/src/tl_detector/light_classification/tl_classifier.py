@@ -43,7 +43,9 @@ class TLClassifier(object):
     def processColoredImage(self,image,debug,X_scaler,svc,param):
 #        heatmap = gd.data["heatmap"]
  #       gd.data["image_counter"]= gd.data["image_counter"] + 1
-      
+        if image is None:
+            return None
+
         normImage = image.copy().astype("float32") / 255.0
 
         windows = []
@@ -187,7 +189,7 @@ class TLClassifier(object):
         
         state = self.processColoredImage(image,False,self.X_scaler, self.svc, self.param)
         rospy.loginfo("classifier state %s",state)
-        return  state       
+        return state
 
     def find_classification(self, image):        
         """Determines the color of the traffic light in the image
@@ -203,7 +205,7 @@ class TLClassifier(object):
         
         pos = self.find_class_position(image,False)
         if pos is not None:
-        rospy.loginfo("classifier pos %s",pos)
-        return  pos       
-        return (None,None)       
+            rospy.loginfo("classifier pos %s",pos)
+            return pos
+        return (None,None)
 

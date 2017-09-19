@@ -23,6 +23,8 @@ if __name__ == '__main__':
     train_images = glob.glob(os.path.join(train_data_dir,'*.jpg'))
     for image_name in train_images:
         image = mpimg.imread(image_name)
+        if image is None:
+            continue
         
         state = tc.get_classification(image)
         rospy.loginfo("image_name:%s state %s",image_name, state)
