@@ -69,8 +69,8 @@ def trafficlights(sid, data):
 @sio.on('image')
 def image(sid, data):
 #    rospy.loginfo("image")
-#    bridge.publish_camera(data)
-    pass
+    bridge.publish_camera(data)
+#    pass
 
 if __name__ == '__main__':
 
