@@ -88,6 +88,7 @@ class Controller(object):
 
             steering_val = self.steering_cntrl.get_steering(twist_cmd.twist.linear.x, twist_cmd.twist.angular.z, current_velocity.twist.linear.x) \
                             + self.steer_pid_.step(cte, control_period)
+            steering_val = max(-abs(self.max_steer_angle), min(abs(self.max_steer_angle), steering_val))
             return throttle_val, brake_val, steering_val
         else:
             self.velocity_pid_.reset()
