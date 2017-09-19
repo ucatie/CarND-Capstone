@@ -2,7 +2,7 @@
 
 import rospy
 from std_msgs.msg import Int32
-from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import PoseStamped, TwistStamped
 from styx_msgs.msg import Lane, Waypoint
 import tf
 
@@ -34,6 +34,7 @@ class WaypointUpdater(object):
 
         rospy.init_node('waypoint_updater')
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
+        rospy.Subscriber('/current_velocity', TwistStamped, self.velocity_cb)
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
 
         # TODO: Add a subscriber for /traffic_waypoint and /obstacle_waypoint below
@@ -52,8 +53,6 @@ class WaypointUpdater(object):
 
         # The car's current velocity
         self.velocity = 0.0
-        self.velocity_timestamp = None
-        self.velocity_timestamp_position = None
 
         # The timestamp of the last traffic_waypoint
         self.traffic_waypoint_timestamp = 0.0
@@ -78,17 +77,10 @@ class WaypointUpdater(object):
         rospy.spin()
 
     def pose_cb(self, msg):
-        pose_timestamp = msg.header.stamp.secs + msg.header.stamp.nsecs / 1.0e9
-        if self.pose != None:
-            # Estimate the current speed (what is 0.2??)
-            if pose_timestamp - self.velocity_timestamp > 0.2:
-                distance = self.distance(self.velocity_timestamp_position, msg.pose.position)
-                time_diff = (pose_timestamp - self.velocity_timestamp)
-                self.velocity = distance / time_diff
-
-        self.velocity_timestamp = pose_timestamp
-        self.velocity_timestamp_position = msg.pose.position
         self.pose = msg
+
+    def velocity_cb(self, msg):
+        self.velocity = msg.twist.linear.x
 
     def waypoints_cb(self, waypoints):
         # We cannot produce waypoints without the car's position
@@ -138,10 +130,10 @@ class WaypointUpdater(object):
             car_distance_to_tl = -1.
             light_waypoint = None
             # If the last traffic_waypoint message is newer than the threshold, we might need to the car.
-            if time.time() - self.traffic_waypoint_timestamp < self.red_light_tresh:
+            if self.light_waypoint_index >= 0 and time.time() - self.traffic_waypoint_timestamp < self.red_light_tresh:
                 light_waypoint = waypoints.waypoints[self.light_waypoint_index]
                 # The approximate distance from the stop line to the traffic light
-                car_distance_to_tl = self.distance(self.pose.position, light_waypoint.pose.pose.position) - self.light_distance_thresh
+                car_distance_to_tl = self.distance(self.pose.pose.position, light_waypoint.pose.pose.position) - self.light_distance_thresh
                 if car_distance_to_tl > 0:
                     # Estimate whether the car cannot cross the stop line on yellow (in less than one and a half seconds). Otherwise don't slow down.
                     if self.velocity / car_distance_to_tl < 1.5:
