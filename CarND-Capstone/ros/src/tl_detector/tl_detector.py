@@ -64,6 +64,8 @@ class TLDetector(object):
                 
         self.SVC_PATH =  os.path.join(self.run_dir,rospy.get_param('~SVC_PATH','svc.p'))       
         rospy.loginfo("SVC_PATH:%s",self.SVC_PATH)
+        self.is_simulator = rospy.get_param('~is_simulator', True)
+        rospy.loginfo("is_simulator:%s",self.is_simulator)
 
         sub1 = rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         sub2 = rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
@@ -90,7 +92,7 @@ class TLDetector(object):
         self.upcoming_traffic_light_image_pub = rospy.Publisher('/traffic_light_image', Image, queue_size=1)
         
         self.bridge = CvBridge()
-        self.light_classifier = TLClassifier(self.SVC_PATH)
+        self.light_classifier = TLClassifier(self.SVC_PATH,self.is_simulator)
         self.listener = tf.TransformListener()
 
         self.state = TrafficLight.UNKNOWN
@@ -162,6 +164,19 @@ class TLDetector(object):
         direction = self.get_direction(wp_pose1, pose2)        
         return abs(direction) < math.pi*0.5 
         		
+    def get_yaw(self, pose1):
+        
+        quaternion = (
+            pose1.orientation.x,
+            pose1.orientation.y,
+            pose1.orientation.z,
+            pose1.orientation.w)
+        euler = tf.transformations.euler_from_quaternion(quaternion)
+        roll = euler[0]
+        pitch = euler[1]
+        yaw = euler[2]    
+        return yaw
+                        
     #return the index and a flag to increase the index for way points ahead
     def get_next_waypoint(self, waypoints, position):
         
@@ -217,9 +232,14 @@ class TLDetector(object):
         camera_point.point.z = point_in_world.z
         p = self.listener.transformPoint("/base_link",camera_point)
         
+        #correct shift of traffic light to left / right because of car heading         
+        car_yaw = self.get_yaw(self.current_pose.pose)
+                
+        y_offset = p.point.x*math.sin(car_yaw)
+        
         #https://en.wikipedia.org/wiki/Pinhole_camera_model#The_geometry_and_mathematics_of_the_pinhole_camera        
-        x = -p.point.y / p.point.x * fx + image_width*0.5
-        #experiments showed that there are 62 pixel offset of the cam 
+        x = -(p.point.y + y_offset)/ p.point.x * fx + image_width*0.5
+        #experiments showed that there are 62 pixel offset of the camera 
         y = 62 + image_height - (p.point.z / p.point.x * fy + image_height*0.5) 
         	
         rospy.loginfo('3D map (%s %s) camera (%s %s %s) pixel (%s %s)',point_in_world.x,point_in_world.y,p.point.x, p.point.y, p.point.z, x,y)
@@ -261,11 +281,21 @@ class TLDetector(object):
             cv_image = cv2.resize(cv_image, (image_height, image_width), interpolation = cv2.INTER_AREA)
 #            rosspy("resize %s %s ", shape, (image_height, image_width))
             
+        rgbimage = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
+        (x,y) = self.light_classifier.find_classification(rgbimage)
+        if x is None:
+            return TrafficLight.UNKNOWN
+
+        
+        x1 = x-128 
+        y1 = y-128
+        x2 = x+128 
+        y2 = y+128
+        
         region = cv_image[y1:y2, x1:x2]
         rospy.loginfo('region %s %s %s %s org: %s region:%s',x1,y1,x2,y2, cv_image.shape, region.shape)
         
         traffic_image = self.bridge.cv2_to_imgmsg(region, "bgr8")
-        
         self.upcoming_traffic_light_image_pub.publish(traffic_image);
         
 #        rospy.loginfo('traffic light image published')
@@ -291,15 +321,12 @@ class TLDetector(object):
             rospy.loginfo('saved gt data %s',gt_image_path)
             self.ground_truth_start_number = self.ground_truth_start_number + 1
 
-
         #save the image as training data 
         if self.create_train_data:
             train_image_path = os.path.join(self.train_data_dir,'{0}.jpg'.format(self.train_data_start_number))
             cv2.imwrite(train_image_path, region)
             rospy.loginfo('saved train data %s',train_image_path)
             self.train_data_start_number = self.train_data_start_number + 1
-#            image = mpimg.imread(train_image_path)
-#            self.light_classifier.get_classification(image)            
             
         rgbregion = cv2.cvtColor(region, cv2.COLOR_BGR2RGB)
         return self.light_classifier.get_classification(rgbregion)
@@ -352,8 +379,7 @@ class TLDetector(object):
         else:
             return -1, TrafficLight.UNKNOWN
 
-        #TODO find the closest visible traffic light (if one exists)
-        
+        #TODO find the closest visible traffic light (if one exists)        
         if world_light is not None:
             state = self.get_light_state(world_light, min_distance)
             

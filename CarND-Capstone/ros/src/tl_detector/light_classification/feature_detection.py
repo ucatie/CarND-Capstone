@@ -1,10 +1,10 @@
+import os
 import rospy
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
 import cv2
-from skimage.feature import hog
-
+from skimage.feature import hog 
 
 # Define a function to return HOG features and visualization
 def get_hog_features(img, orient, pix_per_cell, cell_per_block, 
@@ -15,6 +15,7 @@ def get_hog_features(img, orient, pix_per_cell, cell_per_block,
                                   pixels_per_cell=(pix_per_cell, pix_per_cell),
                                   cells_per_block=(cell_per_block, cell_per_block), 
                                   transform_sqrt=True,
+                                  block_norm="L2-Hys",
                                   visualise=vis, feature_vector=feature_vec)
         return features, hog_image
     # Otherwise call with one output
@@ -23,6 +24,7 @@ def get_hog_features(img, orient, pix_per_cell, cell_per_block,
                        pixels_per_cell=(pix_per_cell, pix_per_cell),
                        cells_per_block=(cell_per_block, cell_per_block), 
                        transform_sqrt=True, 
+                       block_norm="L2-Hys",
                        visualise=vis, feature_vector=feature_vec)
 #        print(features.shape)
         return features
@@ -46,6 +48,46 @@ def color_hist(img, nbins=32, bins_range=(0, 256)):
     # Return the individual histograms, bin_centers and feature vector
     return hist_features
 
+def greenBinaryFromRGB(image, is_simulator):
+    binary = np.zeros_like(image[:,:,0])
+    if is_simulator:
+        binary[(image[:,:,0] <= 90) \
+            & (image[:,:,1] >= 200) \
+            & (image[:,:,2] <=  90)]= 255
+    else:
+        binary[(image[:,:,0] >= 150) \
+            & (image[:,:,1] >= 200) \
+            & (image[:,:,2] >= 200) \
+            & (image[:,:,0] < 190)]= 255
+
+    return binary  
+
+def redBinaryFromRGB(image, is_simulator):
+    binary = np.zeros_like(image[:,:,0])
+    if is_simulator:
+        binary[(image[:,:,0] >= 200) \
+            & (image[:,:,1] <= 120) \
+            & (image[:,:,2] <= 120)]= 255
+    else:
+        binary[(image[:,:,0] >= 250) \
+            & (image[:,:,1] >= 250) \
+            & (image[:,:,2] >= 100) \
+            & (image[:,:,2] < 190)]= 255
+    return binary  
+
+def yellowBinaryFromRGB(image, is_simulator):
+    binary = np.zeros_like(image[:,:,0])
+    if is_simulator:
+        binary[(image[:,:,0] >= 200) \
+            & (image[:,:,1] >= 200) \
+            & (image[:,:,2] <= 90)]= 255
+    else:
+        binary[(image[:,:,0] >= 250) \
+            & (image[:,:,1] >= 250) \
+            & (image[:,:,2] >= 100) \
+            & (image[:,:,2] < 190)]= 255
+    return binary  
+            
 # Define a function to extract features from a list of images
 # Have this function call bin_spatial() and color_hist()
 def extractFeatures(imgs, color_space='RGB', spatial_size=(32, 32),
@@ -161,12 +203,12 @@ def slideWindow(img, x_start_stop=[None, None], y_start_stop=[None, None],
     nx_pix_per_step = xy_window[0]*(1 - xy_overlap[0])
     if nx_pix_per_step == 0:
         nx_pix_per_step = xy_window[0]
-        nx_windows = int((xspan - xy_window[0])/nx_pix_per_step+1)
+    nx_windows = int((xspan - xy_window[0])/nx_pix_per_step+1)
         
     ny_pix_per_step = xy_window[1]*(1 - xy_overlap[1])
     if ny_pix_per_step == 0:
         ny_pix_per_step = xy_window[1]        
-        ny_windows = int((yspan - xy_window[1])/ny_pix_per_step+1)
+    ny_windows = int((yspan - xy_window[1])/ny_pix_per_step+1)
 
     # Initialize a list to append window positions to
     window_list = []
@@ -177,6 +219,7 @@ def slideWindow(img, x_start_stop=[None, None], y_start_stop=[None, None],
     for ys in range(ny_windows):
         starty = int(ys*ny_pix_per_step + y_start_stop[0])
         endy = starty + xy_window[1]
+ #       rospy.loginfo("y start %s stop %s",(starty),(endy))
         if endy > y_start_stop[1]+1:
           print("reduce endy:",endy, y_start_stop[1],(endy - y_start_stop[1]),xy_window[1])
           continue
@@ -194,12 +237,13 @@ def slideWindow(img, x_start_stop=[None, None], y_start_stop=[None, None],
             if xs == nx_windows-1 and endx < x_start_stop[1]-1:
               print("extend endx:",endx, x_start_stop[1],(endx - x_start_stop[1]),xy_window[0])
             # Append window position to list
-            rospy.loginfo("search window %s %s",(startx, starty), (endx, endy))
+#            rospy.loginfo("search window %s %s",(startx, starty), (endx, endy))
             
             window_list.append(((startx, starty), (endx, endy)))
     # Return the list of windows
     return window_list
 
+image_counter = 1
 # Define a function you will pass an image 
 # and the list of windows to be searched (output of slide_windows())
 def searchWindows(img, windows, clf, scaler, color_space='RGB', 
@@ -207,20 +251,26 @@ def searchWindows(img, windows, clf, scaler, color_space='RGB',
                     hist_range=(0, 256), orient=9, 
                     pix_per_cell=8, cell_per_block=2, 
                     hog_channel=0, spatial_feat=True, 
-                    hist_feat=True, hog_feat=True,hardNegative=False):
-
+                    hist_feat=True, hog_feat=True):
+    global image_counter
     #1) Create an empty list to receive positive detection windows
     on_windows = []
     #create 5 state list
     for i in range(5):
         on_windows.append([])
     
+    shape = (windows[0][1][1]-windows[0][0][1],windows[0][1][0]-windows[0][0][0])
     #2) Iterate over all windows in the list
     for window in windows:
+#            print("center:",center[0],center[1])
+#            saveImageAndReturn(bitmap,"/home/frank/selfdriving/sdc_course/CarND-Capstone/ros/bitmap",1)
+                 
         #3) Extract the test window from original image
-#        test_img = cv2.resize(img[window[0][1]:window[1][1], window[0][0]:window[1][0]], (64, 64))      
+        test_img = cv2.resize(img[window[0][1]:window[1][1], window[0][0]:window[1][0]], shape)     
+        #saveImageAndReturn(test_img,"light",image_counter)
+        image_counter = image_counter+1
         #4) Extract features for that window using single_img_features()
-        features = singleImgFeatures(img, color_space=color_space, 
+        features = singleImgFeatures(test_img, color_space=color_space, 
                             spatial_size=spatial_size, hist_bins=hist_bins, 
                             orient=orient, pix_per_cell=pix_per_cell, 
                             cell_per_block=cell_per_block, 
@@ -252,9 +302,10 @@ def drawBoxes(img, bboxes, color=(0, 0, 255), thick=6):
 
 #for logging bad situations
 def saveImageAndReturn(image, name, image_counter):
-  imageName = "{0}{1}.png".format(name,image_counter)
+  imageName = "{0}{1}.jpg".format(name,image_counter)
 
-  path_to_image = os.path.join("hardNegativeTest",imageName)
-  scipy.misc.imsave(path_to_image, image)
+  path_to_image = os.path.join("/home/frank/selfdriving/sdc_course/CarND-Capstone/ros/data_gt/no_light",imageName)
+  image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+  cv2.imwrite(path_to_image, image)
   print("stored image:",imageName)
   return image       
