@@ -2,7 +2,7 @@
 
 import rospy
 from std_msgs.msg import Int32
-from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import PoseStamped, TwistStamped
 from styx_msgs.msg import Lane, Waypoint
 import tf
 
@@ -34,6 +34,7 @@ class WaypointUpdater(object):
         rospy.init_node('waypoint_updater')
         #rospy.loginfo('WaypointUpdater::__init__ - subscribing to /current_pose')
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
+        rospy.Subscriber('/current_velocity', TwistStamped, self.velocity_cb)
         #rospy.loginfo('WaypointUpdater::__init__ - subscribing to /base_waypoints')
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
 
@@ -56,8 +57,6 @@ class WaypointUpdater(object):
 
         # The car's current velocity
         self.velocity = 0.0
-        self.velocity_timestamp = None
-        self.velocity_timestamp_position = None
 
         # The timestamp of the last traffic_waypoint
         self.traffic_waypoint_timestamp = 0.0
@@ -83,23 +82,10 @@ class WaypointUpdater(object):
         rospy.spin()
 
     def pose_cb(self, msg):
-        #rospy.loginfo('WaypointUpdater::pose_cb - Start')
-        #rospy.loginfo('WaypointUpdater::pose_cb - Pose rcvd X:%s, Y:%s, Z:%s, rX:%s, rY:%s, rZ:%s, rW:%s for frame %s', msg.pose.position.x, msg.pose.position.y, msg.pose.position.z, msg.pose.orientation.x, msg.pose.orientation.y, msg.pose.orientation.z, msg.pose.orientation.w, msg.header.frame_id)
-        #rospy.loginfo('WaypointUpdater::pose_cb - End')
-        pose_timestamp = msg.header.stamp.secs + msg.header.stamp.nsecs / 1000000000.
-        if self.pose != None:
-            # Estimate the current speed
-            if pose_timestamp - self.velocity_timestamp > 0.2:
-                distance = math.sqrt((self.velocity_timestamp_position[0] - msg.pose.position.x)**2 + (self.velocity_timestamp_position[1] - msg.pose.position.y)**2)
-                time_diff = (pose_timestamp - self.velocity_timestamp)
-                self.velocity = distance / time_diff
-                self.velocity_timestamp = pose_timestamp
-                self.velocity_timestamp_position = (msg.pose.position.x, msg.pose.position.y)
-                #rospy.loginfo('Velocity: %s', self.velocity / ONE_MPH)
-        else:
-            self.velocity_timestamp = pose_timestamp
-            self.velocity_timestamp_position = (msg.pose.position.x, msg.pose.position.y)
         self.pose = msg
+
+    def velocity_cb(self, msg):
+        self.velocity = msg.twist.linear.x
 
     def waypoints_cb(self, waypoints):
         # We cannot produce waypoints without the car's position
@@ -154,7 +140,7 @@ class WaypointUpdater(object):
             car_distance_to_tl = -1.
             light_waypoint = None
             # If the last traffic_waypoint message is newer than the threshold, we might need to the car.
-            if time.time() - self.traffic_waypoint_timestamp < self.red_light_threshold:
+            if self.light_waypoint_index >= 0 and time.time() - self.traffic_waypoint_timestamp < self.red_light_threshold:
                 light_waypoint = waypoints.waypoints[self.light_waypoint_index]
                 car_distance_to_tl = math.sqrt((self.pose.pose.position.x - light_waypoint.pose.pose.position.x)**2 \
                                             + (self.pose.pose.position.y - light_waypoint.pose.pose.position.y)**2) \
