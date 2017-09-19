@@ -10,7 +10,7 @@ WEIGHT_PERSON = 75
 MIN_SPEED = 2.0 * ONE_MPH
 
 #STEER_Kp = 0.0
-STEER_Kp = 0.0
+STEER_Kp = 0.12
 STEER_Ki = 0.0
 STEER_Kd = 0.0
 
@@ -90,7 +90,8 @@ class Controller(object):
             else:
                 brake_val = 0.0
 
-            steering_val = self.steering_cntrl.get_steering(twist_cmd.twist.linear.x, twist_cmd.twist.angular.z, current_velocity.twist.linear.x) + self.steering_pid.step(twist_cmd.twist.angular.z - current_velocity.twist.angular.z, control_period)
+            angular_velocity_cte = current_velocity.twist.angular.z - twist_cmd.twist.angular.z
+            steering_val = self.steering_cntrl.get_steering(twist_cmd.twist.linear.x, twist_cmd.twist.angular.z, current_velocity.twist.linear.x) + self.steering_pid.step(angular_velocity_cte, control_period)
 
             steering_val = max(-self.max_steer_angle, min(self.max_steer_angle, steering_val))
 
