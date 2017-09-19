@@ -58,3 +58,3239 @@
   - {class: Unknown, height: 88.0, width: 36.0, x: 624.0, y: 405.0}
   class: image
   filename: unidentified/left0389.jpg
+- annotations:
+  - {class: Green, height: 57.29412682131658, width: 22.616102692624963, x: 645.3127968295654,
+    y: 416.89015963405336}
+  class: image
+  filename: green/left0000.jpg
+- annotations:
+  - {class: Green, height: 62.063017179970984, width: 25.681248488263805, x: 644.171316247285,
+    y: 415.1801838935989}
+  class: image
+  filename: green/left0001.jpg
+- annotations:
+  - {class: Green, height: 60.99296515962669, width: 24.611196467919513, x: 645.2413682676292,
+    y: 415.1801838935989}
+  class: image
+  filename: green/left0002.jpg
+- annotations:
+  - {class: Green, height: 62.419701186752434, width: 24.076170457747367, x: 645.5980522744107,
+    y: 414.64515788342675}
+  class: image
+  filename: green/left0003.jpg
+- annotations:
+  - {class: Green, height: 61.52799116979878, width: 25.859590491654558, x: 643.8146322405036,
+    y: 415.5368679003804}
+  class: image
+  filename: green/left0004.jpg
+- annotations:
+  - {class: Green, height: 60.636281152845186, width: 25.859590491654558, x: 643.8146322405036,
+    y: 415.5368679003804}
+  class: image
+  filename: green/left0005.jpg
+- annotations:
+  - {class: Green, height: 59.74457113589159, width: 27.64301052556175, x: 642.9229222235499,
+    y: 415.5368679003804}
+  class: image
+  filename: green/left0006.jpg
+- annotations:
+  - {class: Green, height: 59.74457113589159, width: 24.076170457747367, x: 644.7063422574571,
+    y: 415.5368679003804}
+  class: image
+  filename: green/left0007.jpg
+- annotations:
+  - {class: Green, height: 61.52799116979884, width: 25.859590491654558, x: 643.8146322405036,
+    y: 414.64515788342675}
+  class: image
+  filename: green/left0008.jpg
+- annotations:
+  - {class: Green, height: 60.63628115284524, width: 25.859590491654558, x: 643.8146322405036,
+    y: 414.64515788342675}
+  class: image
+  filename: green/left0009.jpg
+- annotations:
+  - {class: Green, height: 62.419701186752434, width: 24.967880474700905, x: 643.8146322405036,
+    y: 413.75344786647315}
+  class: image
+  filename: green/left0010.jpg
+- annotations:
+  - {class: Green, height: 63.31141120370603, width: 25.859590491654558, x: 643.8146322405036,
+    y: 412.86173784951956}
+  class: image
+  filename: green/left0011.jpg
+- annotations:
+  - {class: Green, height: 59.74457113589159, width: 24.96788047470102, x: 644.7063422574571,
+    y: 416.428577917334}
+  class: image
+  filename: green/left0012.jpg
+- annotations:
+  - {class: Green, height: 61.52799116979878, width: 25.859590491654558, x: 643.8146322405036,
+    y: 415.5368679003804}
+  class: image
+  filename: green/left0013.jpg
+- annotations:
+  - {class: Green, height: 63.31141120370603, width: 24.076170457747367, x: 644.7063422574571,
+    y: 413.75344786647315}
+  class: image
+  filename: green/left0014.jpg
+- annotations:
+  - {class: Green, height: 59.74457113589159, width: 28.5347205425154, x: 642.0312122065963,
+    y: 415.5368679003804}
+  class: image
+  filename: green/left0015.jpg
+- annotations:
+  - {class: Green, height: 59.74457113589159, width: 28.5347205425154, x: 642.0312122065963,
+    y: 415.5368679003804}
+  class: image
+  filename: green/left0016.jpg
+- annotations:
+  - {class: Green, height: 59.74457113589159, width: 28.5347205425154, x: 642.0312122065963,
+    y: 415.5368679003804}
+  class: image
+  filename: green/left0017.jpg
+- annotations:
+  - {class: Green, height: 59.74457113589159, width: 28.5347205425154, x: 642.0312122065963,
+    y: 415.5368679003804}
+  class: image
+  filename: green/left0018.jpg
+- annotations:
+  - {class: Green, height: 59.74457113589159, width: 28.5347205425154, x: 642.0312122065963,
+    y: 415.5368679003804}
+  class: image
+  filename: green/left0019.jpg
+- annotations:
+  - {class: Green, height: 59.74457113589159, width: 28.5347205425154, x: 642.0312122065963,
+    y: 415.5368679003804}
+  class: image
+  filename: green/left0020.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0021.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0022.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0023.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0024.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0025.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0026.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0027.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0028.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0029.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0030.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0031.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0032.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0033.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0034.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0035.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0036.jpg
+- annotations:
+  - {class: Green, height: 59.46048001182021, width: 22.19857920441291, x: 646.1372161284462,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0037.jpg
+- annotations:
+  - {class: Green, height: 58.66767361166262, width: 22.991385604570496, x: 643.7587969279734,
+    y: 417.80897288305664}
+  class: image
+  filename: green/left0038.jpg
+- annotations:
+  - {class: Green, height: 58.66767361166262, width: 22.991385604570496, x: 643.7587969279734,
+    y: 417.80897288305664}
+  class: image
+  filename: green/left0039.jpg
+- annotations:
+  - {class: Green, height: 58.66767361166262, width: 22.991385604570496, x: 643.7587969279734,
+    y: 417.80897288305664}
+  class: image
+  filename: green/left0040.jpg
+- annotations:
+  - {class: Green, height: 58.66767361166262, width: 22.991385604570496, x: 643.7587969279734,
+    y: 417.80897288305664}
+  class: image
+  filename: green/left0041.jpg
+- annotations:
+  - {class: Green, height: 58.66767361166262, width: 22.991385604570496, x: 643.7587969279734,
+    y: 417.80897288305664}
+  class: image
+  filename: green/left0042.jpg
+- annotations:
+  - {class: Green, height: 58.66767361166262, width: 22.991385604570496, x: 643.7587969279734,
+    y: 417.80897288305664}
+  class: image
+  filename: green/left0043.jpg
+- annotations:
+  - {class: Green, height: 58.66767361166262, width: 22.991385604570496, x: 643.7587969279734,
+    y: 417.80897288305664}
+  class: image
+  filename: green/left0044.jpg
+- annotations:
+  - {class: Green, height: 58.66767361166262, width: 24.576998404885785, x: 641.3803777275006,
+    y: 418.6017792832142}
+  class: image
+  filename: green/left0045.jpg
+- annotations:
+  - {class: Green, height: 58.66767361166262, width: 24.576998404885785, x: 641.3803777275006,
+    y: 418.6017792832142}
+  class: image
+  filename: green/left0046.jpg
+- annotations:
+  - {class: Green, height: 58.66767361166262, width: 24.576998404885785, x: 641.3803777275006,
+    y: 418.6017792832142}
+  class: image
+  filename: green/left0047.jpg
+- annotations:
+  - {class: Green, height: 58.66767361166262, width: 24.576998404885785, x: 641.3803777275006,
+    y: 418.6017792832142}
+  class: image
+  filename: green/left0048.jpg
+- annotations:
+  - {class: Green, height: 58.66767361166262, width: 24.576998404885785, x: 641.3803777275006,
+    y: 418.6017792832142}
+  class: image
+  filename: green/left0049.jpg
+- annotations:
+  - {class: Green, height: 58.66767361166262, width: 24.576998404885785, x: 641.3803777275006,
+    y: 418.6017792832142}
+  class: image
+  filename: green/left0050.jpg
+- annotations:
+  - {class: Green, height: 61.04609281213544, width: 22.991385604570496, x: 641.3803777275006,
+    y: 418.6017792832142}
+  class: image
+  filename: green/left0051.jpg
+- annotations:
+  - {class: Green, height: 64.21731841276585, width: 26.162611205200847, x: 639.0019585270278,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0052.jpg
+- annotations:
+  - {class: Green, height: 64.21731841276585, width: 26.162611205200847, x: 639.0019585270278,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0053.jpg
+- annotations:
+  - {class: Green, height: 64.21731841276585, width: 26.162611205200847, x: 639.0019585270278,
+    y: 416.2233600827414}
+  class: image
+  filename: green/left0054.jpg
+- annotations:
+  - {class: Green, height: 61.83889921229303, width: 23.784192004728084, x: 639.7947649271854,
+    y: 417.80897288305664}
+  class: image
+  filename: green/left0055.jpg
+- annotations:
+  - {class: Green, height: 61.83889921229303, width: 23.784192004728084, x: 639.7947649271854,
+    y: 417.80897288305664}
+  class: image
+  filename: green/left0056.jpg
+- annotations:
+  - {class: Green, height: 61.83889921229303, width: 23.784192004728084, x: 639.7947649271854,
+    y: 417.80897288305664}
+  class: image
+  filename: green/left0057.jpg
+- annotations:
+  - {class: Green, height: 61.83889921229303, width: 23.784192004728084, x: 639.7947649271854,
+    y: 417.80897288305664}
+  class: image
+  filename: green/left0058.jpg
+- annotations:
+  - {class: Green, height: 61.83889921229303, width: 23.784192004728084, x: 639.7947649271854,
+    y: 417.80897288305664}
+  class: image
+  filename: green/left0059.jpg
+- annotations:
+  - {class: Green, height: 61.83889921229297, width: 24.57699840488567, x: 637.4163457267126,
+    y: 419.3945856833719}
+  class: image
+  filename: green/left0060.jpg
+- annotations:
+  - {class: Green, height: 61.83889921229297, width: 24.57699840488567, x: 637.4163457267126,
+    y: 419.3945856833719}
+  class: image
+  filename: green/left0061.jpg
+- annotations:
+  - {class: Green, height: 61.83889921229297, width: 24.57699840488567, x: 637.4163457267126,
+    y: 419.3945856833719}
+  class: image
+  filename: green/left0062.jpg
+- annotations:
+  - {class: Green, height: 61.83889921229297, width: 24.57699840488567, x: 637.4163457267126,
+    y: 419.3945856833719}
+  class: image
+  filename: green/left0063.jpg
+- annotations:
+  - {class: Green, height: 61.83889921229297, width: 24.57699840488567, x: 637.4163457267126,
+    y: 419.3945856833719}
+  class: image
+  filename: green/left0064.jpg
+- annotations:
+  - {class: Green, height: 61.83889921229297, width: 24.57699840488567, x: 637.4163457267126,
+    y: 419.3945856833719}
+  class: image
+  filename: green/left0065.jpg
+- annotations:
+  - {class: Green, height: 64.21731841276579, width: 24.57699840488567, x: 636.623539326555,
+    y: 417.01616648289905}
+  class: image
+  filename: green/left0066.jpg
+- annotations:
+  - {class: Green, height: 64.21731841276579, width: 24.57699840488567, x: 636.623539326555,
+    y: 417.01616648289905}
+  class: image
+  filename: green/left0067.jpg
+- annotations:
+  - {class: Green, height: 64.21731841276579, width: 24.57699840488567, x: 636.623539326555,
+    y: 417.01616648289905}
+  class: image
+  filename: green/left0068.jpg
+- annotations:
+  - {class: Green, height: 64.21731841276579, width: 24.57699840488567, x: 636.623539326555,
+    y: 417.01616648289905}
+  class: image
+  filename: green/left0069.jpg
+- annotations:
+  - {class: Green, height: 64.21731841276579, width: 24.57699840488567, x: 636.623539326555,
+    y: 417.01616648289905}
+  class: image
+  filename: green/left0070.jpg
+- annotations:
+  - {class: Green, height: 64.21731841276579, width: 24.57699840488567, x: 636.623539326555,
+    y: 417.01616648289905}
+  class: image
+  filename: green/left0071.jpg
+- annotations:
+  - {class: Green, height: 64.21731841276579, width: 24.57699840488567, x: 636.623539326555,
+    y: 417.01616648289905}
+  class: image
+  filename: green/left0072.jpg
+- annotations:
+  - {class: Green, height: 64.21731841276579, width: 24.57699840488567, x: 636.623539326555,
+    y: 417.01616648289905}
+  class: image
+  filename: green/left0073.jpg
+- annotations:
+  - {class: Green, height: 64.21731841276579, width: 24.57699840488567, x: 636.623539326555,
+    y: 417.01616648289905}
+  class: image
+  filename: green/left0074.jpg
+- annotations:
+  - {class: Green, height: 66.59573761323861, width: 24.57699840488567, x: 635.8307329263974,
+    y: 417.80897288305664}
+  class: image
+  filename: green/left0075.jpg
+- annotations:
+  - {class: Green, height: 66.59573761323861, width: 24.57699840488567, x: 635.8307329263974,
+    y: 417.80897288305664}
+  class: image
+  filename: green/left0076.jpg
+- annotations:
+  - {class: Green, height: 68.18135041355384, width: 23.784192004728084, x: 635.0379265262397,
+    y: 417.80897288305664}
+  class: image
+  filename: green/left0077.jpg
+- annotations:
+  - {class: Green, height: 213.43023121782522, width: 91.69595118988045, x: 134.3819974334455,
+    y: 328.84065254301953}
+  class: image
+  filename: green/left0265.jpg
+- annotations:
+  - {class: Green, height: 207.10637251507484, width: 82.21016313575487, x: 150.19164419032143,
+    y: 330.4216172187071}
+  class: image
+  filename: green/left0266.jpg
+- annotations:
+  - {class: Green, height: 203.94444316369965, width: 79.0482337843797, x: 169.16322029857255,
+    y: 335.1645112457699}
+  class: image
+  filename: green/left0267.jpg
+- annotations:
+  - {class: Green, height: 200.78251381232445, width: 79.0482337843797, x: 177.0680436770105,
+    y: 333.5835465700823}
+  class: image
+  filename: green/left0268.jpg
+- annotations:
+  - {class: Green, height: 202.36347848801205, width: 79.0482337843797, x: 191.29672575819887,
+    y: 335.1645112457699}
+  class: image
+  filename: green/left0269.jpg
+- annotations:
+  - {class: Green, height: 197.62058446094926, width: 80.62919846006727, x: 205.5254078393872,
+    y: 339.9074052728327}
+  class: image
+  filename: green/left0270.jpg
+- annotations:
+  - {class: Green, height: 200.78251381232445, width: 75.88630443300451, x: 213.43023121782517,
+    y: 338.3264405971451}
+  class: image
+  filename: green/left0271.jpg
+- annotations:
+  - {class: Green, height: 197.62058446094926, width: 79.0482337843797, x: 227.65891329901353,
+    y: 339.9074052728327}
+  class: image
+  filename: green/left0272.jpg
+- annotations:
+  - {class: Green, height: 194.45865510957407, width: 75.88630443300448, x: 237.14470135313908,
+    y: 344.6502992998955}
+  class: image
+  filename: green/left0273.jpg
+- annotations:
+  - {class: Green, height: 184.9728670554485, width: 66.40051637887893, x: 257.6972421370778,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0274.jpg
+- annotations:
+  - {class: Green, height: 183.39190237976095, width: 69.56244573025413, x: 268.763994866891,
+    y: 352.5551226783334}
+  class: image
+  filename: green/left0275.jpg
+- annotations:
+  - {class: Green, height: 180.22997302838576, width: 66.40051637887899, x: 278.2497829210165,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0276.jpg
+- annotations:
+  - {class: Green, height: 178.64900835269816, width: 63.23858702750374, x: 292.47846500220487,
+    y: 355.7170520297086}
+  class: image
+  filename: green/left0277.jpg
+- annotations:
+  - {class: Green, height: 178.64900835269816, width: 74.30533975731691, x: 295.64039435358006,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0278.jpg
+- annotations:
+  - {class: Green, height: 177.06804367701056, width: 67.98148105456653, x: 309.86907643476843,
+    y: 357.2980167053962}
+  class: image
+  filename: green/left0279.jpg
+- annotations:
+  - {class: Green, height: 170.74418497426018, width: 64.81955170319134, x: 325.67872319164434,
+    y: 357.2980167053962}
+  class: image
+  filename: green/left0280.jpg
+- annotations:
+  - {class: Green, height: 175.48707900132297, width: 63.23858702750374, x: 335.1645112457699,
+    y: 358.8789813810838}
+  class: image
+  filename: green/left0281.jpg
+- annotations:
+  - {class: Green, height: 170.74418497426018, width: 61.657622351816144, x: 347.8122286512707,
+    y: 360.4599460567714}
+  class: image
+  filename: green/left0282.jpg
+- annotations:
+  - {class: Green, height: 167.582255622885, width: 67.98148105456653, x: 349.3931933269583,
+    y: 362.040910732459}
+  class: image
+  filename: green/left0283.jpg
+- annotations:
+  - {class: Green, height: 164.4203262715098, width: 61.657622351816144, x: 365.2028400838342,
+    y: 365.2028400838342}
+  class: image
+  filename: green/left0284.jpg
+- annotations:
+  - {class: Green, height: 164.4203262715098, width: 61.657622351816144, x: 377.85055748933496,
+    y: 362.040910732459}
+  class: image
+  filename: green/left0285.jpg
+- annotations:
+  - {class: Green, height: 162.8393615958222, width: 64.81955170319134, x: 382.59345151639775,
+    y: 363.6218754081466}
+  class: image
+  filename: green/left0286.jpg
+- annotations:
+  - {class: Green, height: 166.0012909471974, width: 64.8195517031914, x: 393.66020424621087,
+    y: 357.2980167053962}
+  class: image
+  filename: green/left0287.jpg
+- annotations:
+  - {class: Green, height: 159.677432244447, width: 56.914728324753355, x: 404.72695697602404,
+    y: 362.040910732459}
+  class: image
+  filename: green/left0288.jpg
+- annotations:
+  - {class: Green, height: 156.5155028930718, width: 53.75279897337816, x: 417.3746743815248,
+    y: 362.040910732459}
+  class: image
+  filename: green/left0289.jpg
+- annotations:
+  - {class: Green, height: 153.35357354169662, width: 53.75279897337822, x: 428.44142711133793,
+    y: 365.2028400838342}
+  class: image
+  filename: green/left0290.jpg
+- annotations:
+  - {class: Green, height: 156.5155028930718, width: 56.91472832475341, x: 430.0223917870255,
+    y: 363.6218754081466}
+  class: image
+  filename: green/left0291.jpg
+- annotations:
+  - {class: Green, height: 150.19164419032143, width: 61.657622351816144, x: 436.3462504897759,
+    y: 366.7838047595218}
+  class: image
+  filename: green/left0292.jpg
+- annotations:
+  - {class: Green, height: 147.02971483894623, width: 52.171834297690566, x: 447.4130032195891,
+    y: 369.945734110897}
+  class: image
+  filename: green/left0293.jpg
+- annotations:
+  - {class: Green, height: 147.02971483894623, width: 50.59086962200297, x: 458.47975594940226,
+    y: 369.945734110897}
+  class: image
+  filename: green/left0294.jpg
+- annotations:
+  - {class: Green, height: 148.61067951463383, width: 50.59086962200303, x: 467.9655440035278,
+    y: 371.5266987865846}
+  class: image
+  filename: green/left0295.jpg
+- annotations:
+  - {class: Green, height: 151.77260886600902, width: 61.6576223518162, x: 466.3845793278402,
+    y: 368.3647694352094}
+  class: image
+  filename: green/left0296.jpg
+- annotations:
+  - {class: Green, height: 148.61067951463383, width: 63.2385870275038, x: 474.28940270627817,
+    y: 373.10766346227217}
+  class: image
+  filename: green/left0297.jpg
+- annotations:
+  - {class: Green, height: 156.5155028930718, width: 64.8195517031914, x: 475.87036738196576,
+    y: 363.6218754081466}
+  class: image
+  filename: green/left0298.jpg
+- annotations:
+  - {class: Green, height: 145.44875016325864, width: 55.333763649065816, x: 491.6800141388417,
+    y: 373.10766346227217}
+  class: image
+  filename: green/left0299.jpg
+- annotations:
+  - {class: Green, height: 148.61067951463383, width: 56.9147283247533, x: 496.4229081659045,
+    y: 368.3647694352094}
+  class: image
+  filename: green/left0300.jpg
+- annotations:
+  - {class: Green, height: 139.12489146050825, width: 55.33376364906576, x: 501.16580219296725,
+    y: 376.26959281364736}
+  class: image
+  filename: green/left0301.jpg
+- annotations:
+  - {class: Green, height: 142.28682081188344, width: 52.171834297690566, x: 509.07062557140523,
+    y: 373.10766346227217}
+  class: image
+  filename: green/left0302.jpg
+- annotations:
+  - {class: Green, height: 139.12489146050825, width: 52.171834297690566, x: 512.2325549227804,
+    y: 376.26959281364736}
+  class: image
+  filename: green/left0303.jpg
+- annotations:
+  - {class: Green, height: 135.96296210913306, width: 49.00990494631537, x: 518.5564136255308,
+    y: 377.85055748933496}
+  class: image
+  filename: green/left0304.jpg
+- annotations:
+  - {class: Green, height: 135.96296210913306, width: 50.59086962200297, x: 523.2993076525936,
+    y: 379.43152216502256}
+  class: image
+  filename: green/left0305.jpg
+- annotations:
+  - {class: Green, height: 137.54392678482066, width: 50.59086962200297, x: 526.4612370039688,
+    y: 377.85055748933496}
+  class: image
+  filename: green/left0306.jpg
+- annotations:
+  - {class: Green, height: 132.80103275775787, width: 52.171834297690566, x: 529.623166355344,
+    y: 381.01248684071015}
+  class: image
+  filename: green/left0307.jpg
+- annotations:
+  - {class: Green, height: 132.80103275775787, width: 53.75279897337816, x: 529.623166355344,
+    y: 381.01248684071015}
+  class: image
+  filename: green/left0308.jpg
+- annotations:
+  - {class: Green, height: 132.80103275775787, width: 50.59086962200297, x: 539.1089544094696,
+    y: 382.59345151639775}
+  class: image
+  filename: green/left0309.jpg
+- annotations:
+  - {class: Green, height: 134.38199743344546, width: 50.59086962200297, x: 543.8518484365324,
+    y: 379.43152216502256}
+  class: image
+  filename: green/left0310.jpg
+- annotations:
+  - {class: Green, height: 131.22006808207027, width: 49.00990494631537, x: 545.43281311222,
+    y: 381.01248684071015}
+  class: image
+  filename: green/left0311.jpg
+- annotations:
+  - {class: Green, height: 131.22006808207027, width: 49.00990494631537, x: 548.5947424635951,
+    y: 379.43152216502256}
+  class: image
+  filename: green/left0312.jpg
+- annotations:
+  - {class: Green, height: 134.38199743344546, width: 53.75279897337816, x: 547.0137777879075,
+    y: 377.85055748933496}
+  class: image
+  filename: green/left0313.jpg
+- annotations:
+  - {class: Green, height: 137.54392678482066, width: 52.171834297690566, x: 550.1757071392827,
+    y: 376.26959281364736}
+  class: image
+  filename: green/left0314.jpg
+- annotations:
+  - {class: Green, height: 139.12489146050825, width: 50.59086962200308, x: 553.3376364906578,
+    y: 371.5266987865846}
+  class: image
+  filename: green/left0315.jpg
+- annotations:
+  - {class: Green, height: 131.22006808207027, width: 49.00990494631549, x: 556.499565842033,
+    y: 373.10766346227217}
+  class: image
+  filename: green/left0316.jpg
+- annotations:
+  - {class: Green, height: 132.80103275775787, width: 52.17183429769068, x: 554.9186011663454,
+    y: 369.945734110897}
+  class: image
+  filename: green/left0317.jpg
+- annotations:
+  - {class: Green, height: 128.05813873069508, width: 50.59086962200308, x: 558.0805305177206,
+    y: 373.10766346227217}
+  class: image
+  filename: green/left0318.jpg
+- annotations:
+  - {class: Green, height: 129.63910340638267, width: 50.59086962200308, x: 561.2424598690958,
+    y: 374.68862813795977}
+  class: image
+  filename: green/left0319.jpg
+- annotations:
+  - {class: Green, height: 129.63910340638267, width: 50.59086962200308, x: 561.2424598690958,
+    y: 374.68862813795977}
+  class: image
+  filename: green/left0320.jpg
+- annotations:
+  - {class: Green, height: 129.63910340638267, width: 50.59086962200308, x: 561.2424598690958,
+    y: 374.68862813795977}
+  class: image
+  filename: green/left0321.jpg
+- annotations:
+  - {class: Green, height: 123.31524470363235, width: 50.59086962200308, x: 567.5663185718462,
+    y: 373.10766346227217}
+  class: image
+  filename: green/left0322.jpg
+- annotations:
+  - {class: Green, height: 123.31524470363235, width: 50.59086962200308, x: 567.5663185718462,
+    y: 373.10766346227217}
+  class: image
+  filename: green/left0323.jpg
+- annotations:
+  - {class: Green, height: 123.31524470363235, width: 50.59086962200308, x: 567.5663185718462,
+    y: 373.10766346227217}
+  class: image
+  filename: green/left0324.jpg
+- annotations:
+  - {class: Green, height: 121.73428002794475, width: 42.6860462435651, x: 577.0521066259718,
+    y: 371.5266987865846}
+  class: image
+  filename: green/left0325.jpg
+- annotations:
+  - {class: Green, height: 121.73428002794475, width: 42.6860462435651, x: 577.0521066259718,
+    y: 371.5266987865846}
+  class: image
+  filename: green/left0326.jpg
+- annotations:
+  - {class: Green, height: 121.73428002794475, width: 42.6860462435651, x: 577.0521066259718,
+    y: 371.5266987865846}
+  class: image
+  filename: green/left0327.jpg
+- annotations:
+  - {class: Green, height: 124.89620937931994, width: 49.00990494631549, x: 575.4711419502842,
+    y: 371.5266987865846}
+  class: image
+  filename: green/left0328.jpg
+- annotations:
+  - {class: Green, height: 124.89620937931994, width: 49.00990494631549, x: 575.4711419502842,
+    y: 371.5266987865846}
+  class: image
+  filename: green/left0329.jpg
+- annotations:
+  - {class: Green, height: 124.89620937931994, width: 49.00990494631549, x: 575.4711419502842,
+    y: 371.5266987865846}
+  class: image
+  filename: green/left0330.jpg
+- annotations:
+  - {class: Green, height: 124.89620937931994, width: 49.00990494631549, x: 575.4711419502842,
+    y: 371.5266987865846}
+  class: image
+  filename: green/left0331.jpg
+- annotations:
+  - {class: Green, height: 123.31524470363235, width: 47.42894027062778, x: 580.214035977347,
+    y: 373.10766346227217}
+  class: image
+  filename: green/left0332.jpg
+- annotations:
+  - {class: Green, height: 123.31524470363235, width: 47.42894027062778, x: 580.214035977347,
+    y: 373.10766346227217}
+  class: image
+  filename: green/left0333.jpg
+- annotations:
+  - {class: Green, height: 123.31524470363235, width: 47.42894027062778, x: 580.214035977347,
+    y: 373.10766346227217}
+  class: image
+  filename: green/left0334.jpg
+- annotations:
+  - {class: Green, height: 120.1533153522571, width: 44.267010919252584, x: 584.9569300044097,
+    y: 377.85055748933496}
+  class: image
+  filename: green/left0335.jpg
+- annotations:
+  - {class: Green, height: 120.1533153522571, width: 44.267010919252584, x: 584.9569300044097,
+    y: 377.85055748933496}
+  class: image
+  filename: green/left0336.jpg
+- annotations:
+  - {class: Green, height: 120.1533153522571, width: 44.267010919252584, x: 584.9569300044097,
+    y: 377.85055748933496}
+  class: image
+  filename: green/left0337.jpg
+- annotations:
+  - {class: Green, height: 116.9913860008819, width: 41.10508156787739, x: 589.6998240314725,
+    y: 381.01248684071015}
+  class: image
+  filename: green/left0338.jpg
+- annotations:
+  - {class: Green, height: 123.31524470363229, width: 49.00990494631537, x: 584.9569300044097,
+    y: 376.26959281364736}
+  class: image
+  filename: green/left0339.jpg
+- annotations:
+  - {class: Green, height: 120.1533153522571, width: 44.267010919252584, x: 588.1188593557849,
+    y: 379.43152216502256}
+  class: image
+  filename: green/left0340.jpg
+- annotations:
+  - {class: Green, height: 120.1533153522571, width: 44.267010919252584, x: 588.1188593557849,
+    y: 379.43152216502256}
+  class: image
+  filename: green/left0341.jpg
+- annotations:
+  - {class: Green, height: 120.1533153522571, width: 44.267010919252584, x: 588.1188593557849,
+    y: 379.43152216502256}
+  class: image
+  filename: green/left0342.jpg
+- annotations:
+  - {class: Green, height: 120.1533153522571, width: 44.267010919252584, x: 588.1188593557849,
+    y: 379.43152216502256}
+  class: image
+  filename: green/left0343.jpg
+- annotations:
+  - {class: Green, height: 120.1533153522571, width: 44.267010919252584, x: 592.8617533828477,
+    y: 379.43152216502256}
+  class: image
+  filename: green/left0344.jpg
+- annotations:
+  - {class: Green, height: 120.1533153522571, width: 44.267010919252584, x: 592.8617533828477,
+    y: 379.43152216502256}
+  class: image
+  filename: green/left0345.jpg
+- annotations:
+  - {class: Green, height: 120.1533153522571, width: 44.267010919252584, x: 592.8617533828477,
+    y: 379.43152216502256}
+  class: image
+  filename: green/left0346.jpg
+- annotations:
+  - {class: Green, height: 120.1533153522571, width: 44.267010919252584, x: 592.8617533828477,
+    y: 379.43152216502256}
+  class: image
+  filename: green/left0347.jpg
+- annotations:
+  - {class: Green, height: 120.1533153522571, width: 44.267010919252584, x: 592.8617533828477,
+    y: 379.43152216502256}
+  class: image
+  filename: green/left0348.jpg
+- annotations:
+  - {class: Green, height: 120.1533153522571, width: 44.267010919252584, x: 592.8617533828477,
+    y: 379.43152216502256}
+  class: image
+  filename: green/left0349.jpg
+- annotations:
+  - {class: Green, height: 120.1533153522571, width: 44.267010919252584, x: 592.8617533828477,
+    y: 379.43152216502256}
+  class: image
+  filename: green/left0350.jpg
+- annotations:
+  - {class: Green, height: 107.50559794675638, width: 41.10508156787739, x: 597.6046474099105,
+    y: 390.4982748948357}
+  class: image
+  filename: green/left0351.jpg
+- annotations:
+  - {class: Green, height: 107.50559794675638, width: 41.10508156787739, x: 597.6046474099105,
+    y: 390.4982748948357}
+  class: image
+  filename: green/left0352.jpg
+- annotations:
+  - {class: Green, height: 107.50559794675638, width: 41.10508156787739, x: 597.6046474099105,
+    y: 390.4982748948357}
+  class: image
+  filename: green/left0353.jpg
+- annotations:
+  - {class: Green, height: 107.50559794675638, width: 41.10508156787739, x: 597.6046474099105,
+    y: 390.4982748948357}
+  class: image
+  filename: green/left0354.jpg
+- annotations:
+  - {class: Green, height: 110.66752729813157, width: 39.524116892189795, x: 600.7665767612857,
+    y: 388.9173102191481}
+  class: image
+  filename: green/left0355.jpg
+- annotations:
+  - {class: Green, height: 110.66752729813157, width: 39.524116892189795, x: 600.7665767612857,
+    y: 388.9173102191481}
+  class: image
+  filename: green/left0356.jpg
+- annotations:
+  - {class: Green, height: 110.66752729813157, width: 39.524116892189795, x: 600.7665767612857,
+    y: 388.9173102191481}
+  class: image
+  filename: green/left0357.jpg
+- annotations:
+  - {class: Green, height: 110.66752729813157, width: 39.524116892189795, x: 600.7665767612857,
+    y: 388.9173102191481}
+  class: image
+  filename: green/left0358.jpg
+- annotations:
+  - {class: Green, height: 104.34366859538119, width: 41.10508156787739, x: 602.3475414369733,
+    y: 393.66020424621087}
+  class: image
+  filename: green/left0359.jpg
+- annotations:
+  - {class: Green, height: 104.34366859538119, width: 41.10508156787739, x: 602.3475414369733,
+    y: 393.66020424621087}
+  class: image
+  filename: green/left0360.jpg
+- annotations:
+  - {class: Green, height: 104.34366859538119, width: 41.10508156787739, x: 602.3475414369733,
+    y: 393.66020424621087}
+  class: image
+  filename: green/left0361.jpg
+- annotations:
+  - {class: Green, height: 104.34366859538119, width: 41.10508156787739, x: 602.3475414369733,
+    y: 393.66020424621087}
+  class: image
+  filename: green/left0362.jpg
+- annotations:
+  - {class: Green, height: 104.34366859538119, width: 41.10508156787739, x: 602.3475414369733,
+    y: 393.66020424621087}
+  class: image
+  filename: green/left0363.jpg
+- annotations:
+  - {class: Green, height: 105.92463327106879, width: 36.3621875408146, x: 607.0904354640361,
+    y: 393.66020424621087}
+  class: image
+  filename: green/left0364.jpg
+- annotations:
+  - {class: Green, height: 105.92463327106879, width: 39.524116892189795, x: 607.0904354640361,
+    y: 392.07923957052327}
+  class: image
+  filename: green/left0365.jpg
+- annotations:
+  - {class: Green, height: 105.92463327106879, width: 39.524116892189795, x: 607.0904354640361,
+    y: 392.07923957052327}
+  class: image
+  filename: green/left0366.jpg
+- annotations:
+  - {class: Green, height: 105.92463327106879, width: 39.524116892189795, x: 607.0904354640361,
+    y: 392.07923957052327}
+  class: image
+  filename: green/left0367.jpg
+- annotations:
+  - {class: Green, height: 105.92463327106879, width: 39.524116892189795, x: 607.0904354640361,
+    y: 392.07923957052327}
+  class: image
+  filename: green/left0368.jpg
+- annotations:
+  - {class: Green, height: 105.92463327106879, width: 42.68604624356499, x: 607.0904354640361,
+    y: 392.07923957052327}
+  class: image
+  filename: green/left0369.jpg
+- annotations:
+  - {class: Green, height: 105.92463327106879, width: 42.68604624356499, x: 607.0904354640361,
+    y: 392.07923957052327}
+  class: image
+  filename: green/left0370.jpg
+- annotations:
+  - {class: Green, height: 105.92463327106879, width: 42.68604624356499, x: 607.0904354640361,
+    y: 392.07923957052327}
+  class: image
+  filename: green/left0371.jpg
+- annotations:
+  - {class: Green, height: 105.92463327106879, width: 42.68604624356499, x: 607.0904354640361,
+    y: 392.07923957052327}
+  class: image
+  filename: green/left0372.jpg
+- annotations:
+  - {class: Green, height: 99.60077456831846, width: 36.3621875408146, x: 613.4142941667865,
+    y: 396.82213359758606}
+  class: image
+  filename: green/left0373.jpg
+- annotations:
+  - {class: Green, height: 99.60077456831846, width: 36.3621875408146, x: 613.4142941667865,
+    y: 396.82213359758606}
+  class: image
+  filename: green/left0374.jpg
+- annotations:
+  - {class: Green, height: 98.01980989263086, width: 36.3621875408146, x: 614.9952588424741,
+    y: 396.82213359758606}
+  class: image
+  filename: green/left0375.jpg
+- annotations:
+  - {class: Green, height: 98.01980989263086, width: 36.3621875408146, x: 614.9952588424741,
+    y: 396.82213359758606}
+  class: image
+  filename: green/left0376.jpg
+- annotations:
+  - {class: Green, height: 98.01980989263086, width: 36.3621875408146, x: 614.9952588424741,
+    y: 396.82213359758606}
+  class: image
+  filename: green/left0377.jpg
+- annotations:
+  - {class: Green, height: 98.01980989263086, width: 36.3621875408146, x: 614.9952588424741,
+    y: 396.82213359758606}
+  class: image
+  filename: green/left0378.jpg
+- annotations:
+  - {class: Green, height: 101.181739244006, width: 39.524116892189795, x: 614.9952588424741,
+    y: 396.82213359758606}
+  class: image
+  filename: green/left0379.jpg
+- annotations:
+  - {class: Green, height: 101.181739244006, width: 39.524116892189795, x: 614.9952588424741,
+    y: 396.82213359758606}
+  class: image
+  filename: green/left0380.jpg
+- annotations:
+  - {class: Green, height: 99.6007745683184, width: 34.781222865127006, x: 618.1571881938493,
+    y: 398.40309827327366}
+  class: image
+  filename: green/left0381.jpg
+- annotations:
+  - {class: Green, height: 99.6007745683184, width: 34.781222865127006, x: 618.1571881938493,
+    y: 398.40309827327366}
+  class: image
+  filename: green/left0382.jpg
+- annotations:
+  - {class: Green, height: 96.43884521694326, width: 39.524116892189795, x: 618.1571881938493,
+    y: 399.98406294896125}
+  class: image
+  filename: green/left0383.jpg
+- annotations:
+  - {class: Green, height: 96.43884521694326, width: 39.524116892189795, x: 618.1571881938493,
+    y: 399.98406294896125}
+  class: image
+  filename: green/left0384.jpg
+- annotations:
+  - {class: Green, height: 96.43884521694326, width: 39.524116892189795, x: 618.1571881938493,
+    y: 399.98406294896125}
+  class: image
+  filename: green/left0385.jpg
+- annotations:
+  - {class: Green, height: 96.43884521694326, width: 39.524116892189795, x: 618.1571881938493,
+    y: 399.98406294896125}
+  class: image
+  filename: green/left0386.jpg
+- annotations:
+  - {class: Green, height: 91.69595118988047, width: 33.20025818943941, x: 624.4810468965997,
+    y: 401.56502762464885}
+  class: image
+  filename: green/left0387.jpg
+- annotations:
+  - {class: Green, height: 169.16322029857258, width: 60.07665767612855, x: 365.2028400838342,
+    y: 360.4599460567714}
+  class: image
+  filename: green/left0575.jpg
+- annotations:
+  - {class: Green, height: 169.16322029857258, width: 69.56244573025418, x: 350.9741580026458,
+    y: 358.8789813810838}
+  class: image
+  filename: green/left0576.jpg
+- annotations:
+  - {class: Green, height: 170.74418497426018, width: 63.23858702750374, x: 341.4883699485203,
+    y: 357.2980167053962}
+  class: image
+  filename: green/left0577.jpg
+- annotations:
+  - {class: Green, height: 172.32514964994778, width: 67.98148105456653, x: 335.1645112457699,
+    y: 357.2980167053962}
+  class: image
+  filename: green/left0578.jpg
+- annotations:
+  - {class: Green, height: 177.06804367701056, width: 66.40051637887893, x: 324.09775851595674,
+    y: 355.7170520297086}
+  class: image
+  filename: green/left0579.jpg
+- annotations:
+  - {class: Green, height: 177.06804367701056, width: 66.40051637887899, x: 316.19293513751876,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0580.jpg
+- annotations:
+  - {class: Green, height: 183.3919023797609, width: 67.98148105456653, x: 308.28811175908083,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0581.jpg
+- annotations:
+  - {class: Green, height: 183.39190237976095, width: 71.14341040594172, x: 297.22135902926766,
+    y: 350.9741580026458}
+  class: image
+  filename: green/left0582.jpg
+- annotations:
+  - {class: Green, height: 188.13479640682374, width: 71.14341040594172, x: 294.05942967789247,
+    y: 350.9741580026458}
+  class: image
+  filename: green/left0583.jpg
+- annotations:
+  - {class: Green, height: 180.22997302838576, width: 64.81955170319134, x: 287.7355709751421,
+    y: 352.5551226783334}
+  class: image
+  filename: green/left0584.jpg
+- annotations:
+  - {class: Green, height: 180.22997302838576, width: 63.2385870275038, x: 282.9926769480793,
+    y: 350.9741580026458}
+  class: image
+  filename: green/left0585.jpg
+- annotations:
+  - {class: Green, height: 183.3919023797609, width: 69.56244573025413, x: 275.08785356964137,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0586.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 67.98148105456653, x: 270.3449595425786,
+    y: 350.9741580026458}
+  class: image
+  filename: green/left0587.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 66.40051637887893, x: 270.3449595425786,
+    y: 350.9741580026458}
+  class: image
+  filename: green/left0588.jpg
+- annotations:
+  - {class: Green, height: 183.3919023797609, width: 66.40051637887893, x: 265.6020655155158,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0589.jpg
+- annotations:
+  - {class: Green, height: 180.22997302838576, width: 67.98148105456653, x: 259.2782068127654,
+    y: 350.9741580026458}
+  class: image
+  filename: green/left0590.jpg
+- annotations:
+  - {class: Green, height: 183.39190237976095, width: 69.56244573025413, x: 256.1162774613902,
+    y: 350.9741580026458}
+  class: image
+  filename: green/left0591.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 63.23858702750374, x: 259.2782068127654,
+    y: 350.9741580026458}
+  class: image
+  filename: green/left0592.jpg
+- annotations:
+  - {class: Green, height: 186.55383173113609, width: 74.30533975731691, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0593.jpg
+- annotations:
+  - {class: Green, height: 183.3919023797609, width: 71.14341040594172, x: 252.95434811001502,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0594.jpg
+- annotations:
+  - {class: Green, height: 183.3919023797609, width: 71.14341040594172, x: 252.95434811001502,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0595.jpg
+- annotations:
+  - {class: Green, height: 183.3919023797609, width: 71.14341040594172, x: 252.95434811001502,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0596.jpg
+- annotations:
+  - {class: Green, height: 183.3919023797609, width: 71.14341040594172, x: 252.95434811001502,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0597.jpg
+- annotations:
+  - {class: Green, height: 183.3919023797609, width: 71.14341040594172, x: 252.95434811001502,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0598.jpg
+- annotations:
+  - {class: Green, height: 183.3919023797609, width: 71.14341040594172, x: 252.95434811001502,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0599.jpg
+- annotations:
+  - {class: Green, height: 183.3919023797609, width: 71.14341040594172, x: 252.95434811001502,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0600.jpg
+- annotations:
+  - {class: Green, height: 183.3919023797609, width: 71.14341040594172, x: 252.95434811001502,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0601.jpg
+- annotations:
+  - {class: Green, height: 183.3919023797609, width: 71.14341040594172, x: 252.95434811001502,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0602.jpg
+- annotations:
+  - {class: Green, height: 183.3919023797609, width: 71.14341040594172, x: 252.95434811001502,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0603.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 74.30533975731691, x: 249.79241875863983,
+    y: 355.7170520297086}
+  class: image
+  filename: green/left0604.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 74.30533975731691, x: 249.79241875863983,
+    y: 355.7170520297086}
+  class: image
+  filename: green/left0605.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 74.30533975731691, x: 249.79241875863983,
+    y: 355.7170520297086}
+  class: image
+  filename: green/left0606.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 74.30533975731691, x: 249.79241875863983,
+    y: 355.7170520297086}
+  class: image
+  filename: green/left0607.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0608.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0609.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0610.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0611.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0612.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0613.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0614.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0615.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0616.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0617.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0618.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0619.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0620.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0621.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0622.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0623.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0624.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0625.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0626.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0627.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0628.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0629.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0630.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0631.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0632.jpg
+- annotations:
+  - {class: Green, height: 189.71576108251128, width: 72.72437508162932, x: 251.37338343432742,
+    y: 347.8122286512707}
+  class: image
+  filename: green/left0633.jpg
+- annotations:
+  - {class: Green, height: 186.55383173113609, width: 69.56244573025413, x: 254.53531278570262,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0634.jpg
+- annotations:
+  - {class: Green, height: 186.55383173113609, width: 69.56244573025413, x: 254.53531278570262,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0635.jpg
+- annotations:
+  - {class: Green, height: 186.55383173113609, width: 69.56244573025413, x: 254.53531278570262,
+    y: 349.3931933269583}
+  class: image
+  filename: green/left0636.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0637.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0638.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0639.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0640.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0641.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0642.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0643.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0644.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0645.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0646.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0647.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0648.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0649.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0650.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0651.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0652.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0653.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0654.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0655.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0656.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0657.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0658.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0659.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0660.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0661.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0662.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0663.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0664.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0665.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0666.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0667.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0668.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0669.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0670.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0671.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0672.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0673.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0674.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0675.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0676.jpg
+- annotations:
+  - {class: Green, height: 181.81093770407335, width: 71.14341040594172, x: 254.53531278570262,
+    y: 354.136087354021}
+  class: image
+  filename: green/left0677.jpg
+- annotations:
+  - {class: Green, height: 178.39453891654705, width: 67.08854454981258, x: 256.15626100837534,
+    y: 356.7890778330942}
+  class: image
+  filename: green/left0678.jpg
+- annotations:
+  - {class: Green, height: 178.39453891654705, width: 67.08854454981258, x: 256.15626100837534,
+    y: 356.7890778330942}
+  class: image
+  filename: green/left0679.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 67.08854454981258, x: 256.15626100837534,
+    y: 352.2148588865161}
+  class: image
+  filename: green/left0680.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 67.08854454981258, x: 256.15626100837534,
+    y: 352.2148588865161}
+  class: image
+  filename: green/left0681.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 67.08854454981258, x: 256.15626100837534,
+    y: 352.2148588865161}
+  class: image
+  filename: green/left0682.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 67.08854454981258, x: 256.15626100837534,
+    y: 352.2148588865161}
+  class: image
+  filename: green/left0683.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 67.08854454981258, x: 256.15626100837534,
+    y: 352.2148588865161}
+  class: image
+  filename: green/left0684.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 67.08854454981258, x: 256.15626100837534,
+    y: 352.2148588865161}
+  class: image
+  filename: green/left0685.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 67.08854454981258, x: 256.15626100837534,
+    y: 352.2148588865161}
+  class: image
+  filename: green/left0686.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 67.08854454981258, x: 256.15626100837534,
+    y: 352.2148588865161}
+  class: image
+  filename: green/left0687.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 67.08854454981258, x: 256.15626100837534,
+    y: 352.2148588865161}
+  class: image
+  filename: green/left0688.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 67.08854454981258, x: 256.15626100837534,
+    y: 352.2148588865161}
+  class: image
+  filename: green/left0689.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 67.08854454981258, x: 256.15626100837534,
+    y: 352.2148588865161}
+  class: image
+  filename: green/left0690.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 67.08854454981258, x: 256.15626100837534,
+    y: 352.2148588865161}
+  class: image
+  filename: green/left0691.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 67.08854454981258, x: 256.15626100837534,
+    y: 352.2148588865161}
+  class: image
+  filename: green/left0692.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 67.08854454981258, x: 256.15626100837534,
+    y: 352.2148588865161}
+  class: image
+  filename: green/left0693.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 67.08854454981258, x: 256.15626100837534,
+    y: 352.2148588865161}
+  class: image
+  filename: green/left0694.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 67.08854454981258, x: 256.15626100837534,
+    y: 352.2148588865161}
+  class: image
+  filename: green/left0695.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 68.61328419867198, x: 254.63152135951594,
+    y: 350.6901192376567}
+  class: image
+  filename: green/left0696.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 68.61328419867198, x: 254.63152135951594,
+    y: 350.6901192376567}
+  class: image
+  filename: green/left0697.jpg
+- annotations:
+  - {class: Green, height: 184.49349751198457, width: 68.61328419867198, x: 254.63152135951594,
+    y: 350.6901192376567}
+  class: image
+  filename: green/left0698.jpg
+- annotations:
+  - {class: Red, height: 108.55729292459984, width: 39.201244667216656, x: 526.2013226484073,
+    y: 384.47374577462426}
+  class: image
+  filename: red/left0140.jpg
+- annotations:
+  - {class: Red, height: 110.8189031938623, width: 39.955114756970715, x: 523.1858422893907,
+    y: 382.2121355053618}
+  class: image
+  filename: red/left0141.jpg
+- annotations:
+  - {class: Red, height: 112.32664337337064, width: 42.216725026233235, x: 516.4010114816032,
+    y: 380.70439532585345}
+  class: image
+  filename: red/left0142.jpg
+- annotations:
+  - {class: Red, height: 113.83438355287893, width: 39.95511475697083, x: 514.8932713020948,
+    y: 377.6889149668368}
+  class: image
+  filename: red/left0143.jpg
+- annotations:
+  - {class: Red, height: 116.09599382214145, width: 42.216725026233235, x: 508.1084404943074,
+    y: 375.4273046975743}
+  class: image
+  filename: red/left0144.jpg
+- annotations:
+  - {class: Red, height: 118.35760409140391, width: 42.21672502623329, x: 502.07747977627406,
+    y: 370.9040841590493}
+  class: image
+  filename: red/left0145.jpg
+- annotations:
+  - {class: Red, height: 119.86534427091226, width: 41.46285493647912, x: 500.5697395967657,
+    y: 370.15021406929515}
+  class: image
+  filename: red/left0146.jpg
+- annotations:
+  - {class: Red, height: 119.86534427091226, width: 44.4783352954957, x: 491.52329851971575,
+    y: 370.15021406929515}
+  class: image
+  filename: red/left0147.jpg
+- annotations:
+  - {class: Red, height: 121.3730844504206, width: 42.970595115987464, x: 490.0155583402074,
+    y: 370.15021406929515}
+  class: image
+  filename: red/left0148.jpg
+- annotations:
+  - {class: Red, height: 121.3730844504206, width: 45.23220538524987, x: 481.7229873529116,
+    y: 373.91956451806595}
+  class: image
+  filename: red/left0149.jpg
+- annotations:
+  - {class: Red, height: 127.40404516845393, width: 47.493815654512446, x: 473.43041636561577,
+    y: 373.1656944283118}
+  class: image
+  filename: red/left0150.jpg
+- annotations:
+  - {class: Red, height: 123.63469471968307, width: 44.4783352954957, x: 470.41493600659913,
+    y: 376.93504487708265}
+  class: image
+  filename: red/left0151.jpg
+- annotations:
+  - {class: Red, height: 126.65017507869976, width: 47.493815654512446, x: 462.1223650193033,
+    y: 379.9505252360993}
+  class: image
+  filename: red/left0152.jpg
+- annotations:
+  - {class: Red, height: 126.65017507869976, width: 45.9860754750041, x: 460.61462483979494,
+    y: 380.70439532585345}
+  class: image
+  filename: red/left0153.jpg
+- annotations:
+  - {class: Red, height: 130.41952552747057, width: 47.49381565451239, x: 452.32205385249915,
+    y: 381.4582654156076}
+  class: image
+  filename: red/left0154.jpg
+- annotations:
+  - {class: Red, height: 133.4350058864872, width: 47.49381565451239, x: 446.2910931344658,
+    y: 380.70439532585345}
+  class: image
+  filename: red/left0155.jpg
+- annotations:
+  - {class: Red, height: 133.4350058864872, width: 51.263166103283254, x: 439.5062623266783,
+    y: 379.9505252360993}
+  class: image
+  filename: red/left0156.jpg
+- annotations:
+  - {class: Red, height: 136.45048624550384, width: 52.01703619303737, x: 431.9675614291367,
+    y: 377.6889149668368}
+  class: image
+  filename: red/left0157.jpg
+- annotations:
+  - {class: Red, height: 136.45048624550384, width: 52.7709062827916, x: 427.44434089061167,
+    y: 376.93504487708265}
+  class: image
+  filename: red/left0158.jpg
+- annotations:
+  - {class: Red, height: 141.72757687378305, width: 51.263166103283254, x: 422.1672502623325,
+    y: 373.1656944283118}
+  class: image
+  filename: red/left0159.jpg
+- annotations:
+  - {class: Red, height: 143.23531705329134, width: 52.01703619303743, x: 413.12080918528255,
+    y: 371.6579542488035}
+  class: image
+  filename: red/left0160.jpg
+- annotations:
+  - {class: Red, height: 144.74305723279969, width: 52.01703619303737, x: 408.5975886467576,
+    y: 370.15021406929515}
+  class: image
+  filename: red/left0161.jpg
+- annotations:
+  - {class: Red, height: 147.0046675020622, width: 54.27864646229989, x: 396.5356672106909,
+    y: 368.6424738897868}
+  class: image
+  filename: red/left0162.jpg
+- annotations:
+  - {class: Red, height: 147.0046675020622, width: 49.75542592377491, x: 395.02792703118257,
+    y: 368.6424738897868}
+  class: image
+  filename: red/left0163.jpg
+- annotations:
+  - {class: Red, height: 149.80906423594774, width: 52.10750060380792, x: 382.12167109459125,
+    y: 366.9236500851473}
+  class: image
+  filename: red/left0164.jpg
+- annotations:
+  - {class: Red, height: 155.23692888217772, width: 55.36421939154593, x: 369.09479594363927,
+    y: 363.6669312974093}
+  class: image
+  filename: red/left0165.jpg
+- annotations:
+  - {class: Red, height: 155.23692888217772, width: 53.19307353305385, x: 365.8380771559013,
+    y: 363.6669312974093}
+  class: image
+  filename: red/left0166.jpg
+- annotations:
+  - {class: Red, height: 160.6647935284077, width: 56.449792320791914, x: 350.6400561464573,
+    y: 361.4957854389173}
+  class: image
+  filename: red/left0167.jpg
+- annotations:
+  - {class: Red, height: 161.75036645765363, width: 58.62093817928388, x: 341.9554727124893,
+    y: 361.4957854389173}
+  class: image
+  filename: red/left0168.jpg
+- annotations:
+  - {class: Red, height: 168.42190413875386, width: 59.443024990148444, x: 325.698241091855,
+    y: 361.61173535673635}
+  class: image
+  filename: red/left0169.jpg
+- annotations:
+  - {class: Red, height: 173.3754895545996, width: 65.63500675995556, x: 307.1222957824336,
+    y: 359.1349426488135}
+  class: image
+  filename: red/left0170.jpg
+- annotations:
+  - {class: Red, height: 175.85228226252246, width: 66.87340311391699, x: 297.21512495074217,
+    y: 357.89654629485204}
+  class: image
+  filename: red/left0171.jpg
+- annotations:
+  - {class: Red, height: 174.61388590856103, width: 68.11179946787843, x: 282.35436870320507,
+    y: 359.1349426488135}
+  class: image
+  filename: red/left0172.jpg
+- annotations:
+  - {class: Red, height: 177.7858376048245, width: 67.88186526729663, x: 271.52746106918653,
+    y: 355.5716752096491}
+  class: image
+  filename: red/left0173.jpg
+- annotations:
+  - {class: Red, height: 184.18111255595517, width: 65.41011473949806, x: 256.47650253118985,
+    y: 351.1490370225686}
+  class: image
+  filename: red/left0174.jpg
+- annotations:
+  - {class: Red, height: 184.18111255595517, width: 68.85275235736643, x: 232.3780392061116,
+    y: 349.4277182136345}
+  class: image
+  filename: red/left0175.jpg
+- annotations:
+  - {class: Red, height: 189.34506898275765, width: 72.29538997523471, x: 220.32880754357248,
+    y: 345.98508059576614}
+  class: image
+  filename: red/left0176.jpg
+- annotations:
+  - {class: Red, height: 192.78770660062594, width: 75.73802759310306, x: 197.9516630274284,
+    y: 342.54244297789785}
+  class: image
+  filename: red/left0177.jpg
+- annotations:
+  - {class: Red, height: 196.23034421849422, width: 75.73802759310306, x: 185.90243136488928,
+    y: 340.8211241689637}
+  class: image
+  filename: red/left0178.jpg
+- annotations:
+  - {class: Red, height: 204.83693826316505, width: 79.18066521097134, x: 161.80396803981105,
+    y: 333.935848933227}
+  class: image
+  filename: red/left0179.jpg
+- annotations:
+  - {class: Red, height: 208.81717441810912, width: 78.56487750384304, x: 140.5897807963507,
+    y: 330.79948422670753}
+  class: image
+  filename: red/left0180.jpg
+- annotations:
+  - {class: Red, height: 212.95216797094304, width: 82.69987105667688, x: 121.9823098085984,
+    y: 328.7319874502906}
+  class: image
+  filename: red/left0181.jpg
+- annotations:
+  - {class: Red, height: 219.15465830019377, width: 95.10485171517841, x: 97.17234849159534,
+    y: 324.59699389745674}
+  class: image
+  filename: red/left0182.jpg
+- annotations:
+  - {class: Red, height: 219.15465830019372, width: 86.83486460951072, x: 88.90236138592765,
+    y: 320.46200034462294}
+  class: image
+  filename: red/left0183.jpg
+- annotations:
+  - {class: Red, height: 233.89530017451773, width: 91.09606427849636, x: 56.62728320014639,
+    y: 315.1431412877712}
+  class: image
+  filename: red/left0184.jpg
+- annotations:
+  - {class: Red, height: 241.28146754844988, width: 98.4822316524285, x: 24.620557913107124,
+    y: 310.21902970514975}
+  class: image
+  filename: red/left0185.jpg
+- annotations:
+  - {class: Red, height: 243.7435233397606, width: 96.02017586111778, x: 14.772334747864274,
+    y: 307.75697391383903}
+  class: image
+  filename: red/left0186.jpg
+- annotations:
+  - {class: Red, height: 251.12969071369264, width: 71.39961794801066, x: 12.310278956553562,
+    y: 302.8328623312176}
+  class: image
+  filename: red/left0187.jpg
+- annotations:
+  - {class: Red, height: 258.51585808762474, width: 56.62728320014639, x: 9.84822316524285,
+    y: 295.4466949572855}
+  class: image
+  filename: red/left0188.jpg
+- annotations:
+  - {class: Red, height: 264.08934386777565, width: 34.67839868970791, x: 5.335138259955063,
+    y: 293.4326042975285}
+  class: image
+  filename: red/left0189.jpg
+- annotations:
+  - {class: Red, height: 264.08934386777565, width: 45.34867520961804, x: 0.0, y: 296.10017342750604}
+  class: image
+  filename: red/left0252.jpg
+- annotations:
+  - {class: Red, height: 264.08934386777565, width: 53.35138259955063, x: 0.0, y: 296.10017342750604}
+  class: image
+  filename: red/left0253.jpg
+- annotations:
+  - {class: Red, height: 266.7569129977532, width: 61.35408998948323, x: 8.002707389932596,
+    y: 296.10017342750604}
+  class: image
+  filename: red/left0254.jpg
+- annotations:
+  - {class: Red, height: 253.4190673478655, width: 90.69735041923607, x: 0.0, y: 301.4353116874611}
+  class: image
+  filename: red/left0255.jpg
+- annotations:
+  - {class: Red, height: 253.4190673478655, width: 101.3676269391462, x: 0.0, y: 301.4353116874611}
+  class: image
+  filename: red/left0256.jpg
+- annotations:
+  - {class: Red, height: 248.0839290879104, width: 98.70005780916867, x: 16.00541477986519,
+    y: 304.10288081743863}
+  class: image
+  filename: red/left0257.jpg
+- annotations:
+  - {class: Red, height: 240.0812216979778, width: 96.03248867919115, x: 29.34326042975285,
+    y: 309.4380190773937}
+  class: image
+  filename: red/left0258.jpg
+- annotations:
+  - {class: Red, height: 240.0812216979778, width: 96.03248867919115, x: 48.01624433959557,
+    y: 312.1055882073712}
+  class: image
+  filename: red/left0259.jpg
+- annotations:
+  - {class: Red, height: 226.74337604809023, width: 90.69735041923607, x: 66.68922824943829,
+    y: 317.4407264673263}
+  class: image
+  filename: red/left0260.jpg
+- annotations:
+  - {class: Red, height: 232.07851430804521, width: 88.02978128925854, x: 77.35950476934842,
+    y: 317.4407264673263}
+  class: image
+  filename: red/left0261.jpg
+- annotations:
+  - {class: Red, height: 226.74337604809023, width: 88.02978128925855, x: 96.03248867919115,
+    y: 320.1082955973038}
+  class: image
+  filename: red/left0262.jpg
+- annotations:
+  - {class: Red, height: 226.74337604809023, width: 93.36491954921362, x: 98.70005780916867,
+    y: 317.4407264673263}
+  class: image
+  filename: red/left0263.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0450.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0451.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0452.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0453.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0454.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0455.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0456.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0457.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0458.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0459.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0460.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0461.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0462.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0463.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0464.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0465.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0466.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0467.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0468.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0469.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0470.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0471.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0472.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0473.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0474.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0475.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0476.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0477.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0478.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0479.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0480.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0481.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0482.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0483.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0484.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0485.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0486.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0487.jpg
+- annotations:
+  - {class: Red, height: 82.18944239417658, width: 29.480995641389427, x: 639.648269067722,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0488.jpg
+- annotations:
+  - {class: Red, height: 81.29607888989204, width: 32.16108615424298, x: 637.8615420591531,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0489.jpg
+- annotations:
+  - {class: Red, height: 81.29607888989204, width: 32.16108615424298, x: 637.8615420591531,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0490.jpg
+- annotations:
+  - {class: Red, height: 81.29607888989204, width: 32.16108615424298, x: 637.8615420591531,
+    y: 410.05384846659837}
+  class: image
+  filename: red/left0491.jpg
+- annotations:
+  - {class: Red, height: 77.7226248727539, width: 30.374359145673907, x: 637.8615420591531,
+    y: 412.733938979452}
+  class: image
+  filename: red/left0492.jpg
+- annotations:
+  - {class: Red, height: 84.86953290703019, width: 28.587632137104947, x: 639.648269067722,
+    y: 409.16048496231383}
+  class: image
+  filename: red/left0493.jpg
+- annotations:
+  - {class: Red, height: 84.86953290703019, width: 33.05444965852746, x: 636.074815050584,
+    y: 408.2671214580293}
+  class: image
+  filename: red/left0494.jpg
+- annotations:
+  - {class: Red, height: 84.86953290703019, width: 33.05444965852746, x: 636.074815050584,
+    y: 408.2671214580293}
+  class: image
+  filename: red/left0495.jpg
+- annotations:
+  - {class: Red, height: 84.86953290703019, width: 33.05444965852746, x: 636.074815050584,
+    y: 408.2671214580293}
+  class: image
+  filename: red/left0496.jpg
+- annotations:
+  - {class: Red, height: 85.76289641131473, width: 31.2677226499585, x: 636.074815050584,
+    y: 408.2671214580293}
+  class: image
+  filename: red/left0497.jpg
+- annotations:
+  - {class: Red, height: 85.76289641131473, width: 31.2677226499585, x: 636.074815050584,
+    y: 408.2671214580293}
+  class: image
+  filename: red/left0498.jpg
+- annotations:
+  - {class: Red, height: 85.76289641131473, width: 31.2677226499585, x: 636.074815050584,
+    y: 408.2671214580293}
+  class: image
+  filename: red/left0499.jpg
+- annotations:
+  - {class: Red, height: 85.76289641131473, width: 31.2677226499585, x: 636.074815050584,
+    y: 408.2671214580293}
+  class: image
+  filename: red/left0500.jpg
+- annotations:
+  - {class: Red, height: 83.9761694027456, width: 30.374359145673907, x: 636.074815050584,
+    y: 407.3737579537448}
+  class: image
+  filename: red/left0501.jpg
+- annotations:
+  - {class: Red, height: 83.9761694027456, width: 30.374359145673907, x: 636.074815050584,
+    y: 407.3737579537448}
+  class: image
+  filename: red/left0502.jpg
+- annotations:
+  - {class: Red, height: 86.65625991559921, width: 31.2677226499585, x: 633.3947245377303,
+    y: 407.3737579537448}
+  class: image
+  filename: red/left0503.jpg
+- annotations:
+  - {class: Red, height: 86.65625991559921, width: 31.2677226499585, x: 633.3947245377303,
+    y: 407.3737579537448}
+  class: image
+  filename: red/left0504.jpg
+- annotations:
+  - {class: Red, height: 86.65625991559921, width: 31.2677226499585, x: 633.3947245377303,
+    y: 407.3737579537448}
+  class: image
+  filename: red/left0505.jpg
+- annotations:
+  - {class: Red, height: 86.65625991559921, width: 31.2677226499585, x: 633.3947245377303,
+    y: 407.3737579537448}
+  class: image
+  filename: red/left0506.jpg
+- annotations:
+  - {class: Red, height: 86.65625991559921, width: 32.16108615424298, x: 631.6079975291614,
+    y: 407.3737579537448}
+  class: image
+  filename: red/left0507.jpg
+- annotations:
+  - {class: Red, height: 88.44298692416828, width: 35.73454017138113, x: 629.8212705205923,
+    y: 405.58703094517574}
+  class: image
+  filename: red/left0508.jpg
+- annotations:
+  - {class: Red, height: 88.44298692416822, width: 31.2677226499585, x: 630.7146340248768,
+    y: 407.3737579537448}
+  class: image
+  filename: red/left0509.jpg
+- annotations:
+  - {class: Red, height: 88.44298692416822, width: 31.2677226499585, x: 630.7146340248768,
+    y: 407.3737579537448}
+  class: image
+  filename: red/left0510.jpg
+- annotations:
+  - {class: Red, height: 88.44298692416822, width: 31.2677226499585, x: 630.7146340248768,
+    y: 407.3737579537448}
+  class: image
+  filename: red/left0511.jpg
+- annotations:
+  - {class: Red, height: 86.65625991559921, width: 32.161086154243094, x: 628.9279070163077,
+    y: 406.4803944494603}
+  class: image
+  filename: red/left0512.jpg
+- annotations:
+  - {class: Red, height: 88.44298692416828, width: 33.05444965852746, x: 627.1411800077387,
+    y: 406.4803944494603}
+  class: image
+  filename: red/left0513.jpg
+- annotations:
+  - {class: Red, height: 88.44298692416822, width: 33.054449658527574, x: 626.2478165034541,
+    y: 407.3737579537448}
+  class: image
+  filename: red/left0514.jpg
+- annotations:
+  - {class: Red, height: 89.33635042845276, width: 30.374359145673907, x: 627.1411800077387,
+    y: 407.3737579537448}
+  class: image
+  filename: red/left0515.jpg
+- annotations:
+  - {class: Red, height: 88.44298692416828, width: 35.73454017138113, x: 625.3544529991697,
+    y: 406.4803944494603}
+  class: image
+  filename: red/left0516.jpg
+- annotations:
+  - {class: Red, height: 88.44298692416828, width: 35.73454017138113, x: 625.3544529991697,
+    y: 406.4803944494603}
+  class: image
+  filename: red/left0517.jpg
+- annotations:
+  - {class: Red, height: 89.33635042845276, width: 33.054449658527574, x: 623.5677259906006,
+    y: 406.4803944494603}
+  class: image
+  filename: red/left0518.jpg
+- annotations:
+  - {class: Red, height: 88.44298692416822, width: 33.947813162812054, x: 621.7809989820315,
+    y: 407.3737579537448}
+  class: image
+  filename: red/left0519.jpg
+- annotations:
+  - {class: Red, height: 92.90980444559091, width: 33.947813162812054, x: 619.9942719734624,
+    y: 406.4803944494603}
+  class: image
+  filename: red/left0520.jpg
+- annotations:
+  - {class: Red, height: 94.69653145415998, width: 33.947813162812054, x: 619.100908469178,
+    y: 403.80030393660667}
+  class: image
+  filename: red/left0521.jpg
+- annotations:
+  - {class: Red, height: 95.58989495844452, width: 33.947813162812054, x: 618.2075449648934,
+    y: 403.80030393660667}
+  class: image
+  filename: red/left0522.jpg
+- annotations:
+  - {class: Red, height: 92.01644094130637, width: 33.947813162812054, x: 618.2075449648934,
+    y: 405.58703094517574}
+  class: image
+  filename: red/left0523.jpg
+- annotations:
+  - {class: Red, height: 97.37662196701353, width: 36.62790367566561, x: 612.8473639391863,
+    y: 401.1202134237531}
+  class: image
+  filename: red/left0524.jpg
+- annotations:
+  - {class: Red, height: 98.26998547129807, width: 36.62790367566572, x: 611.9540004349017,
+    y: 401.1202134237531}
+  class: image
+  filename: red/left0525.jpg
+- annotations:
+  - {class: Red, height: 98.26998547129807, width: 33.05444965852746, x: 612.8473639391863,
+    y: 400.2268499194686}
+  class: image
+  filename: red/left0526.jpg
+- annotations:
+  - {class: Red, height: 98.26998547129807, width: 34.84117666709665, x: 609.2739099220481,
+    y: 400.2268499194686}
+  class: image
+  filename: red/left0527.jpg
+- annotations:
+  - {class: Red, height: 98.26998547129807, width: 36.62790367566572, x: 607.487182913479,
+    y: 400.2268499194686}
+  class: image
+  filename: red/left0528.jpg
+- annotations:
+  - {class: Red, height: 98.26998547129807, width: 34.84117666709653, x: 606.5938194091946,
+    y: 398.4401229108995}
+  class: image
+  filename: red/left0529.jpg
+- annotations:
+  - {class: Red, height: 99.16334897558261, width: 38.41463068423468, x: 602.1270018877719,
+    y: 399.33348641518404}
+  class: image
+  filename: red/left0530.jpg
+- annotations:
+  - {class: Red, height: 101.84343948843622, width: 33.947813162812054, x: 602.1270018877719,
+    y: 397.54675940661497}
+  class: image
+  filename: red/left0531.jpg
+- annotations:
+  - {class: Red, height: 100.95007598415168, width: 39.307994188519274, x: 596.7668208620647,
+    y: 397.54675940661497}
+  class: image
+  filename: red/left0532.jpg
+- annotations:
+  - {class: Red, height: 100.95007598415168, width: 39.307994188519274, x: 596.7668208620647,
+    y: 397.54675940661497}
+  class: image
+  filename: red/left0533.jpg
+- annotations:
+  - {class: Red, height: 100.95007598415168, width: 34.84117666709665, x: 594.9800938534956,
+    y: 396.65339590233043}
+  class: image
+  filename: red/left0534.jpg
+- annotations:
+  - {class: Red, height: 102.7368029927207, width: 37.5212671799502, x: 592.3000033406421,
+    y: 394.8666688937614}
+  class: image
+  filename: red/left0535.jpg
+- annotations:
+  - {class: Red, height: 104.52353000128977, width: 40.201357692803754, x: 590.513276332073,
+    y: 393.07994188519234}
+  class: image
+  filename: red/left0536.jpg
+- annotations:
+  - {class: Red, height: 105.41689350557431, width: 35.73454017138113, x: 588.726549323504,
+    y: 393.07994188519234}
+  class: image
+  filename: red/left0537.jpg
+- annotations:
+  - {class: Red, height: 107.20362051414338, width: 38.414630684234794, x: 586.9398223149349,
+    y: 392.1865783809078}
+  class: image
+  filename: red/left0538.jpg
+- annotations:
+  - {class: Red, height: 108.09698401842792, width: 35.73454017138113, x: 586.0464588106504,
+    y: 390.39985137233873}
+  class: image
+  filename: red/left0539.jpg
+- annotations:
+  - {class: Red, height: 109.88371102699693, width: 41.98808470137283, x: 580.6862777849432,
+    y: 388.6131243637697}
+  class: image
+  filename: red/left0540.jpg
+- annotations:
+  - {class: Red, height: 108.9903475227124, width: 39.307994188519274, x: 581.5796412892278,
+    y: 388.6131243637697}
+  class: image
+  filename: red/left0541.jpg
+- annotations:
+  - {class: Red, height: 109.88371102699693, width: 39.307994188519274, x: 578.0061872720896,
+    y: 385.9330338509161}
+  class: image
+  filename: red/left0542.jpg
+- annotations:
+  - {class: Red, height: 111.67043803556601, width: 43.77481170994179, x: 574.4327332549516,
+    y: 384.14630684234703}
+  class: image
+  filename: red/left0543.jpg
+- annotations:
+  - {class: Red, height: 115.2438920527041, width: 40.201357692803754, x: 574.4327332549516,
+    y: 380.57285282520894}
+  class: image
+  filename: red/left0544.jpg
+- annotations:
+  - {class: Red, height: 115.24389205270415, width: 41.09472119708835, x: 569.9659157335288,
+    y: 378.78612581663987}
+  class: image
+  filename: red/left0545.jpg
+- annotations:
+  - {class: Red, height: 117.92398256555765, width: 41.98808470137283, x: 569.0725522292444,
+    y: 377.8927623123554}
+  class: image
+  filename: red/left0546.jpg
+- annotations:
+  - {class: Red, height: 116.13725555698863, width: 40.201357692803754, x: 567.2858252206753,
+    y: 375.2126717995018}
+  class: image
+  filename: red/left0547.jpg
+- annotations:
+  - {class: Red, height: 116.13725555698863, width: 41.09472119708835, x: 567.2858252206753,
+    y: 374.31930829521724}
+  class: image
+  filename: red/left0548.jpg
+- annotations:
+  - {class: Red, height: 122.39080008698033, width: 42.88144820565742, x: 561.0322806906836,
+    y: 369.8524907737946}
+  class: image
+  filename: red/left0549.jpg
+- annotations:
+  - {class: Red, height: 119.71070957412672, width: 39.307994188519274, x: 562.8190076992527,
+    y: 370.74585427807915}
+  class: image
+  filename: red/left0550.jpg
+- annotations:
+  - {class: Red, height: 119.71070957412672, width: 41.09472119708835, x: 559.2455536821145,
+    y: 371.6392177823637}
+  class: image
+  filename: red/left0551.jpg
+- annotations:
+  - {class: Red, height: 122.39080008698033, width: 42.88144820565742, x: 554.7787361606919,
+    y: 374.31930829521724}
+  class: image
+  filename: red/left0552.jpg
+- annotations:
+  - {class: Red, height: 125.96425410411848, width: 45.561538718510974, x: 550.3119186392693,
+    y: 372.53258128664817}
+  class: image
+  filename: red/left0553.jpg
+- annotations:
+  - {class: Red, height: 125.96425410411848, width: 45.56153871851086, x: 544.9517376135622,
+    y: 375.2126717995018}
+  class: image
+  filename: red/left0554.jpg
+- annotations:
+  - {class: Red, height: 127.7509811126875, width: 45.56153871851086, x: 541.378283596424,
+    y: 377.8927623123554}
+  class: image
+  filename: red/left0555.jpg
+- annotations:
+  - {class: Red, height: 127.75098111268755, width: 44.66817521422638, x: 538.6981930835705,
+    y: 378.78612581663987}
+  class: image
+  filename: red/left0556.jpg
+- annotations:
+  - {class: Red, height: 131.32443512982564, width: 46.454902222795454, x: 534.2313755621477,
+    y: 378.78612581663987}
+  class: image
+  filename: red/left0557.jpg
+- annotations:
+  - {class: Red, height: 128.64434461697203, width: 46.454902222795454, x: 530.6579215450097,
+    y: 380.57285282520894}
+  class: image
+  filename: red/left0558.jpg
+- annotations:
+  - {class: Red, height: 129.53770812125657, width: 50.0283562399336, x: 523.5110135107334,
+    y: 380.57285282520894}
+  class: image
+  filename: red/left0559.jpg
+- annotations:
+  - {class: Red, height: 133.11116213839466, width: 50.92171974421808, x: 515.4707419721727,
+    y: 377.8927623123554}
+  class: image
+  filename: red/left0560.jpg
+- annotations:
+  - {class: Red, height: 137.57797965981734, width: 50.92171974421814, x: 511.00392445075005,
+    y: 374.31930829521724}
+  class: image
+  filename: red/left0561.jpg
+- annotations:
+  - {class: Red, height: 141.15143367695538, width: 50.0283562399336, x: 503.8570164164738,
+    y: 371.6392177823637}
+  class: image
+  filename: red/left0562.jpg
+- annotations:
+  - {class: Red, height: 142.04479718124003, width: 52.708446752787154, x: 499.3901988950512,
+    y: 373.4259447909327}
+  class: image
+  filename: red/left0563.jpg
+- annotations:
+  - {class: Red, height: 141.15143367695538, width: 54.49517376135623, x: 486.8831098350678,
+    y: 371.6392177823637}
+  class: image
+  filename: red/left0564.jpg
+- annotations:
+  - {class: Red, height: 141.15143367695543, width: 49.13499273564901, x: 480.6295653050761,
+    y: 370.74585427807915}
+  class: image
+  filename: red/left0565.jpg
+- annotations:
+  - {class: Red, height: 139.36470666838636, width: 49.134992735649064, x: 473.48265727079985,
+    y: 371.6392177823637}
+  class: image
+  filename: red/left0566.jpg
+- annotations:
+  - {class: Red, height: 145.61825119837812, width: 51.81508324850262, x: 458.2954776979629,
+    y: 368.06576376522554}
+  class: image
+  filename: red/left0567.jpg
+- annotations:
+  - {class: Red, height: 145.73661253211714, width: 52.18946259596083, x: 450.9957333764164,
+    y: 368.28035869602564}
+  class: image
+  filename: red/left0568.jpg
+- annotations:
+  - {class: Red, height: 146.7213193735504, width: 55.14358312026053, x: 436.22513075491804,
+    y: 367.2956518545924}
+  class: image
+  filename: red/left0569.jpg
+- annotations:
+  - {class: Red, height: 150.70559851698022, width: 56.80441790255412, x: 421.9756758475445,
+    y: 365.17125794499043}
+  class: image
+  filename: red/left0570.jpg
+- annotations:
+  - {class: Red, height: 154.18342002121824, width: 55.645144067808076, x: 415.0200328390685,
+    y: 362.85271027549845}
+  class: image
+  filename: red/left0571.jpg
+- annotations:
+  - {class: Red, height: 155.34269385596423, width: 56.804417902554064, x: 398.7901991526245,
+    y: 360.5341626060064}
+  class: image
+  filename: red/left0572.jpg
+- annotations:
+  - {class: Red, height: 156.50196769071027, width: 56.804417902554064, x: 391.8345561441485,
+    y: 360.5341626060064}
+  class: image
+  filename: red/left0573.jpg
+- annotations:
+  - {class: Yellow, height: 68.42935830097923, width: 25.761640772133433, x: 634.3804040137841,
+    y: 417.01655999890886}
+  class: image
+  filename: yellow/left0079.jpg
+- annotations:
+  - {class: Yellow, height: 68.42935830097929, width: 24.956589498004178, x: 633.5753527396549,
+    y: 416.21150872477966}
+  class: image
+  filename: yellow/left0080.jpg
+- annotations:
+  - {class: Yellow, height: 67.62430702685009, width: 24.95658949800429, x: 634.3804040137841,
+    y: 416.21150872477966}
+  class: image
+  filename: yellow/left0081.jpg
+- annotations:
+  - {class: Yellow, height: 69.23440957510843, width: 25.76164077213332, x: 631.9652501913966,
+    y: 415.4064574506505}
+  class: image
+  filename: yellow/left0082.jpg
+- annotations:
+  - {class: Yellow, height: 68.42935830097923, width: 28.17679459452097, x: 631.1601989172674,
+    y: 415.4064574506505}
+  class: image
+  filename: yellow/left0083.jpg
+- annotations:
+  - {class: Yellow, height: 69.23440957510843, width: 27.371743320391715, x: 630.3551476431383,
+    y: 415.4064574506505}
+  class: image
+  filename: yellow/left0084.jpg
+- annotations:
+  - {class: Yellow, height: 70.84451212336677, width: 26.566692046262574, x: 630.3551476431383,
+    y: 415.4064574506505}
+  class: image
+  filename: yellow/left0085.jpg
+- annotations:
+  - {class: Yellow, height: 68.42935830097929, width: 26.566692046262574, x: 630.3551476431383,
+    y: 416.21150872477966}
+  class: image
+  filename: yellow/left0086.jpg
+- annotations:
+  - {class: Yellow, height: 71.64956339749597, width: 28.176794594520857, x: 628.74504509488,
+    y: 412.991303628263}
+  class: image
+  filename: yellow/left0087.jpg
+- annotations:
+  - {class: Yellow, height: 71.64956339749597, width: 28.176794594520857, x: 628.74504509488,
+    y: 412.991303628263}
+  class: image
+  filename: yellow/left0088.jpg
+- annotations:
+  - {class: Yellow, height: 71.64956339749597, width: 27.3717433203916, x: 627.9399938207508,
+    y: 412.991303628263}
+  class: image
+  filename: yellow/left0089.jpg
+- annotations:
+  - {class: Yellow, height: 70.84451212336677, width: 28.981845868649998, x: 624.7197887242341,
+    y: 412.991303628263}
+  class: image
+  filename: yellow/left0090.jpg
+- annotations:
+  - {class: Yellow, height: 70.84451212336677, width: 28.981845868649998, x: 624.7197887242341,
+    y: 412.991303628263}
+  class: image
+  filename: yellow/left0091.jpg
+- annotations:
+  - {class: Yellow, height: 73.25966594575425, width: 27.3717433203916, x: 624.7197887242341,
+    y: 412.18625235413384}
+  class: image
+  filename: yellow/left0092.jpg
+- annotations:
+  - {class: Yellow, height: 73.25966594575425, width: 27.3717433203916, x: 624.7197887242341,
+    y: 412.18625235413384}
+  class: image
+  filename: yellow/left0093.jpg
+- annotations:
+  - {class: Yellow, height: 74.06471721988345, width: 28.98184586865011, x: 620.6945323535882,
+    y: 412.991303628263}
+  class: image
+  filename: yellow/left0094.jpg
+- annotations:
+  - {class: Yellow, height: 76.47987104227093, width: 27.371743320391715, x: 620.6945323535882,
+    y: 412.18625235413384}
+  class: image
+  filename: yellow/left0095.jpg
+- annotations:
+  - {class: Yellow, height: 76.47987104227093, width: 28.176794594520857, x: 619.0844298053299,
+    y: 410.5761498058755}
+  class: image
+  filename: yellow/left0096.jpg
+- annotations:
+  - {class: Yellow, height: 76.47987104227093, width: 30.59194841690828, x: 617.4743272570716,
+    y: 411.3812010800047}
+  class: image
+  filename: yellow/left0097.jpg
+- annotations:
+  - {class: Yellow, height: 77.28492231640013, width: 31.396999691037536, x: 616.6692759829424,
+    y: 410.5761498058755}
+  class: image
+  filename: yellow/left0098.jpg
+- annotations:
+  - {class: Yellow, height: 76.47987104227093, width: 31.396999691037536, x: 613.4490708864257,
+    y: 410.5761498058755}
+  class: image
+  filename: yellow/left0099.jpg
+- annotations:
+  - {class: Yellow, height: 76.47987104227093, width: 28.981845868649998, x: 612.6440196122966,
+    y: 410.5761498058755}
+  class: image
+  filename: yellow/left0100.jpg
+- annotations:
+  - {class: Yellow, height: 78.08997359052927, width: 28.176794594520857, x: 612.6440196122966,
+    y: 408.96604725761716}
+  class: image
+  filename: yellow/left0101.jpg
+- annotations:
+  - {class: Yellow, height: 77.28492231640007, width: 29.78689714277914, x: 611.0339170640383,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0102.jpg
+- annotations:
+  - {class: Yellow, height: 77.28492231640007, width: 29.786897142779253, x: 610.228865789909,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0103.jpg
+- annotations:
+  - {class: Yellow, height: 77.28492231640013, width: 29.786897142779253, x: 608.6187632416508,
+    y: 410.5761498058755}
+  class: image
+  filename: yellow/left0104.jpg
+- annotations:
+  - {class: Yellow, height: 80.50512741291675, width: 29.786897142779253, x: 605.3985581451341,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0105.jpg
+- annotations:
+  - {class: Yellow, height: 80.50512741291675, width: 29.786897142779253, x: 605.3985581451341,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0106.jpg
+- annotations:
+  - {class: Yellow, height: 80.50512741291675, width: 29.786897142779253, x: 605.3985581451341,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0107.jpg
+- annotations:
+  - {class: Yellow, height: 82.92028123530429, width: 31.396999691037536, x: 602.1783530486174,
+    y: 408.96604725761716}
+  class: image
+  filename: yellow/left0108.jpg
+- annotations:
+  - {class: Yellow, height: 81.31017868704589, width: 33.81215351342496, x: 596.5429941297133,
+    y: 408.160995983488}
+  class: image
+  filename: yellow/left0109.jpg
+- annotations:
+  - {class: Yellow, height: 81.31017868704589, width: 33.81215351342496, x: 596.5429941297133,
+    y: 408.160995983488}
+  class: image
+  filename: yellow/left0110.jpg
+- annotations:
+  - {class: Yellow, height: 81.31017868704589, width: 33.81215351342496, x: 596.5429941297133,
+    y: 408.160995983488}
+  class: image
+  filename: yellow/left0111.jpg
+- annotations:
+  - {class: Yellow, height: 85.33543505769177, width: 32.20205096516668, x: 594.9328915814549,
+    y: 404.94079088697134}
+  class: image
+  filename: yellow/left0112.jpg
+- annotations:
+  - {class: Yellow, height: 85.33543505769177, width: 32.20205096516668, x: 594.9328915814549,
+    y: 404.94079088697134}
+  class: image
+  filename: yellow/left0113.jpg
+- annotations:
+  - {class: Yellow, height: 86.14048633182097, width: 33.00710223929593, x: 591.7126864849382,
+    y: 404.13573961284214}
+  class: image
+  filename: yellow/left0114.jpg
+- annotations:
+  - {class: Yellow, height: 87.75058888007925, width: 36.22730733581261, x: 589.2975326625507,
+    y: 403.330688338713}
+  class: image
+  filename: yellow/left0115.jpg
+- annotations:
+  - {class: Yellow, height: 87.75058888007925, width: 36.22730733581261, x: 589.2975326625507,
+    y: 403.330688338713}
+  class: image
+  filename: yellow/left0116.jpg
+- annotations:
+  - {class: Yellow, height: 87.75058888007925, width: 36.22730733581261, x: 589.2975326625507,
+    y: 403.330688338713}
+  class: image
+  filename: yellow/left0117.jpg
+- annotations:
+  - {class: Yellow, height: 90.16574270246679, width: 35.422256061683356, x: 584.4672250177757,
+    y: 402.5256370645838}
+  class: image
+  filename: yellow/left0118.jpg
+- annotations:
+  - {class: Yellow, height: 90.16574270246679, width: 35.422256061683356, x: 584.4672250177757,
+    y: 402.5256370645838}
+  class: image
+  filename: yellow/left0119.jpg
+- annotations:
+  - {class: Yellow, height: 90.97079397659593, width: 33.00710223929593, x: 582.0520711953882,
+    y: 403.330688338713}
+  class: image
+  filename: yellow/left0120.jpg
+- annotations:
+  - {class: Yellow, height: 90.97079397659593, width: 33.00710223929593, x: 582.0520711953882,
+    y: 403.330688338713}
+  class: image
+  filename: yellow/left0121.jpg
+- annotations:
+  - {class: Yellow, height: 90.97079397659593, width: 33.00710223929593, x: 582.0520711953882,
+    y: 403.330688338713}
+  class: image
+  filename: yellow/left0122.jpg
+- annotations:
+  - {class: Yellow, height: 93.38594779898347, width: 36.22730733581261, x: 574.8066097282257,
+    y: 402.5256370645838}
+  class: image
+  filename: yellow/left0123.jpg
+- annotations:
+  - {class: Yellow, height: 93.38594779898347, width: 36.22730733581261, x: 574.8066097282257,
+    y: 402.5256370645838}
+  class: image
+  filename: yellow/left0124.jpg
+- annotations:
+  - {class: Yellow, height: 91.77584525072513, width: 32.20205096516668, x: 572.3914559058383,
+    y: 401.72058579045466}
+  class: image
+  filename: yellow/left0125.jpg
+- annotations:
+  - {class: Yellow, height: 94.19099907311261, width: 35.422256061683356, x: 570.7813533575799,
+    y: 400.1104832421963}
+  class: image
+  filename: yellow/left0126.jpg
+- annotations:
+  - {class: Yellow, height: 94.9960503472418, width: 35.422256061683356, x: 567.5611482610632,
+    y: 400.1104832421963}
+  class: image
+  filename: yellow/left0127.jpg
+- annotations:
+  - {class: Yellow, height: 97.41120416962929, width: 37.03235860994175, x: 565.1459944386756,
+    y: 396.89027814567964}
+  class: image
+  filename: yellow/left0128.jpg
+- annotations:
+  - {class: Yellow, height: 99.82635799201682, width: 35.422256061683356, x: 561.9257893421591,
+    y: 395.2801755974213}
+  class: image
+  filename: yellow/left0129.jpg
+- annotations:
+  - {class: Yellow, height: 99.82635799201677, width: 36.2273073358125, x: 558.7055842456424,
+    y: 396.0852268715505}
+  class: image
+  filename: yellow/left0130.jpg
+- annotations:
+  - {class: Yellow, height: 101.43646054027516, width: 38.642461158200035, x: 556.2904304232549,
+    y: 393.67007304916297}
+  class: image
+  filename: yellow/left0131.jpg
+- annotations:
+  - {class: Yellow, height: 101.4364605402751, width: 36.2273073358125, x: 553.0702253267382,
+    y: 392.8650217750338}
+  class: image
+  filename: yellow/left0132.jpg
+- annotations:
+  - {class: Yellow, height: 99.82635799201682, width: 39.44751243232918, x: 549.8500202302215,
+    y: 393.67007304916297}
+  class: image
+  filename: yellow/left0133.jpg
+- annotations:
+  - {class: Yellow, height: 103.0465630885335, width: 36.2273073358125, x: 548.2399176819632,
+    y: 392.0599705009046}
+  class: image
+  filename: yellow/left0134.jpg
+- annotations:
+  - {class: Yellow, height: 103.85161436266259, width: 37.837409884070894, x: 544.2146613113173,
+    y: 390.44986795264634}
+  class: image
+  filename: yellow/left0135.jpg
+- annotations:
+  - {class: Yellow, height: 106.26676818505013, width: 39.44751243232918, x: 540.9944562148007,
+    y: 388.839765404388}
+  class: image
+  filename: yellow/left0136.jpg
+- annotations:
+  - {class: Yellow, height: 107.07181945917932, width: 37.837409884070894, x: 539.3843536665423,
+    y: 388.0347141302588}
+  class: image
+  filename: yellow/left0137.jpg
+- annotations:
+  - {class: Yellow, height: 109.4869732815668, width: 41.862666254716714, x: 532.1388921993798,
+    y: 386.42461158200047}
+  class: image
+  filename: yellow/left0138.jpg
+- annotations:
+  - {class: Yellow, height: 110.29202455569595, width: 40.25256370645843, x: 529.7237383769923,
+    y: 385.6195603078713}
+  class: image
+  filename: yellow/left0139.jpg
+- annotations:
+  - {class: Yellow, height: 89.36069142833759, width: 33.00710223929593, x: 626.3298912724924,
+    y: 403.330688338713}
+  class: image
+  filename: yellow/left0390.jpg
+- annotations:
+  - {class: Yellow, height: 89.36069142833759, width: 33.00710223929593, x: 626.3298912724924,
+    y: 403.330688338713}
+  class: image
+  filename: yellow/left0391.jpg
+- annotations:
+  - {class: Yellow, height: 89.36069142833759, width: 33.00710223929593, x: 626.3298912724924,
+    y: 403.330688338713}
+  class: image
+  filename: yellow/left0392.jpg
+- annotations:
+  - {class: Yellow, height: 89.36069142833759, width: 33.00710223929593, x: 626.3298912724924,
+    y: 403.330688338713}
+  class: image
+  filename: yellow/left0393.jpg
+- annotations:
+  - {class: Yellow, height: 89.36069142833759, width: 33.00710223929593, x: 626.3298912724924,
+    y: 403.330688338713}
+  class: image
+  filename: yellow/left0394.jpg
+- annotations:
+  - {class: Yellow, height: 85.33543505769177, width: 31.396999691037536, x: 630.3551476431383,
+    y: 404.13573961284214}
+  class: image
+  filename: yellow/left0395.jpg
+- annotations:
+  - {class: Yellow, height: 85.33543505769177, width: 31.396999691037536, x: 630.3551476431383,
+    y: 404.13573961284214}
+  class: image
+  filename: yellow/left0396.jpg
+- annotations:
+  - {class: Yellow, height: 85.33543505769177, width: 31.396999691037536, x: 630.3551476431383,
+    y: 404.13573961284214}
+  class: image
+  filename: yellow/left0397.jpg
+- annotations:
+  - {class: Yellow, height: 85.33543505769177, width: 31.396999691037536, x: 630.3551476431383,
+    y: 404.13573961284214}
+  class: image
+  filename: yellow/left0398.jpg
+- annotations:
+  - {class: Yellow, height: 85.33543505769177, width: 31.396999691037536, x: 630.3551476431383,
+    y: 404.13573961284214}
+  class: image
+  filename: yellow/left0399.jpg
+- annotations:
+  - {class: Yellow, height: 84.53038378356263, width: 28.176794594520857, x: 633.5753527396549,
+    y: 405.7458421611005}
+  class: image
+  filename: yellow/left0400.jpg
+- annotations:
+  - {class: Yellow, height: 82.92028123530423, width: 29.786897142779253, x: 633.5753527396549,
+    y: 406.5508934352297}
+  class: image
+  filename: yellow/left0401.jpg
+- annotations:
+  - {class: Yellow, height: 82.92028123530423, width: 29.786897142779253, x: 633.5753527396549,
+    y: 406.5508934352297}
+  class: image
+  filename: yellow/left0402.jpg
+- annotations:
+  - {class: Yellow, height: 82.92028123530423, width: 29.786897142779253, x: 633.5753527396549,
+    y: 406.5508934352297}
+  class: image
+  filename: yellow/left0403.jpg
+- annotations:
+  - {class: Yellow, height: 82.92028123530423, width: 29.786897142779253, x: 633.5753527396549,
+    y: 406.5508934352297}
+  class: image
+  filename: yellow/left0404.jpg
+- annotations:
+  - {class: Yellow, height: 82.92028123530423, width: 29.786897142779253, x: 634.3804040137841,
+    y: 408.160995983488}
+  class: image
+  filename: yellow/left0405.jpg
+- annotations:
+  - {class: Yellow, height: 83.72533250943343, width: 31.396999691037536, x: 634.3804040137841,
+    y: 408.160995983488}
+  class: image
+  filename: yellow/left0406.jpg
+- annotations:
+  - {class: Yellow, height: 83.72533250943343, width: 31.396999691037536, x: 634.3804040137841,
+    y: 408.160995983488}
+  class: image
+  filename: yellow/left0407.jpg
+- annotations:
+  - {class: Yellow, height: 83.72533250943343, width: 31.396999691037536, x: 634.3804040137841,
+    y: 408.160995983488}
+  class: image
+  filename: yellow/left0408.jpg
+- annotations:
+  - {class: Yellow, height: 82.92028123530423, width: 29.786897142779253, x: 636.7955578361716,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0409.jpg
+- annotations:
+  - {class: Yellow, height: 82.92028123530423, width: 29.786897142779253, x: 636.7955578361716,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0410.jpg
+- annotations:
+  - {class: Yellow, height: 82.92028123530423, width: 29.786897142779253, x: 636.7955578361716,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0411.jpg
+- annotations:
+  - {class: Yellow, height: 80.50512741291675, width: 28.176794594520857, x: 638.40566038443,
+    y: 411.3812010800047}
+  class: image
+  filename: yellow/left0412.jpg
+- annotations:
+  - {class: Yellow, height: 80.50512741291675, width: 28.176794594520857, x: 638.40566038443,
+    y: 411.3812010800047}
+  class: image
+  filename: yellow/left0413.jpg
+- annotations:
+  - {class: Yellow, height: 80.50512741291675, width: 28.176794594520857, x: 638.40566038443,
+    y: 411.3812010800047}
+  class: image
+  filename: yellow/left0414.jpg
+- annotations:
+  - {class: Yellow, height: 80.50512741291675, width: 28.176794594520857, x: 638.40566038443,
+    y: 411.3812010800047}
+  class: image
+  filename: yellow/left0415.jpg
+- annotations:
+  - {class: Yellow, height: 80.50512741291675, width: 28.176794594520857, x: 638.40566038443,
+    y: 411.3812010800047}
+  class: image
+  filename: yellow/left0416.jpg
+- annotations:
+  - {class: Yellow, height: 80.50512741291675, width: 28.176794594520857, x: 638.40566038443,
+    y: 411.3812010800047}
+  class: image
+  filename: yellow/left0417.jpg
+- annotations:
+  - {class: Yellow, height: 80.50512741291675, width: 28.176794594520857, x: 638.40566038443,
+    y: 411.3812010800047}
+  class: image
+  filename: yellow/left0418.jpg
+- annotations:
+  - {class: Yellow, height: 80.50512741291675, width: 28.176794594520857, x: 638.40566038443,
+    y: 411.3812010800047}
+  class: image
+  filename: yellow/left0419.jpg
+- annotations:
+  - {class: Yellow, height: 80.50512741291675, width: 28.176794594520857, x: 638.40566038443,
+    y: 411.3812010800047}
+  class: image
+  filename: yellow/left0420.jpg
+- annotations:
+  - {class: Yellow, height: 80.50512741291675, width: 28.176794594520857, x: 638.40566038443,
+    y: 411.3812010800047}
+  class: image
+  filename: yellow/left0421.jpg
+- annotations:
+  - {class: Yellow, height: 78.08997359052927, width: 28.981845868649998, x: 639.2107116585591,
+    y: 412.18625235413384}
+  class: image
+  filename: yellow/left0422.jpg
+- annotations:
+  - {class: Yellow, height: 78.08997359052927, width: 28.981845868649998, x: 639.2107116585591,
+    y: 412.18625235413384}
+  class: image
+  filename: yellow/left0423.jpg
+- annotations:
+  - {class: Yellow, height: 78.08997359052927, width: 28.981845868649998, x: 639.2107116585591,
+    y: 412.18625235413384}
+  class: image
+  filename: yellow/left0424.jpg
+- annotations:
+  - {class: Yellow, height: 78.08997359052927, width: 28.981845868649998, x: 639.2107116585591,
+    y: 412.18625235413384}
+  class: image
+  filename: yellow/left0425.jpg
+- annotations:
+  - {class: Yellow, height: 78.08997359052927, width: 28.981845868649998, x: 639.2107116585591,
+    y: 412.18625235413384}
+  class: image
+  filename: yellow/left0426.jpg
+- annotations:
+  - {class: Yellow, height: 78.08997359052927, width: 28.981845868649998, x: 639.2107116585591,
+    y: 412.18625235413384}
+  class: image
+  filename: yellow/left0427.jpg
+- annotations:
+  - {class: Yellow, height: 78.08997359052927, width: 28.981845868649998, x: 639.2107116585591,
+    y: 412.18625235413384}
+  class: image
+  filename: yellow/left0428.jpg
+- annotations:
+  - {class: Yellow, height: 78.08997359052927, width: 28.981845868649998, x: 639.2107116585591,
+    y: 412.18625235413384}
+  class: image
+  filename: yellow/left0429.jpg
+- annotations:
+  - {class: Yellow, height: 78.08997359052927, width: 28.981845868649998, x: 639.2107116585591,
+    y: 412.18625235413384}
+  class: image
+  filename: yellow/left0430.jpg
+- annotations:
+  - {class: Yellow, height: 78.08997359052927, width: 28.981845868649998, x: 639.2107116585591,
+    y: 412.18625235413384}
+  class: image
+  filename: yellow/left0431.jpg
+- annotations:
+  - {class: Yellow, height: 78.08997359052927, width: 28.981845868649998, x: 639.2107116585591,
+    y: 412.18625235413384}
+  class: image
+  filename: yellow/left0432.jpg
+- annotations:
+  - {class: Yellow, height: 81.31017868704589, width: 29.78689714277914, x: 638.40566038443,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0433.jpg
+- annotations:
+  - {class: Yellow, height: 81.31017868704589, width: 29.78689714277914, x: 638.40566038443,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0434.jpg
+- annotations:
+  - {class: Yellow, height: 81.31017868704589, width: 29.78689714277914, x: 638.40566038443,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0435.jpg
+- annotations:
+  - {class: Yellow, height: 81.31017868704589, width: 29.78689714277914, x: 638.40566038443,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0436.jpg
+- annotations:
+  - {class: Yellow, height: 81.31017868704589, width: 29.78689714277914, x: 638.40566038443,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0437.jpg
+- annotations:
+  - {class: Yellow, height: 81.31017868704589, width: 29.78689714277914, x: 638.40566038443,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0438.jpg
+- annotations:
+  - {class: Yellow, height: 81.31017868704589, width: 29.78689714277914, x: 638.40566038443,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0439.jpg
+- annotations:
+  - {class: Yellow, height: 81.31017868704589, width: 29.78689714277914, x: 638.40566038443,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0440.jpg
+- annotations:
+  - {class: Yellow, height: 81.31017868704589, width: 29.78689714277914, x: 638.40566038443,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0441.jpg
+- annotations:
+  - {class: Yellow, height: 78.89502486465841, width: 29.78689714277914, x: 639.2107116585591,
+    y: 410.5761498058755}
+  class: image
+  filename: yellow/left0442.jpg
+- annotations:
+  - {class: Yellow, height: 78.89502486465841, width: 29.78689714277914, x: 639.2107116585591,
+    y: 410.5761498058755}
+  class: image
+  filename: yellow/left0443.jpg
+- annotations:
+  - {class: Yellow, height: 78.89502486465841, width: 29.78689714277914, x: 639.2107116585591,
+    y: 410.5761498058755}
+  class: image
+  filename: yellow/left0444.jpg
+- annotations:
+  - {class: Yellow, height: 82.11522996117509, width: 31.396999691037536, x: 638.40566038443,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0445.jpg
+- annotations:
+  - {class: Yellow, height: 82.11522996117509, width: 31.396999691037536, x: 638.40566038443,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0446.jpg
+- annotations:
+  - {class: Yellow, height: 80.50512741291675, width: 29.78689714277914, x: 638.40566038443,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0447.jpg
+- annotations:
+  - {class: Yellow, height: 80.50512741291675, width: 29.78689714277914, x: 638.40566038443,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0448.jpg
+- annotations:
+  - {class: Yellow, height: 80.50512741291675, width: 29.78689714277914, x: 638.40566038443,
+    y: 409.77109853174636}
+  class: image
+  filename: yellow/left0449.jpg
+- annotations:
+  - {class: Yellow, height: 179.50564868780612, width: 63.12286547263511, x: 256.43664098258006,
+    y: 353.09352873755256}
+  class: image
+  filename: yellow/left0700.jpg
+- annotations:
+  - {class: Yellow, height: 179.50564868780612, width: 63.12286547263511, x: 256.43664098258006,
+    y: 353.09352873755256}
+  class: image
+  filename: yellow/left0701.jpg
+- annotations:
+  - {class: Yellow, height: 179.50564868780612, width: 63.12286547263511, x: 256.43664098258006,
+    y: 353.09352873755256}
+  class: image
+  filename: yellow/left0702.jpg
+- annotations:
+  - {class: Yellow, height: 179.50564868780612, width: 63.12286547263511, x: 256.43664098258006,
+    y: 353.09352873755256}
+  class: image
+  filename: yellow/left0703.jpg
+- annotations:
+  - {class: Yellow, height: 179.50564868780612, width: 63.12286547263511, x: 256.43664098258006,
+    y: 353.09352873755256}
+  class: image
+  filename: yellow/left0704.jpg
+- annotations:
+  - {class: Yellow, height: 179.50564868780612, width: 63.12286547263511, x: 256.43664098258006,
+    y: 353.09352873755256}
+  class: image
+  filename: yellow/left0705.jpg
+- annotations:
+  - {class: Yellow, height: 179.50564868780612, width: 63.12286547263511, x: 256.43664098258006,
+    y: 353.09352873755256}
+  class: image
+  filename: yellow/left0706.jpg
+- annotations:
+  - {class: Yellow, height: 179.50564868780612, width: 63.12286547263511, x: 256.43664098258006,
+    y: 353.09352873755256}
+  class: image
+  filename: yellow/left0707.jpg
+- annotations:
+  - {class: Yellow, height: 179.50564868780612, width: 63.12286547263511, x: 256.43664098258006,
+    y: 353.09352873755256}
+  class: image
+  filename: yellow/left0708.jpg
+- annotations:
+  - {class: Yellow, height: 179.50564868780612, width: 63.12286547263511, x: 256.43664098258006,
+    y: 353.09352873755256}
+  class: image
+  filename: yellow/left0709.jpg
+- annotations:
+  - {class: Unknown, height: 65.6203996951017, width: 24.530990540224934, x: 634.1261054648144,
+    y: 418.8666634743406}
+  class: image
+  filename: unidentified/left0078.jpg
+- annotations:
+  - {class: Unknown, height: 211.68257563704248, width: 88.20107318210104, x: 119.95345952765742,
+    y: 326.34397077377383}
+  class: image
+  filename: unidentified/left0264.jpg
+- annotations:
+  - {class: Unknown, height: 88.20107318210103, width: 31.752386345556374, x: 626.2276195929174,
+    y: 402.1968937103808}
+  class: image
+  filename: unidentified/left0388.jpg
+- annotations:
+  - {class: Unknown, height: 86.34190166516436, width: 29.92046097307673, x: 625.7650694940626,
+    y: 404.35365829329453}
+  class: image
+  filename: unidentified/left0389.jpg
+- annotations:
+  - {class: Unknown, height: 159.4432237582913, width: 58.25810098860643, x: 378.67765642594185,
+    y: 360.2803613769082}
+  class: image
+  filename: unidentified/left0574.jpg
+- annotations:
+  - {class: Unknown, height: 180.90673464883054, width: 65.92364059237042, x: 256.02902276571774,
+    y: 352.61482177314423}
+  class: image
+  filename: unidentified/left0699.jpg
