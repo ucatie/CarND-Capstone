@@ -20,6 +20,7 @@ import base64
 
 import math
 import rospy
+import time
 
 TYPE = {
     'bool': Bool,
@@ -45,6 +46,8 @@ class Bridge(object):
         self.angular_vel = 0.
         self.old_data = None
         self.bridge = CvBridge()
+
+        self.prev_timestamp = 0.0
 
         self.callbacks = {
             '/vehicle/steering_cmd': self.callback_steering,
@@ -126,21 +129,13 @@ class Bridge(object):
             rospy.Time.now(),
             name,
             "world")
-
-    def data_has_changed(self,data):
-        if self.old_data == None:
-          self.old_data = data
-          return True
-    
-        if data['x'] != self.old_data['x'] or data['y'] != self.old_data['y'] or data['z'] != self.old_data['z'] or data['yaw'] != self.old_data['yaw']:
-          self.old_data = data
-          return True
           
     def publish_odometry(self, data):
-    
-        if not self.data_has_changed(data):
-          return
-          
+        # Publish only every 50 milliseconds or less
+        if self.prev_timestamp > 0.0 and time.time() - self.prev_timestamp < 0.05:
+            return
+        self.prev_timestamp = time.time()
+
         pose = self.create_pose(data['x'], data['y'], data['z'], data['yaw'])
 
         position = (data['x'], data['y'], data['z'])
@@ -149,7 +144,7 @@ class Bridge(object):
 
         rospy.loginfo("current_pose %s %s %s",pose.header.stamp, pose.pose.position.x, pose.pose.position.y)
         self.publishers['current_pose'].publish(pose)
-        self.vel = data['velocity']* 0.44704
+        self.vel = data['velocity'] * 0.44704
         self.angular = self.calc_angular(data['yaw'] * math.pi/180.)
         self.publishers['current_velocity'].publish(self.create_twist(self.vel, self.angular))
 
@@ -204,3 +199,4 @@ class Bridge(object):
 
     def callback_brake(self, data):
         self.server('brake', data={'brake': str(data.pedal_cmd)})
+

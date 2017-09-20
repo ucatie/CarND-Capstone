@@ -34,7 +34,7 @@ Once you have the proposed throttle, brake, and steer values, publish it on the 
 that we have created in the `__init__` function.
 
 '''
-UPDATE_RATE = 4.0
+UPDATE_RATE = 10.0
 TIMEOUT_VALUE = 10.0
 
 class DBWNode(object):
@@ -129,11 +129,10 @@ class DBWNode(object):
                 # Create lists of x and y values of the next waypoints to fit a polynomial
                 x = []
                 y = []
-                i = -1
+                i = 0
                 # Due to race conditions, we need to store the waypoints temporary
                 temp_waypoints = copy.deepcopy(self.waypoints)
-                while len(x) < 50 and i < len(temp_waypoints.waypoints):
-                    i += 1
+                while len(x) < 20 and i < len(temp_waypoints.waypoints):
                     # Transform waypoint to car coordinates
                     temp_waypoints.waypoints[i].pose.header.frame_id = temp_waypoints.header.frame_id
                     self.tf_listener.waitForTransform("/base_link", "/world", rospy.Time(0), rospy.Duration(TIMEOUT_VALUE))
@@ -142,6 +141,7 @@ class DBWNode(object):
                     if transformed_waypoint.pose.position.x >= 0.0:
                         x.append(transformed_waypoint.pose.position.x)
                         y.append(transformed_waypoint.pose.position.y)
+                    i += 1
                 #rospy.loginfo('x: %s', x)
                 #rospy.loginfo('y: %s', y)
                 coefficients = np.polyfit(x, y, 3)
