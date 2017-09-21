@@ -99,6 +99,9 @@ class TLDetector(object):
         self.last_state = TrafficLight.UNKNOWN
         self.last_wp = -1
         self.state_count = 0
+        self.has_image = False
+		
+        self.loop()
 		
         rospy.spin()
         
@@ -127,6 +130,11 @@ class TLDetector(object):
         
         self.has_image = True
         self.camera_image = msg
+        
+    def loop(self):
+        rate = rospy.Rate(10) # 50Hz
+        while not rospy.is_shutdown():
+        
         light_wp, state = self.process_traffic_lights()
  
         '''
@@ -268,13 +276,13 @@ class TLDetector(object):
         image_height = self.config['camera_info']['image_height']
 		
         #use light location to zoom in on traffic light in image
-        x1 = x-128 
-        y1 = y-128
-        x2 = x+128 
-        y2 = y+128
-        if x1 < 0 or x2 > image_width or y1 < 0 or y2 > image_height:
-        	rospy.loginfo('outside image %s',world_light.pose.position)
-        	return TrafficLight.UNKNOWN
+#        x1 = x-128 
+#        y1 = y-128
+#        x2 = x+128 
+#        y2 = y+128
+#        if x1 < 0 or x2 > image_width or y1 < 0 or y2 > image_height:
+#        	rospy.loginfo('outside image %s',world_light.pose.position)
+#        	return TrafficLight.UNKNOWN
         	
         shape = cv_image.shape
         if shape[0] != image_height or shape[1] !=  image_width:
@@ -285,8 +293,7 @@ class TLDetector(object):
         (x,y) = self.light_classifier.find_classification(rgbimage)
         if x is None:
             return TrafficLight.UNKNOWN
-
-        
+       
         x1 = x-32 
         y1 = y-32
         x2 = x+32 
