@@ -2,7 +2,7 @@
 <launch>
     <param name="run_dir" value="/home/frank/selfdriving/sdc_course/CarND-Capstone/ros" />        
     <node pkg="tl_detector" type="test_classifier.py" name="test_classifier" output="screen" cwd="node">
-        <param name="train_data_dir" value="data_gt/0" />        
+        <param name="train_data_dir" value="data_gt/2" />        
         <param name="SVC_PATH" value="svc.p" />
     </node>        
 </launch>

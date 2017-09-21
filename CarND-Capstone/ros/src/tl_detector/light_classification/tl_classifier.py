@@ -36,7 +36,7 @@ class TLClassifier(object):
         #define search parameter for window search.
     def getSearchParam(self):
         search_param = []
-        search_param.append((256,0,256,0,256,1))  
+        search_param.append((64,0,64,0,64,1))  
         return search_param
   
     #the process chain for an image. 
@@ -95,7 +95,7 @@ class TLClassifier(object):
     def getSearchParam2(self):
         search_param = []
 #        search_param.append((128,256,768,0,1024,0.75))  
-        search_param.append((80,200,590,10,790,0.75))  #simulator
+        search_param.append((20,200,590,10,790,0.75))  #simulator
         return search_param
                                    
     def distance(self, pos1, pos2):

@@ -52,7 +52,7 @@ class TLDetector_Train(object):
       red = []
       green = []
       yellow = []
-      unknown = []
+
       red_gt_images = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'0'),'*.jpg'))
       for image in red_gt_images:
         red.append(image)
@@ -65,12 +65,8 @@ class TLDetector_Train(object):
       for image in  yellow_gt_images:
         yellow.append(image)
         
-      unknown = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'4'),'*.jpg'))
-      for image in  unknown:
-        unknown.append(image)
-        
       np.random.seed(1)
-      sample_size = 32
+      sample_size = 64
       random_indizes = np.arange(sample_size)
       np.random.shuffle(random_indizes)
     
@@ -94,9 +90,6 @@ class TLDetector_Train(object):
        elif j == 2: 
          data = yellow
          title = "yellow"
-       elif j == 3:
-         data = unknown
-         title = "unknown"
         
        for i in range(int(size*size/2)):
         image = mpimg.imread(data[i])
@@ -126,7 +119,6 @@ class TLDetector_Train(object):
       red = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'0'),'*.jpg'))  
       green = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'2'),'*.jpg'))
       yellow = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'1'),'*.jpg'))
-      unknown = glob.glob(os.path.join(os.path.join(self.ground_truth_dir,'4'),'*.jpg'))
       
       image = mpimg.imread(red[0])
       rospy.loginfo("min: %s max: %s",np.min(image[0]),np.max(image[0]))
@@ -135,7 +127,7 @@ class TLDetector_Train(object):
         print("read sample database")
         np.random.seed(1)
       # Reduce the sample size for fast testing
-        sample_size = 100
+        sample_size = 64
 
         random_indizes = np.arange(min(sample_size, len(red)))
         np.random.shuffle(random_indizes)
@@ -149,15 +141,11 @@ class TLDetector_Train(object):
         np.random.shuffle(random_indizes)
         yellow = np.array(yellow)[random_indizes]
         
-        random_indizes = np.arange(min(sample_size, len(unknown)))
-        np.random.shuffle(random_indizes)       
-        unknown = np.array(unknown)[random_indizes]
-        
       else:
         rospy.loginfo("read database")
     
-      rospy.loginfo("red: {0} green {1} yellow {2} unknown {3}".format(len(red),len(green),len(yellow),len(unknown)))
-      return (red,green,yellow,unknown)
+      rospy.loginfo("red: {0} green {1} yellow {2}".format(len(red),len(green),len(yellow)))
+      return (red,green,yellow)
     
     #answer a list of param for optimization
     def getParamlist3(self):
@@ -238,14 +226,14 @@ class TLDetector_Train(object):
       return params
     
     #train a list of parameters
-    def trainParamlist(self, red,green,yellow,unknown,params):
+    def trainParamlist(self, red,green,yellow,params):
     
       results = {}
       #train the list
       for i in range(len(params)):
         key = params[i]
         try:
-            (scaler,svc,accuracy) = self.train(params[i],red,green,yellow,unknown)
+            (scaler,svc,accuracy) = self.train(params[i],red,green,yellow)
             results[key] = accuracy
         except ValueError: 
             rospy.loginfo("error in train {0}".format(key))
@@ -266,7 +254,7 @@ class TLDetector_Train(object):
           rospy.loginfo("| %s | %s | %s | %s | %s | %s |",color_space,hog_channel,spatial_feat,hist_feat,hog_feat,accuracy)
     
     #create normalized, randomly shuffelded test and train data for a parameter set    
-    def getFeatures(self, param,red,green,yellow,unknown):
+    def getFeatures(self, param,red,green,yellow):
       print(param)
     
       (color_space,hog_channel,spatial_feat,hist_feat,hog_feat,cell_per_block) = param
@@ -296,22 +284,15 @@ class TLDetector_Train(object):
                             cell_per_block=cell_per_block, 
                             hog_channel=hog_channel, spatial_feat=spatial_feat, 
                             hist_feat=hist_feat, hog_feat=hog_feat,feature_vec=True)
-
-      unknown_features = fd.extractFeatures(unknown, color_space=color_space, 
-                            spatial_size=spatial_size, hist_bins=hist_bins, 
-                            orient=orient, pix_per_cell=pix_per_cell, 
-                            cell_per_block=cell_per_block, 
-                            hog_channel=hog_channel, spatial_feat=spatial_feat, 
-                            hist_feat=hist_feat, hog_feat=hog_feat,feature_vec=True)
     
-      X = np.vstack((red_features, green_features, yellow_features, unknown_features)).astype(np.float64)      
+      X = np.vstack((red_features, green_features, yellow_features)).astype(np.float64)      
       
     # Fit a per-column scaler
       X_scaler = StandardScaler().fit(X)
     # Apply the scaler to X
       scaled_X = X_scaler.transform(X)
     # Define the labels vector
-      y = np.hstack((np.zeros(len(red_features)), np.ones(len(green_features))*2,np.ones(len(yellow_features)),np.ones(len(unknown_features))*4))
+      y = np.hstack((np.zeros(len(red_features)), np.ones(len(green_features))*2,np.ones(len(yellow_features))))
     #Split up data into randomized training and test sets
       rand_state = 1
       X_train, X_test, y_train, y_test = train_test_split(
@@ -322,9 +303,9 @@ class TLDetector_Train(object):
       return (X_train,X_test,y_train,y_test,X_scaler)
         
     #train once
-    def train(self, param,red,green,yellow,unknown):
+    def train(self, param,red,green,yellow):
         
-      (X_train, X_test, y_train, y_test,X_scaler) = self.getFeatures(param,red,green,yellow,unknown)
+      (X_train, X_test, y_train, y_test,X_scaler) = self.getFeatures(param,red,green,yellow)
     
     #train
       svc = SGDClassifier(fit_intercept=False, loss="squared_hinge", n_jobs=-1, learning_rate="optimal", penalty="elasticnet", class_weight="balanced",n_iter=10, alpha=0.01)
@@ -346,7 +327,7 @@ class TLDetector_Train(object):
     
     #search optimal classifier paramter
     def gridSearch(self, red,green,yellow,unknown,param):
-      (X_train, X_test, y_train, y_test, X_scaler) = getFeatures(param,red,green,yellow,unknown)
+      (X_train, X_test, y_train, y_test, X_scaler) = getFeatures(param,red,green,yellow)
     
       scores = ['precision', 'recall']
     
@@ -390,28 +371,28 @@ class TLDetector_Train(object):
     
       elif self.task == 'trainList1':
         #read a sample
-        (red,green,yellow,unknown) = self.readDatabase(True)
+        (red,green,yellow) = self.readDatabase(True)
         #train a list of params for optimization
-        self.trainParamlist(red,green,yellow,unknown,self.getParamlist1())
+        self.trainParamlist(red,green,yellow,self.getParamlist1())
     
       elif self.task == 'trainList2':
         #read a sample
-        (red,green,yellow,unknown) = self.readDatabase(True)
+        (red,green,yellow) = self.readDatabase(True)
         #train a list of params for optimization
-        self.trainParamlist(red,green,yellow,unknown,self.getParamlist2())
+        self.trainParamlist(red,green,yellow,self.getParamlist2())
     
       elif self.task == 'trainList3':
         #read a sample
-        (red,green,yellow,unknown) = self.readDatabase(True)
+        (red,green,yellow) = self.readDatabase(True)
         #train a list of params for optimization
-        self.trainParamlist(red,green,yellow,unknown,self.getParamlist3())
+        self.trainParamlist(red,green,yellow,self.getParamlist3())
     
       elif self.task == 'best':
         #read all
-        (red,green,yellow,unknown) = self.readDatabase(False)
+        (red,green,yellow) = self.readDatabase(False)
         #train the best choice
-        param = ("HSV","ALL",False,True,False,3)
-        (X_scaler,svc,acccuracy) = self.train(param,red,green,yellow,unknown)
+        param = ("RGB","ALL",True,True,False,3)
+        (X_scaler,svc,acccuracy) = self.train(param,red,green,yellow)
     
         #save the calibration in a pickle file
         data = {}
@@ -428,7 +409,7 @@ class TLDetector_Train(object):
         (red,green,yellow,unknown) = self.readDatabase(True)
         #find optimal Classifier parameter
         param = ("YCrCb","0,1",True,False,True,3)
-        self.gridSearch(red,green,yellow,unknown,param)
+        self.gridSearch(red,green,yellow,param)
     
         
 if __name__ == '__main__':

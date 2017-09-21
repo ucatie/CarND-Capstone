@@ -287,10 +287,10 @@ class TLDetector(object):
             return TrafficLight.UNKNOWN
 
         
-        x1 = x-128 
-        y1 = y-128
-        x2 = x+128 
-        y2 = y+128
+        x1 = x-32 
+        y1 = y-32
+        x2 = x+32 
+        y2 = y+32
         
         region = cv_image[y1:y2, x1:x2]
         rospy.loginfo('region %s %s %s %s org: %s region:%s',x1,y1,x2,y2, cv_image.shape, region.shape)
