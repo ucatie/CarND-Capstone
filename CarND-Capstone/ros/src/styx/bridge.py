@@ -20,7 +20,6 @@ import base64
 
 import math
 import rospy
-import time
 
 TYPE = {
     'bool': Bool,
@@ -46,8 +45,6 @@ class Bridge(object):
         self.angular_vel = 0.
         self.old_data = None
         self.bridge = CvBridge()
-
-        self.prev_timestamp = 0.0
 
         self.callbacks = {
             '/vehicle/steering_cmd': self.callback_steering,
@@ -129,13 +126,21 @@ class Bridge(object):
             rospy.Time.now(),
             name,
             "world")
+
+    def data_has_changed(self,data):
+        if self.old_data == None:
+          self.old_data = data
+          return True
+    
+        if data['x'] != self.old_data['x'] or data['y'] != self.old_data['y'] or data['z'] != self.old_data['z'] or data['yaw'] != self.old_data['yaw']:
+          self.old_data = data
+          return True
           
     def publish_odometry(self, data):
-        # Publish only every 50 milliseconds or less
-        if self.prev_timestamp > 0.0 and time.time() - self.prev_timestamp < 0.05:
-            return
-        self.prev_timestamp = time.time()
-
+    
+        if not self.data_has_changed(data):
+          return
+          
         pose = self.create_pose(data['x'], data['y'], data['z'], data['yaw'])
 
         position = (data['x'], data['y'], data['z'])
