@@ -84,6 +84,9 @@ class WaypointUpdater(object):
 
         first_wpt_index = -1
         min_wpt_distance = float('inf')
+        if self.waypoints is None:
+            return
+        
         num_waypoints_in_list = len(self.waypoints.waypoints)
 
         # Gererate an empty lane to store the final_waypoints
@@ -111,8 +114,12 @@ class WaypointUpdater(object):
         else:
             # Transform first waypoint to car coordinates
             self.waypoints.waypoints[first_wpt_index].pose.header.frame_id = self.waypoints.header.frame_id
-            self.tf_listener.waitForTransform("/base_link", "/world", rospy.Time(0), rospy.Duration(TIMEOUT_VALUE))
-            transformed_waypoint = self.tf_listener.transformPose("/base_link", self.waypoints.waypoints[first_wpt_index].pose)
+            try:
+                self.tf_listener.waitForTransform("base_link", "world", rospy.Time(0), rospy.Duration(TIMEOUT_VALUE))
+                transformed_waypoint = self.tf_listener.transformPose("base_link", self.waypoints.waypoints[first_wpt_index].pose)
+            except (tf.Exception, tf.LookupException, tf.ConnectivityException):
+                rospy.logerr("Failed to find camera to map transform")
+                
 
             # All waypoints in front of the car should have positive X coordinate in car coordinate frame
             # If the closest waypoint is behind the car, skip this waypoint
@@ -137,7 +144,7 @@ class WaypointUpdater(object):
                         if self.car_distance_to_tl_when_car_started_to_slow_down is None:
                             self.car_distance_to_tl_when_car_started_to_slow_down = car_distance_to_tl
                             self.car_velocity_when_car_started_to_slow_down = self.velocity
-                        #rospy.loginfo('Stopping the car')
+                        rospy.loginfo('Stopping the car')
 
             # Fill the lane with the final waypoints
             for num_wp in range(LOOKAHEAD_WPS):
@@ -202,6 +209,7 @@ class WaypointUpdater(object):
         # Store the timestamp and the traffic light position to use them for final_waypoints in waypoints_cb
         self.traffic_waypoint_timestamp = time.time()
         self.light_waypoint_index = traffic_waypoint.data
+#        rospy.loginfo("received traffic light %s",self.light_waypoint_index)
 
     def obstacle_cb(self, msg):
         # TODO: Callback for /obstacle_waypoint message. We will implement it later

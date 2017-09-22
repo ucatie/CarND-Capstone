@@ -100,9 +100,9 @@ class TLDetector(object):
         self.last_wp = -1
         self.state_count = 0
         self.has_image = False
-		
+
         self.loop()
-		
+
         rospy.spin()
         
     def pose_cb(self, msg):
@@ -135,30 +135,33 @@ class TLDetector(object):
         rate = rospy.Rate(10) # 50Hz
         while not rospy.is_shutdown():
         
-        light_wp, state = self.process_traffic_lights()
- 
-        '''
-        Publish upcoming red lights at camera frequency.
-        Each predicted state has to occur `STATE_COUNT_THRESHOLD` number
-        of times till we start using it. Otherwise the previous stable state is
-        used.
-        '''
-        if self.state != state:
-            self.state_count = 0
-            self.state = state
-            
-        elif self.state_count >= STATE_COUNT_THRESHOLD:
-            self.last_state = self.state
-            
-            if state != TrafficLight.RED:
-                light_wp = -1
-            
-            self.last_wp = light_wp
-            self.upcoming_red_light_pub.publish(int(light_wp))
-        else:
-            self.upcoming_red_light_pub.publish(int(self.last_wp))
-        self.state_count += 1
-
+            light_wp, state = self.process_traffic_lights()
+     
+            '''
+            Publish upcoming red lights at camera frequency.
+            Each predicted state has to occur `STATE_COUNT_THRESHOLD` number
+            of times till we start using it. Otherwise the previous stable state is
+            used.
+            '''
+            if self.state != state:
+                self.state_count = 0
+                self.state = state
+                rospy.loginfo('state change %s',state) 
+                
+            elif self.state_count >= STATE_COUNT_THRESHOLD:
+                self.last_state = self.state
+                
+                if state != TrafficLight.RED:
+                    light_wp = -1
+                
+                self.last_wp = light_wp
+#                rospy.loginfo('state pub1 %s',self.last_wp) 
+                self.upcoming_red_light_pub.publish(int(light_wp))
+            else:
+                self.upcoming_red_light_pub.publish(int(self.last_wp))
+#                rospy.loginfo('state pub2 %s',self.last_wp) 
+            self.state_count += 1
+    
     def distance_pose_to_pose(self, pose1, pose2):
         dist = 0
         dl = lambda a, b: math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2  + (a.z-b.z)**2)
@@ -222,10 +225,10 @@ class TLDetector(object):
         trans = None
         try:
             now = rospy.Time.now()
-            self.listener.waitForTransform("/base_link",
-                  "/world", now, rospy.Duration(1.0))
-            (trans, rot) = self.listener.lookupTransform("/base_link",
-                  "/world", now)
+            self.listener.waitForTransform("base_link",
+                  "world", now, rospy.Duration(1.0))
+            (trans, rot) = self.listener.lookupTransform("base_link",
+                  "world", now)
 
         except (tf.Exception, tf.LookupException, tf.ConnectivityException):
             rospy.logerr("Failed to find camera to map transform")
@@ -238,7 +241,7 @@ class TLDetector(object):
         camera_point.point.x = point_in_world.x
         camera_point.point.y = point_in_world.y
         camera_point.point.z = point_in_world.z
-        p = self.listener.transformPoint("/base_link",camera_point)
+        p = self.listener.transformPoint("base_link",camera_point)
         
         #correct shift of traffic light to left / right because of car heading         
         car_yaw = self.get_yaw(self.current_pose.pose)
@@ -250,7 +253,7 @@ class TLDetector(object):
         #experiments showed that there are 62 pixel offset of the camera 
         y = 62 + image_height - (p.point.z / p.point.x * fy + image_height*0.5) 
         	
-        rospy.loginfo('3D map (%s %s) camera (%s %s %s) pixel (%s %s)',point_in_world.x,point_in_world.y,p.point.x, p.point.y, p.point.z, x,y)
+#        rospy.loginfo('3D map (%s %s) camera (%s %s %s) pixel (%s %s)',point_in_world.x,point_in_world.y,p.point.x, p.point.y, p.point.z, x,y)
 		
         return (int(x), int(y))
 
@@ -270,7 +273,7 @@ class TLDetector(object):
 
         cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "bgr8")
 
-        x, y = self.project_to_image_plane(world_light.pose.position)
+#        x, y = self.project_to_image_plane(world_light.pose.position)
 		
         image_width = self.config['camera_info']['image_width']
         image_height = self.config['camera_info']['image_height']
@@ -300,8 +303,8 @@ class TLDetector(object):
         y2 = y+32
         
         region = cv_image[y1:y2, x1:x2]
-        rospy.loginfo('region %s %s %s %s org: %s region:%s',x1,y1,x2,y2, cv_image.shape, region.shape)
-        
+#        rospy.loginfo('region %s %s %s %s org: %s region:%s',x1,y1,x2,y2, cv_image.shape, region.shape)
+
         traffic_image = self.bridge.cv2_to_imgmsg(region, "bgr8")
         self.upcoming_traffic_light_image_pub.publish(traffic_image);
         
@@ -384,16 +387,16 @@ class TLDetector(object):
         yaw = euler[2]        
         #add orientation pf car !!!
         if abs(dir) < math.pi*0.5 and min_distance < self.traffic_light_is_close:
-            rospy.loginfo('traffic light close: %s dir %s car yaw %s', min_distance,dir,yaw) 
+            rospy.logdebug('traffic light close: %s dir %s car yaw %s', min_distance,dir,yaw) 
         else:
             return -1, TrafficLight.UNKNOWN
 
-        #TODO find the closest visible traffic light (if one exists)        
+        #TODO find the closest visible traffic light (if one exists)
         if world_light is not None:
             state = self.get_light_state(world_light, min_distance)
             
             header = std_msgs.msg.Header()
-            header.frame_id = '/world'
+            header.frame_id = 'world'
             header.stamp = rospy.Time.now()
             self.upcoming_traffic_light_pub.publish(TrafficLight(header,world_light,state))
             
