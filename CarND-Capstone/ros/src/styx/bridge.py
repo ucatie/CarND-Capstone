@@ -19,6 +19,7 @@ from io import BytesIO
 import base64
 
 import math
+import time
 import rospy
 
 TYPE = {
@@ -45,6 +46,7 @@ class Bridge(object):
         self.angular_vel = 0.
         self.old_data = None
         self.bridge = CvBridge()
+        self.prev_timestamp = 0.0
 
         self.callbacks = {
             '/vehicle/steering_cmd': self.callback_steering,
@@ -138,9 +140,13 @@ class Bridge(object):
           
     def publish_odometry(self, data):
     
-        if not self.data_has_changed(data):
-          return
-          
+        #avoid unnecessary messages
+        if not self.data_has_changed(data) and self.prev_timestamp > 0.0 and time.time() - self.prev_timestamp < 0.1:
+            return
+        #ensure fixed update rate
+        if self.prev_timestamp > 0.0 and time.time() - self.prev_timestamp < 0.1:
+            return
+        self.prev_timestamp = time.time()          
         pose = self.create_pose(data['x'], data['y'], data['z'], data['yaw'])
 
         position = (data['x'], data['y'], data['z'])

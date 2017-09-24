@@ -28,6 +28,9 @@ class TLDetector(object):
         self.gt_lights = []
         self.run_dir = rospy.get_param('/run_dir')
         rospy.loginfo("run_dir:%s",self.run_dir)
+
+        # first waypoint index at the previous iteration
+        self.prev_first_wpt_index = 0
         
         self.create_ground_truth = rospy.get_param('~create_ground_truth', False)
         rospy.loginfo("create_ground_truth:%s",self.create_ground_truth)
@@ -132,7 +135,7 @@ class TLDetector(object):
         self.camera_image = msg
         
     def loop(self):
-        rate = rospy.Rate(10) # 50Hz
+        rate = rospy.Rate(10) # 10Hz
         while not rospy.is_shutdown():
         
             light_wp, state = self.process_traffic_lights()
@@ -148,19 +151,30 @@ class TLDetector(object):
                 self.state = state
                 rospy.loginfo('state change %s',state) 
                 
-            elif self.state_count >= STATE_COUNT_THRESHOLD:
-                self.last_state = self.state
+            if self.state_count >= STATE_COUNT_THRESHOLD:
+
+                green_to_yellow_or_red = False                
+                if state == TrafficLight.YELLOW and self.last_state == TrafficLight.GREEN:
+                    green_to_yellow_or_red = True
+                elif state == TrafficLight.RED:
+                    green_to_yellow_or_red = True
                 
-                if state != TrafficLight.RED:
+                self.last_state = self.state
+               
+                if green_to_yellow_or_red:
+                    rospy.logdebug('green_to_yellow_or_red %s %s',light_wp,state)
+                else:
                     light_wp = -1
+ #               rospy.loginfo('light_wp %s %s',light_wp,state)
                 
                 self.last_wp = light_wp
-#                rospy.loginfo('state pub1 %s',self.last_wp) 
+                rospy.loginfo('state pub1 %s',self.last_wp) 
                 self.upcoming_red_light_pub.publish(int(light_wp))
             else:
                 self.upcoming_red_light_pub.publish(int(self.last_wp))
-#                rospy.loginfo('state pub2 %s',self.last_wp) 
+                rospy.loginfo('state pub2 %s',self.last_wp) 
             self.state_count += 1
+            rate.sleep()
     
     def distance_pose_to_pose(self, pose1, pose2):
         dist = 0
@@ -399,8 +413,23 @@ class TLDetector(object):
             header.frame_id = 'world'
             header.stamp = rospy.Time.now()
             self.upcoming_traffic_light_pub.publish(TrafficLight(header,world_light,state))
+
+            # Iterate through the complete set of waypoints until we found the closest
+            first_wpt_index = -1
+            min_wpt_distance = float('inf')
+            distance_decreased = False
+            for index, waypoint in enumerate(self.lane.waypoints[self.prev_first_wpt_index:] + self.lane.waypoints[:self.prev_first_wpt_index], start=self.prev_first_wpt_index):
+                current_wpt_distance = math.sqrt((waypoint.pose.pose.position.x-stop_line_positions[light_wp][0])**2 + (waypoint.pose.pose.position.y-stop_line_positions[light_wp][1])**2)
+                if distance_decreased and current_wpt_distance > min_wpt_distance:
+                    break
+                if current_wpt_distance > 0 and current_wpt_distance < min_wpt_distance:
+                    min_wpt_distance = current_wpt_distance
+                    first_wpt_index = index
+                    distance_decreased = True
+            first_wpt_index %= len(self.lane.waypoints)
+            self.prev_first_wpt_index = first_wpt_index - 1
             
-            return light_wp, state
+            return first_wpt_index, state
         
         return -1, TrafficLight.UNKNOWN
 
@@ -409,3 +438,5 @@ if __name__ == '__main__':
         TLDetector()
     except rospy.ROSInterruptException:
         rospy.logerr('Could not start traffic node.')
+
+
