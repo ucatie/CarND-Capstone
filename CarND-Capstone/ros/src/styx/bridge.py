@@ -141,10 +141,10 @@ class Bridge(object):
     def publish_odometry(self, data):
     
         #avoid unnecessary messages
-        if not self.data_has_changed(data) and self.prev_timestamp > 0.0 and time.time() - self.prev_timestamp < 0.1:
+        if not self.data_has_changed(data) and self.prev_timestamp > 0.0 and time.time() - self.prev_timestamp < 0.05:
             return
         #ensure fixed update rate
-        if self.prev_timestamp > 0.0 and time.time() - self.prev_timestamp < 0.1:
+        if self.prev_timestamp > 0.0 and time.time() - self.prev_timestamp < 0.05:
             return
         self.prev_timestamp = time.time()          
         pose = self.create_pose(data['x'], data['y'], data['z'], data['yaw'])
@@ -195,6 +195,8 @@ class Bridge(object):
         self.publishers['dbw_status'].publish(Bool(data))
 
     def publish_camera(self, data):
+        if self.prev_timestamp > 0.0 and time.time() - self.prev_timestamp < 0.05:
+            return
         imgString = data["image"]
         image = PIL_Image.open(BytesIO(base64.b64decode(imgString)))
         image_array = np.asarray(image)

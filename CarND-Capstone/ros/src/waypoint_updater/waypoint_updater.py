@@ -147,7 +147,7 @@ class WaypointUpdater(object):
                         self.car_distance_to_sl_when_car_started_to_slow_down = car_distance_to_stop_line
                         self.car_velocity_when_car_started_to_slow_down = self.velocity
                     rospy.loginfo('Stopping the car')
-                    planned_velocity = max(car_distance_to_stop_line*0.5,0.0)
+                    planned_velocity = min(max(car_distance_to_stop_line*0.5,0.0),self.default_velocity)
                     # Stop the car in a safe distance before the stop line to give the simulator space to adapt velocity
                 #we are close to the stop line and slow
                 elif car_distance_to_stop_line < 4 and self.velocity < 4:
