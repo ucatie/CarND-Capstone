@@ -402,8 +402,8 @@ class TLDetector(object):
   #      pitch = euler[1]
 #        yaw = euler[2]        
         #add orientation pf car !!!
-        if abs(dir) < math.pi*0.5 and min_distance < self.traffic_light_is_close:
-            rospy.logdebug('traffic light close: %s dir %s', min_distance,dir) 
+        if abs(dir) < math.pi*0.5 and min_distance < self.traffic_light_is_close and min_distance > 10:
+            rospy.loginfo('traffic light close: %s dir %s', min_distance,dir) 
         else:
             return -1, TrafficLight.UNKNOWN
 
