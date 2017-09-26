@@ -13,6 +13,7 @@ import yaml
 import tf
 import cv2
 import math
+import time
 import std_msgs
 import matplotlib.image as mpimg
 
@@ -287,6 +288,10 @@ class TLDetector(object):
             self.prev_light_loc = None
             return False
 
+        image_age = time.time() - self.camera_image.header.stamp.secs-(self.camera_image.header.stamp.nsecs/100000000)
+        if self.camera_image.header.stamp.secs > 0 and image_age > 0.1:
+            rospy.logwarn("image message delay %s %s %s",time.time(),self.camera_image.header.stamp,image_age)
+            
         cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "bgr8")
 
 #        x, y = self.project_to_image_plane(world_light.pose.position)
@@ -306,7 +311,7 @@ class TLDetector(object):
         shape = cv_image.shape
         if shape[0] != image_height or shape[1] !=  image_width:
             cv_image = cv2.resize(cv_image, (image_height, image_width), interpolation = cv2.INTER_AREA)
-#            rosspy("resize %s %s ", shape, (image_height, image_width))
+#            rospy.loginfo("resize %s %s ", shape, (image_height, image_width))
             
         rgbimage = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
         (x,y) = self.light_classifier.find_classification(rgbimage)
@@ -381,29 +386,34 @@ class TLDetector(object):
             pose.pose.position.x = stop_line_positions[wp][0]
             pose.pose.position.y = stop_line_positions[wp][1]
             pose.pose.position.z = 7
+            dir = self.get_direction(self.current_pose.pose,pose.pose)
             dist = self.distance_pose_to_pose(self.current_pose.pose, pose.pose)
 #            rospy.loginfo('traffic light: %s %s %s %s',self.gt_lights[wp].header.frame_id, pose.pose.position.x, pose.pose.position.y, dist)
-             
-            if dist < min_distance:
+           
+            #only points ahead  
+            if abs(dir) < math.pi*0.5 and dist < min_distance:
                 min_distance = dist 
                 world_light = pose
                 light_wp = wp
 
-        dir = self.get_direction(self.current_pose.pose,world_light.pose)
+        #nothing ahead
+        if world_light is None:
+            return -1, TrafficLight.UNKNOWN        
+        rospy.loginfo('traffic light distance: %s pose %s', min_distance,(pose.pose.position.x,pose.pose.position.y)) 
         
         #get the orientation of the car
 #        quaternion = (
- #           self.current_pose.pose.orientation.x,
-  #          self.current_pose.pose.orientation.y,
-   #         self.current_pose.pose.orientation.z,
-    #        self.current_pose.pose.orientation.w)        
+#           self.current_pose.pose.orientation.x,
+#           self.current_pose.pose.orientation.y,
+#           self.current_pose.pose.orientation.z,
+#           self.current_pose.pose.orientation.w)        
 #        euler = tf.transformations.euler_from_quaternion(quaternion)
- #       roll = euler[0]
-  #      pitch = euler[1]
+#        roll = euler[0]
+#        pitch = euler[1]
 #        yaw = euler[2]        
         #add orientation pf car !!!
-        if abs(dir) < math.pi*0.5 and min_distance < self.traffic_light_is_close and min_distance > 10:
-            rospy.loginfo('traffic light close: %s dir %s', min_distance,dir) 
+        if min_distance < self.traffic_light_is_close and min_distance > 10:
+            rospy.logdebug('traffic light close: %s dir %s', min_distance,dir) 
         else:
             return -1, TrafficLight.UNKNOWN
 

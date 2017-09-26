@@ -202,6 +202,7 @@ class Bridge(object):
         image_array = np.asarray(image)
 
         image_message = self.bridge.cv2_to_imgmsg(image_array, encoding="rgb8")
+        image_message.header.stamp = rospy.Time.now()
         self.publishers['image'].publish(image_message)
 
     def callback_steering(self, data):
