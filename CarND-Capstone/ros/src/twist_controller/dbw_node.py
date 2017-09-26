@@ -159,18 +159,24 @@ class DBWNode(object):
         tcmd.enable = True
         tcmd.pedal_cmd_type = ThrottleCmd.CMD_PERCENT
         tcmd.pedal_cmd = throttle
-        self.throttle_pub.publish(tcmd)
+        #rospy.loginfo('DBWNode::publish - publishing throttle command')
+        if brake == 0.0 and throttle > 0.0: 
+            self.throttle_pub.publish(tcmd)
 
         scmd = SteeringCmd()
         scmd.enable = True
         scmd.steering_wheel_angle_cmd = steer
+        #rospy.loginfo('DBWNode::publish - publishing steering command')
         self.steer_pub.publish(scmd)
 
         bcmd = BrakeCmd()
         bcmd.enable = True
         bcmd.pedal_cmd_type = BrakeCmd.CMD_TORQUE
         bcmd.pedal_cmd = brake
-        self.brake_pub.publish(bcmd)
+        #rospy.loginfo('DBWNode::publish - publishing brake command')
+        if brake != 0.0:
+            self.brake_pub.publish(bcmd)
+
 
 if __name__ == '__main__':
     DBWNode()

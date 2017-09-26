@@ -103,6 +103,7 @@ class TLDetector(object):
         self.last_wp = -1
         self.state_count = 0
         self.has_image = False
+        self.green_to_yellow_or_red = False                
 
         self.loop()
 
@@ -135,7 +136,7 @@ class TLDetector(object):
         self.camera_image = msg
         
     def loop(self):
-        rate = rospy.Rate(10) # 10Hz
+        rate = rospy.Rate(5) # 10Hz
         while not rospy.is_shutdown():
         
             light_wp, state = self.process_traffic_lights()
@@ -153,26 +154,27 @@ class TLDetector(object):
                 
             if self.state_count >= STATE_COUNT_THRESHOLD:
 
-                green_to_yellow_or_red = False                
                 if state == TrafficLight.YELLOW and self.last_state == TrafficLight.GREEN:
-                    green_to_yellow_or_red = True
+                    self.green_to_yellow_or_red = True
                 elif state == TrafficLight.RED:
-                    green_to_yellow_or_red = True
+                    self.green_to_yellow_or_red = True
+                elif state == TrafficLight.GREEN:
+                    self.green_to_yellow_or_red = False
                 
                 self.last_state = self.state
                
-                if green_to_yellow_or_red:
-                    rospy.logdebug('green_to_yellow_or_red %s %s',light_wp,state)
+                if self.green_to_yellow_or_red:
+                    rospy.loginfo('green_to_yellow_or_red %s %s',light_wp,state)
                 else:
                     light_wp = -1
  #               rospy.loginfo('light_wp %s %s',light_wp,state)
                 
                 self.last_wp = light_wp
-                rospy.loginfo('state pub1 %s',self.last_wp) 
+#                rospy.loginfo('state pub1 %s',self.last_wp) 
                 self.upcoming_red_light_pub.publish(int(light_wp))
             else:
                 self.upcoming_red_light_pub.publish(int(self.last_wp))
-                rospy.loginfo('state pub2 %s',self.last_wp) 
+#                rospy.loginfo('state pub2 %s',self.last_wp) 
             self.state_count += 1
             rate.sleep()
     
@@ -320,7 +322,7 @@ class TLDetector(object):
 #        rospy.loginfo('region %s %s %s %s org: %s region:%s',x1,y1,x2,y2, cv_image.shape, region.shape)
 
         traffic_image = self.bridge.cv2_to_imgmsg(region, "bgr8")
-        self.upcoming_traffic_light_image_pub.publish(traffic_image);
+#        self.upcoming_traffic_light_image_pub.publish(traffic_image);
         
 #        rospy.loginfo('traffic light image published')
         
@@ -390,18 +392,18 @@ class TLDetector(object):
         dir = self.get_direction(self.current_pose.pose,world_light.pose)
         
         #get the orientation of the car
-        quaternion = (
-            self.current_pose.pose.orientation.x,
-            self.current_pose.pose.orientation.y,
-            self.current_pose.pose.orientation.z,
-            self.current_pose.pose.orientation.w)        
-        euler = tf.transformations.euler_from_quaternion(quaternion)
-        roll = euler[0]
-        pitch = euler[1]
-        yaw = euler[2]        
+#        quaternion = (
+ #           self.current_pose.pose.orientation.x,
+  #          self.current_pose.pose.orientation.y,
+   #         self.current_pose.pose.orientation.z,
+    #        self.current_pose.pose.orientation.w)        
+#        euler = tf.transformations.euler_from_quaternion(quaternion)
+ #       roll = euler[0]
+  #      pitch = euler[1]
+#        yaw = euler[2]        
         #add orientation pf car !!!
         if abs(dir) < math.pi*0.5 and min_distance < self.traffic_light_is_close:
-            rospy.logdebug('traffic light close: %s dir %s car yaw %s', min_distance,dir,yaw) 
+            rospy.logdebug('traffic light close: %s dir %s', min_distance,dir) 
         else:
             return -1, TrafficLight.UNKNOWN
 

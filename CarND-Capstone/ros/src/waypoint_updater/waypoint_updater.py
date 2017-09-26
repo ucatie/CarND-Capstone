@@ -60,9 +60,6 @@ class WaypointUpdater(object):
         # The timestamp of the last traffic_waypoint
         self.traffic_waypoint_timestamp = 0.0
 
-        # Define how many seconds we wait to start driving after we did not receive a traffic_waypoint
-        self.red_light_tresh = 0.2
-
         # The index of the waypoint in the base_waypoints list, which is closest to the traffic light
         self.light_waypoint_index = None
         # The approximate distance from the stop line to the traffic light
@@ -142,30 +139,22 @@ class WaypointUpdater(object):
                 # The approximate distance from the stop line to the traffic light
                 car_distance_to_stop_line = self.distance(self.pose.pose.position, light_waypoint.pose.pose.position) - self.light_distance_thresh
                 
-                if time.time() - self.traffic_waypoint_timestamp < self.red_light_tresh:
     #                if car_distance_to_tl >  self.light_distance_thresh:
                     # Estimate whether the car cannot cross the stop line on yellow (in less than one and a half seconds). Otherwise don't slow down.
-                    if self.velocity / car_distance_to_stop_line < 1.5 or car_distance_to_stop_line < 4:
-                        slow_down = True
-                        if self.car_distance_to_sl_when_car_started_to_slow_down is None:
-                            self.car_distance_to_sl_when_car_started_to_slow_down = car_distance_to_stop_line
-                            self.car_velocity_when_car_started_to_slow_down = self.velocity
-                        rospy.loginfo('Stopping the car')
-                        planned_velocity = max(car_distance_to_stop_line*0.5,0.0)
-                        # Stop the car in a safe distance before the stop line to give the simulator space to adapt velocity
-        
-                    #we are close to the stop line and slow
-                    else:
-                        rospy.loginfo('too late to stopp the car')
-                        self.car_distance_to_tl_when_car_started_to_slow_down = None
-                        self.car_velocity_when_car_started_to_slow_down = None
-                        
-                    rospy.loginfo('car_distance_to_stop_line %s velocity %s set to %s',car_distance_to_stop_line,self.velocity,planned_velocity)
+                if self.velocity / car_distance_to_stop_line < 1.5 and car_distance_to_stop_line >= 4 :
+                    slow_down = True
+                    if self.car_distance_to_sl_when_car_started_to_slow_down is None:
+                        self.car_distance_to_sl_when_car_started_to_slow_down = car_distance_to_stop_line
+                        self.car_velocity_when_car_started_to_slow_down = self.velocity
+                    rospy.loginfo('Stopping the car')
+                    planned_velocity = max(car_distance_to_stop_line*0.5,0.0)
+                    # Stop the car in a safe distance before the stop line to give the simulator space to adapt velocity
+                #we are close to the stop line and slow
                 elif car_distance_to_stop_line < 4 and self.velocity < 4:
                     slow_down = True
                     if car_distance_to_stop_line > 0.5:
                         planned_velocity = 1.0
-                    if car_distance_to_stop_line < 0.5 :
+                    else:
                         planned_velocity = 0.0
                         reached_zero_velocity = True
                     rospy.loginfo('car_distance_to_stop_line %s velocity %s set to %s',car_distance_to_stop_line,self.velocity,planned_velocity)
@@ -174,7 +163,7 @@ class WaypointUpdater(object):
                     self.car_distance_to_tl_when_car_started_to_slow_down = None
                     self.car_velocity_when_car_started_to_slow_down = None
                 
-                rospy.loginfo('velocity %s set to %s',self.velocity,planned_velocity)
+                rospy.loginfo('car_distance_to_stop_line %s velocity %s set to %s',car_distance_to_stop_line,self.velocity,planned_velocity)
 
             # Fill the lane with the final waypoints
             for num_wp in range(LOOKAHEAD_WPS):
