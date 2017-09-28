@@ -426,10 +426,10 @@ class TLDetector(object):
         #nothing ahead
         if world_light is None:
             return -1, TrafficLight.UNKNOWN        
-        rospy.loginfo('traffic light distance: %s pose %s', min_distance,(pose.pose.position.x,pose.pose.position.y)) 
+        rospy.loginfo('stop line distance: %s pose %s', min_distance,(pose.pose.position.x,pose.pose.position.y)) 
         
-        if min_distance < self.traffic_light_is_close and min_distance > 10:
-            rospy.logdebug('traffic light close: %s dir %s', min_distance,dir) 
+        if min_distance < self.traffic_light_is_close and min_distance >=0:
+            rospy.logdebug('stop line close: %s dir %s', min_distance,dir) 
         else:
             return -1, TrafficLight.UNKNOWN
 

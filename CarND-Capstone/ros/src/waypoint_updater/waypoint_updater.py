@@ -63,7 +63,7 @@ class WaypointUpdater(object):
         # The index of the waypoint in the base_waypoints list, which is closest to the traffic light
         self.light_waypoint_index = None
         # The approximate distance from the stop line to the traffic light
-        self.light_distance_thresh = 10.0
+        self.light_distance_thresh = 3.0
 
         # The car's distance to the traffic light when the car started the slowing down process
         self.car_distance_to_sl_when_car_started_to_slow_down = None
@@ -106,6 +106,8 @@ class WaypointUpdater(object):
                 distance_decreased = True
         first_wpt_index %= num_waypoints_in_list
 
+        transformed_light_point = None
+        
         if first_wpt_index == -1:
             rospy.logwarn('WaypointUpdater::waypoints_cb - No waypoints ahead of ego were found... seems that the car went off course')
         else:
@@ -133,18 +135,20 @@ class WaypointUpdater(object):
             slow_down = False
             reached_zero_velocity = False
             car_distance_to_stop_line = -1.
-            light_waypoint = None
             planned_velocity = self.default_velocity
-            
+
             # If the last traffic_waypoint message is newer than the threshold, we might need to the car.
             if self.light_waypoint_index >= 0: 
-                light_waypoint = self.waypoints.waypoints[self.light_waypoint_index]
                 rospy.loginfo('should stopp the car %s', self.light_waypoint_index)
-                # The approximate distance from the stop line to the traffic light
-                car_distance_to_stop_line = self.distance(self.pose.pose.position, light_waypoint.pose.pose.position) - self.light_distance_thresh
+
                 
-    #                if car_distance_to_tl >  self.light_distance_thresh:
-                    # Estimate whether the car cannot cross the stop line on yellow (in less than one and a half seconds). Otherwise don't slow down.
+                self.waypoints.waypoints[self.light_waypoint_index].pose.header.frame_id = self.waypoints.header.frame_id
+                transformed_light_point = self.tf_listener.transformPose("base_link", self.waypoints.waypoints[self.light_waypoint_index].pose)
+            
+                # The approximate distance from the stop line to the traffic light
+                car_distance_to_stop_line = transformed_light_point.pose.position.x - self.light_distance_thresh
+                
+                # Estimate whether the car cannot cross the stop line on yellow (in less than 2 seconds). Otherwise don't slow down.
                 if self.velocity / car_distance_to_stop_line < 2 and car_distance_to_stop_line >= 4 :
                     slow_down = True
                     if self.car_distance_to_sl_when_car_started_to_slow_down is None:
@@ -154,14 +158,13 @@ class WaypointUpdater(object):
                     planned_velocity = min(max(car_distance_to_stop_line*0.5,0.0),self.default_velocity)
                     # Stop the car in a safe distance before the stop line to give the simulator space to adapt velocity
                 #we are close to the stop line and slow
-                elif car_distance_to_stop_line < 4 and self.velocity < 6:
+                elif car_distance_to_stop_line > 0 and car_distance_to_stop_line < 4 and self.velocity < 6:
                     slow_down = True
                     if car_distance_to_stop_line > 0.5:
                         planned_velocity = 1.0
                     else:
                         planned_velocity = 0.0
                         reached_zero_velocity = True
-                    rospy.loginfo('car_distance_to_stop_line %s velocity %s set to %s',car_distance_to_stop_line,self.velocity,planned_velocity)
                 else:
                     rospy.loginfo('too late to stopp the car')
                     self.car_distance_to_tl_when_car_started_to_slow_down = None
