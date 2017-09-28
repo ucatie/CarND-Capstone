@@ -45,7 +45,7 @@ class TLClassifier(object):
  #       gd.data["image_counter"]= gd.data["image_counter"] + 1
         if image is None:
             return None
-
+      
         normImage = image.copy().astype("float32") / 255.0
 
         windows = []
@@ -62,7 +62,7 @@ class TLClassifier(object):
                                      xy_window=(size,size), xy_overlap=(ov, ov))
         
             windows += new_win
-           
+    
         #  print(windows2)
         (color_space,hog_channel,spatial_feat,hist_feat,hog_feat,cell_per_block) = param
         orient = 9  # HOG orientations
@@ -91,13 +91,13 @@ class TLClassifier(object):
         
 #        rospy.loginfo("best state %s count %s",best_state, max_count)
         return best_state
-
-    def getSearchParam2(self):
+                                   
+    def getSearchParam2(self, shape):
         search_param = []
 #        search_param.append((128,256,768,0,1024,0.75))  
-        search_param.append((20,200,590,10,790,0.75))  #simulator
+        search_param.append((20,shape[0]*0.2,shape[0]*0.9,10,shape[1]-10,0.75))  #simulator
         return search_param
-                                   
+                              
     def distance(self, pos1, pos2):
         return math.sqrt((pos1[0] - pos2[0])*(pos1[0] - pos2[0]) + (pos1[1] - pos2[1])*(pos1[1] - pos2[1]))
                                        
@@ -110,7 +110,7 @@ class TLClassifier(object):
         windows = []
         debugImg = image
     
-        search_param = self.getSearchParam2()
+        search_param = self.getSearchParam2(image.shape)
 #        all_hot_windows = []
         #  create the windows list sliding ofver the search area
         for i in range(len(search_param)):  
@@ -205,7 +205,7 @@ class TLClassifier(object):
         
         pos = self.find_class_position(image,False)
         if pos is not None:
-            rospy.loginfo("classifier pos %s",pos)
-            return pos
-        return (None,None)
+#            rospy.loginfo("classifier pos %s",pos)
+            return  pos
+        return (None,None)       
 

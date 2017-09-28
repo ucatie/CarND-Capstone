@@ -25,7 +25,7 @@ TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 '''
 
 LOOKAHEAD_WPS = 100 # Number of waypoints we will publish. You can change this number
-TIMEOUT_VALUE = 10.0
+TIMEOUT_VALUE = 0.1
 ONE_MPH = 0.44704
 
 class WaypointUpdater(object):
@@ -109,15 +109,19 @@ class WaypointUpdater(object):
         if first_wpt_index == -1:
             rospy.logwarn('WaypointUpdater::waypoints_cb - No waypoints ahead of ego were found... seems that the car went off course')
         else:
+            #transform fast avoiding wait cycles
             # Transform first waypoint to car coordinates
             self.waypoints.waypoints[first_wpt_index].pose.header.frame_id = self.waypoints.header.frame_id
             try:
-                self.tf_listener.waitForTransform("base_link", "world", rospy.Time(0), rospy.Duration(TIMEOUT_VALUE))
+                self.tf_listener.waitForTransform("base_link", "world", rospy.Time(0), rospy.Duration(0.02))
                 transformed_waypoint = self.tf_listener.transformPose("base_link", self.waypoints.waypoints[first_wpt_index].pose)
             except (tf.Exception, tf.LookupException, tf.ConnectivityException):
-                rospy.logerr("Failed to find camera to map transform")
+                try:
+                    self.tf_listener.waitForTransform("base_link", "world", rospy.Time(0), rospy.Duration(TIMEOUT_VALUE))
+                    transformed_waypoint = self.tf_listener.transformPose("base_link", self.waypoints.waypoints[first_wpt_index].pose)
+                except (tf.Exception, tf.LookupException, tf.ConnectivityException):
+                    rospy.logwarn("Failed to find camera to map transform")
                 return
-                
 
             # All waypoints in front of the car should have positive X coordinate in car coordinate frame
             # If the closest waypoint is behind the car, skip this waypoint
@@ -141,7 +145,7 @@ class WaypointUpdater(object):
                 
     #                if car_distance_to_tl >  self.light_distance_thresh:
                     # Estimate whether the car cannot cross the stop line on yellow (in less than one and a half seconds). Otherwise don't slow down.
-                if self.velocity / car_distance_to_stop_line < 1.5 and car_distance_to_stop_line >= 4 :
+                if self.velocity / car_distance_to_stop_line < 2 and car_distance_to_stop_line >= 4 :
                     slow_down = True
                     if self.car_distance_to_sl_when_car_started_to_slow_down is None:
                         self.car_distance_to_sl_when_car_started_to_slow_down = car_distance_to_stop_line
@@ -150,7 +154,7 @@ class WaypointUpdater(object):
                     planned_velocity = min(max(car_distance_to_stop_line*0.5,0.0),self.default_velocity)
                     # Stop the car in a safe distance before the stop line to give the simulator space to adapt velocity
                 #we are close to the stop line and slow
-                elif car_distance_to_stop_line < 4 and self.velocity < 4:
+                elif car_distance_to_stop_line < 4 and self.velocity < 6:
                     slow_down = True
                     if car_distance_to_stop_line > 0.5:
                         planned_velocity = 1.0

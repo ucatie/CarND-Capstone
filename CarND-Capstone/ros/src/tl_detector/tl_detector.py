@@ -3,6 +3,7 @@ import rospy
 import os
 import image_geometry
 from std_msgs.msg import Int32
+from tf2_msgs.msg import TFMessage
 from geometry_msgs.msg import PoseStamped, Pose, PointStamped
 from styx_msgs.msg import TrafficLightArray, TrafficLight
 from styx_msgs.msg import Lane
@@ -86,6 +87,7 @@ class TLDetector(object):
             sub3 = rospy.Subscriber('/vehicle/traffic_lights', TrafficLightArray, self.traffic_cb)
             
         sub6 = rospy.Subscriber('/image_color', Image, self.image_cb)
+#        sub7 = rospy.Subscriber('/tf', TFMessage, self.tf_cb)
 
         config_string = rospy.get_param("/traffic_light_config")
         self.config = yaml.load(config_string)
@@ -94,6 +96,7 @@ class TLDetector(object):
         self.upcoming_traffic_light_pub = rospy.Publisher('/traffic_light', TrafficLight, queue_size=1)
         #puplish the sub images for testing, can be viewed in rviz tool 
         self.upcoming_traffic_light_image_pub = rospy.Publisher('/traffic_light_image', Image, queue_size=1)
+
         
         self.bridge = CvBridge()
         self.light_classifier = TLClassifier(self.SVC_PATH,self.is_simulator)
@@ -104,12 +107,13 @@ class TLDetector(object):
         self.last_wp = -1
         self.state_count = 0
         self.has_image = False
-        self.green_to_yellow_or_red = False                
+        self.green_to_yellow_or_red = False       
+        self.transform = None         
 
         self.loop()
 
         rospy.spin()
-        
+                
     def pose_cb(self, msg):
 #        rospy.loginfo('Pose received')
         self.current_pose = msg
@@ -141,6 +145,8 @@ class TLDetector(object):
         while not rospy.is_shutdown():
         
             light_wp, state = self.process_traffic_lights()
+            if state == None:
+                continue
      
             '''
             Publish upcoming red lights at camera frequency.
@@ -160,6 +166,8 @@ class TLDetector(object):
                 elif state == TrafficLight.RED:
                     self.green_to_yellow_or_red = True
                 elif state == TrafficLight.GREEN:
+                    self.green_to_yellow_or_red = False
+                else:
                     self.green_to_yellow_or_red = False
                 
                 self.last_state = self.state
@@ -181,7 +189,7 @@ class TLDetector(object):
     
     def distance_pose_to_pose(self, pose1, pose2):
         dist = 0
-        dl = lambda a, b: math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2  + (a.z-b.z)**2)
+        dl = lambda a, b: math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2)
         dist = dl(pose1.position, pose2.position)
         return dist
     
@@ -243,9 +251,9 @@ class TLDetector(object):
         try:
             now = rospy.Time.now()
             self.listener.waitForTransform("base_link",
-                  "world", now, rospy.Duration(1.0))
-            (trans, rot) = self.listener.lookupTransform("base_link",
-                  "world", now)
+                  "world", now, rospy.Duration(0.02))
+#            (trans, rot) = self.listener.lookupTransform("base_link",
+#                  "world", now)
 
         except (tf.Exception, tf.LookupException, tf.ConnectivityException):
             rospy.logerr("Failed to find camera to map transform")
@@ -376,23 +384,42 @@ class TLDetector(object):
         # List of positions that correspond to the line to stop in front of for a given intersection
         stop_line_positions = self.config['stop_line_positions']
         if(self.current_pose is None):
-            return -1, TrafficLight.UNKNOWN
+            return -1, None
         
         min_distance = 9999.0
         light_wp = -1
-        for wp in range(len(stop_line_positions)):
-            pose = PoseStamped()
 
+        #transform fast avoiding wait cycles
+        try:
+            now = rospy.Time.now()
+            self.listener.waitForTransform("base_link","world", now, rospy.Duration(0.02))
+        except (tf.Exception, tf.LookupException, tf.ConnectivityException):
+#            rospy.logwarn("Failed to find camera to map transform 0.02 duration")
+            try:
+                self.listener.waitForTransform("base_link","world", now, rospy.Duration(0.1))
+            except (tf.Exception, tf.LookupException, tf.ConnectivityException):
+                rospy.logwarn("Failed to find camera to map transform")
+                return -1, None
+
+#        rospy.loginfo('base_link received trans %s rot %s',trans,rot)
+        
+        wtl=PointStamped()
+        wtl.header.frame_id = "/world"
+        wtl.header.stamp =rospy.Time(0)
+        wtl.point.z = 0
+        for wp in range(len(stop_line_positions)):
+            wtl.point.x = stop_line_positions[wp][0]
+            wtl.point.y = stop_line_positions[wp][1]
+            # Transform first waypoint to car coordinates
+            ctl = self.listener.transformPoint("base_link",wtl)
+            pose = PoseStamped()
             pose.pose.position.x = stop_line_positions[wp][0]
             pose.pose.position.y = stop_line_positions[wp][1]
-            pose.pose.position.z = 7
-            dir = self.get_direction(self.current_pose.pose,pose.pose)
-            dist = self.distance_pose_to_pose(self.current_pose.pose, pose.pose)
-#            rospy.loginfo('traffic light: %s %s %s %s',self.gt_lights[wp].header.frame_id, pose.pose.position.x, pose.pose.position.y, dist)
+            pose.pose.position.z = 0
            
             #only points ahead  
-            if abs(dir) < math.pi*0.5 and dist < min_distance:
-                min_distance = dist 
+            if ctl.point.x > 0 and ctl.point.x < min_distance and abs(ctl.point.y) < 10:
+                min_distance = ctl.point.x 
                 world_light = pose
                 light_wp = wp
 
@@ -401,17 +428,6 @@ class TLDetector(object):
             return -1, TrafficLight.UNKNOWN        
         rospy.loginfo('traffic light distance: %s pose %s', min_distance,(pose.pose.position.x,pose.pose.position.y)) 
         
-        #get the orientation of the car
-#        quaternion = (
-#           self.current_pose.pose.orientation.x,
-#           self.current_pose.pose.orientation.y,
-#           self.current_pose.pose.orientation.z,
-#           self.current_pose.pose.orientation.w)        
-#        euler = tf.transformations.euler_from_quaternion(quaternion)
-#        roll = euler[0]
-#        pitch = euler[1]
-#        yaw = euler[2]        
-        #add orientation pf car !!!
         if min_distance < self.traffic_light_is_close and min_distance > 10:
             rospy.logdebug('traffic light close: %s dir %s', min_distance,dir) 
         else:
@@ -424,7 +440,7 @@ class TLDetector(object):
             header = std_msgs.msg.Header()
             header.frame_id = 'world'
             header.stamp = rospy.Time.now()
-            self.upcoming_traffic_light_pub.publish(TrafficLight(header,world_light,state))
+#            self.upcoming_traffic_light_pub.publish(TrafficLight(header,world_light,state))
 
             # Iterate through the complete set of waypoints until we found the closest
             first_wpt_index = -1
