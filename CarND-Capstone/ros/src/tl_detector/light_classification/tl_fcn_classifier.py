@@ -48,6 +48,21 @@ def load_vgg(sess, vgg_path):
     
     return vgg_input_tensor, vgg_keep_prob_tensor, vgg_layer3_out_tensor, vgg_layer4_out_tensor, vgg_layer7_out_tensor
 
+def load_fcn(sess, fcn_path):
+    """
+    Load Pretrained FCN Model into TensorFlow.
+    :param sess: TensorFlow Session
+    :param vgg_path: Path to fcn folder, containing "variables/" and "saved_model.pb"
+    :return: Tuple of Tensors from FCN model (image_input, keep_prob, layer3_out, layer4_out, layer7_out)
+    """
+    # Download pretrained vgg model
+#    vgg_helper.maybe_download_pretrained_vgg('./data')
+
+    saver = tf.train.Saver()
+    model = saver.restore(sess, os.path.join(fcn_path, 'model.ckpt'))
+    print("loaded saved fcn model!".format(fcn_path))
+    
+    return model
 
 def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     """
@@ -266,7 +281,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     if runs_dir is not None:
         tf.train.Saver().save(sess, 'trained_model')   
 
-def run():
+def train():
     num_classes = 2
     image_shape = (256, 256)
     home_dir = '/home/frank/selfdriving/sdc_course/CarND-Capstone'
@@ -307,6 +322,38 @@ def run():
 
         # OPTIONAL: Apply the trained model to a video
 
+#expects the tsaved model in the fcn folder
+def test():
+    num_classes = 2
+    image_shape = (256, 256)
+    home_dir = '/home/frank/selfdriving/sdc_course/CarND-Capstone'
+
+    vgg_path = os.path.join(home_dir, 'vgg')
+    fcn_path = os.path.join(home_dir, 'fcn')
+    data_dir = os.path.join(home_dir, 'bag_dump_just_traffic_light')
+    runs_dir = os.path.join(home_dir, 'runs')
+    
+    input = tf.placeholder(tf.float32, [None, image_shape[0], image_shape[1], num_classes])
+#    output = tf.placeholder(tf.float32, [None, image_shape[0], image_shape[1], num_classes])
+ #   feed_dict ={input,output}
+    
+    batch_size = 1
+    with tf.Session() as sess:
+        
+        model = tf.train.import_meta_graph(os.path.join(fcn_path, 'model.meta'))
+        graph = tf.get_default_graph()
+#        for v in graph.get_operations():
+#            print(v.values())
+           
+        model.restore(sess, tf.train.latest_checkpoint(fcn_path))
+        print("restored fcn model!".format(fcn_path))    
+        
+        keep_prob = graph.get_tensor_by_name('keep_prob:0')
+        input = graph.get_tensor_by_name('image_input:0')   
+        logits = graph.get_tensor_by_name('logits:0')
+        
+        #Save inference data using vgg_helper.save_inference_samples
+        vgg_helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, input)
 
 if __name__ == '__main__':
-    run()
+    test()
