@@ -149,13 +149,13 @@ class WaypointUpdater(object):
                 car_distance_to_stop_line = transformed_light_point.pose.position.x - self.light_distance_thresh
                 
                 # Estimate whether the car cannot cross the stop line on yellow (in less than 2 seconds). Otherwise don't slow down.
-                if self.velocity / car_distance_to_stop_line < 2 and car_distance_to_stop_line >= 4 :
+                if self.velocity / car_distance_to_stop_line < 2 and car_distance_to_stop_line >= 4:
                     slow_down = True
                     if self.car_distance_to_sl_when_car_started_to_slow_down is None:
                         self.car_distance_to_sl_when_car_started_to_slow_down = car_distance_to_stop_line
                         self.car_velocity_when_car_started_to_slow_down = self.velocity
                     rospy.loginfo('Stopping the car')
-                    planned_velocity = min(max(car_distance_to_stop_line*0.5,0.0),self.default_velocity)
+                    planned_velocity = min(max(abs(car_distance_to_stop_line*0.2),0.0),self.default_velocity)
                     # Stop the car in a safe distance before the stop line to give the simulator space to adapt velocity
                 #we are close to the stop line and slow
                 elif car_distance_to_stop_line > 0 and car_distance_to_stop_line < 4 and self.velocity < 6:
