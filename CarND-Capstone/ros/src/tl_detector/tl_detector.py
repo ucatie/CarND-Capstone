@@ -310,7 +310,7 @@ class TLDetector(object):
         shape = cv_image.shape
         if shape[0] != image_height or shape[1] !=  image_width:
             cv_image = cv2.resize(cv_image, (image_height, image_width), interpolation = cv2.INTER_AREA)
-            rospy.loginfo("resize %s %s ", shape, (image_height, image_width))
+#            rospy.loginfo("resize %s %s ", shape, (image_height, image_width))
             
         rgbimage = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
         (x,y) = self.light_classifier.find_classification(rgbimage)
@@ -323,10 +323,10 @@ class TLDetector(object):
         y2 = y+32
         
         if not self.is_simulator:
-            x1 = x-64 
+            x1 = x-32 
             y1 = y-64
-            x2 = x+128 
-            y2 = y+128
+            x2 = x+32 
+            y2 = y+64
             
         region = cv_image[y1:y2, x1:x2]
         rospy.loginfo('region %s %s %s %s org: %s region:%s',x1,y1,x2,y2, cv_image.shape, region.shape)

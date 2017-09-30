@@ -269,7 +269,7 @@ class TLClassifier(object):
         if self.is_simulator:
             pos = self.find_sim_class_position(image,False)
         else:
-            pos = self.find_real_class_position(image,True)
+            pos = self.find_real_class_position(image,False)
             
         if pos is not None:
             rospy.loginfo("classifier pos %s",pos)
