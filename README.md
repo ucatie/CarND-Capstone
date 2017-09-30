@@ -4,6 +4,8 @@ The goal of this project is to code a real self-driving car to drive itself on a
 
 ![demo_animation](animation.gif)
 
+A demo video can be viewed at [this link](https://youtu.be/zid5BqIE600)
+
 ### Installation
 
 * Be sure that your workstation is running Ubuntu 16.04 Xenial Xerus or Ubuntu 14.04 Trusty Tahir. [Ubuntu downloads can be found here](https://www.ubuntu.com/download/desktop).
