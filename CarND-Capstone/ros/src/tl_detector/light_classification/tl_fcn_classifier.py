@@ -8,18 +8,17 @@ from distutils.version import LooseVersion
 import time
 import csv
 import numpy as np
+import rospy
 
 # Check TensorFlow Version
 #assert LooseVersion(tf.__version__) >= LooseVersion('1.0'), 'Please use TensorFlow version 1.0 or newer.  You are using {}'.format(tf.__version__)
 print('TensorFlow Version: {}'.format(tf.__version__))
-
+tf.initialize_all_variables
 # Check for a GPU
 if not tf.test.gpu_device_name():
     warnings.warn('No GPU found. Please use a GPU to train your neural network.')
 else:
     print('Default GPU Device: {}'.format(tf.test.gpu_device_name()))
-
-
    
 def load_vgg(sess, vgg_path):
     """
@@ -50,7 +49,7 @@ def load_vgg(sess, vgg_path):
 
 def load_fcn(sess, fcn_path):
     """
-    Load Pretrained FCN Model into TensorFlow.
+    Load Trained FCN Model into TensorFlow.
     :param sess: TensorFlow Session
     :param vgg_path: Path to fcn folder, containing "variables/" and "saved_model.pb"
     :return: Tuple of Tensors from FCN model (image_input, keep_prob, layer3_out, layer4_out, layer7_out)
@@ -58,11 +57,23 @@ def load_fcn(sess, fcn_path):
     # Download pretrained vgg model
 #    vgg_helper.maybe_download_pretrained_vgg('./data')
 
-    saver = tf.train.Saver()
-    model = saver.restore(sess, os.path.join(fcn_path, 'model.ckpt'))
-    print("loaded saved fcn model!".format(fcn_path))
+    model = tf.train.import_meta_graph(os.path.join(fcn_path, 'model.meta'))
+    rospy.loginfo("restored fcn meta graph %s",os.path.join(fcn_path, 'model.meta'))
+    graph = tf.get_default_graph()
+#    for v in graph.get_operations():
+#       rospy.loginfo("%s",v.values())
+
+    model.restore(sess, tf.train.latest_checkpoint(fcn_path))
+    rospy.loginfo("restored fcn model %s",fcn_path)
+        
+    keep_prob = graph.get_tensor_by_name('keep_prob:0')
+    input = graph.get_tensor_by_name('image_input:0')   
+    logits = graph.get_tensor_by_name('logits:0')
+#    rospy.loginfo("%s",keep_prob)
+#    rospy.loginfo("%s",input)
+#    rospy.loginfo("%s",logits)
     
-    return model
+    return keep_prob, input, logits
 
 def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     """
@@ -140,27 +151,6 @@ def get_trainable_variables():
     for var in var_list:
         print(var)
     return var_list
-
-def optimize_iou2(nn_last_layer, correct_label, learning_rate, num_classes):
-    logits = tf.reshape(nn_last_layer, (-1, num_classes))    
-    labels = tf.reshape(correct_label, (-1, num_classes))    
-    '''
-    Eq. (1) The intersection part - tf.mul is element-wise, 
-    if logits were also binary then tf.reduce_sum would be like a bitcount here.
-    '''
-    inter=tf.reduce_sum(tf.multiply(logits,labels))
-    
-    '''
-    Eq. (2) The union part - element-wise sum and multiplication, then vector sum
-    '''
-    union=tf.reduce_sum(tf.subtract(tf.add(logits,labels),tf.multiply(logits,labels)))
-    
-    # Eq. (4)
-    loss=tf.subtract(tf.constant(1.0, dtype=tf.float32),tf.divide(inter,union))
-    
-    global_step = tf.Variable(0, name='global_step', trainable=False) #learning rate
-    train_op=tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss,var_list=get_trainable_variables(), global_step=global_step)
-    return logits, train_op, loss
 
 def optimize(nn_last_layer, correct_label, learning_rate, num_classes):
     """
@@ -328,7 +318,6 @@ def test():
     image_shape = (256, 256)
     home_dir = '/home/frank/selfdriving/sdc_course/CarND-Capstone'
 
-    vgg_path = os.path.join(home_dir, 'vgg')
     fcn_path = os.path.join(home_dir, 'fcn')
     data_dir = os.path.join(home_dir, 'bag_dump_just_traffic_light')
     runs_dir = os.path.join(home_dir, 'runs')
@@ -355,5 +344,17 @@ def test():
         #Save inference data using vgg_helper.save_inference_samples
         vgg_helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, input)
 
+def classify(session,keep_prob,input,logits,image):
+    
+        im_softmax = session.run(
+            [tf.nn.softmax(logits)],
+            {keep_prob: 1.0, input: [image]})
+        im_softmax = im_softmax[0][:, 1].reshape(image.shape[0], image.shape[1])
+#        rospy.loginfo("fcn classified %s",im_softmax)
+        
+        segmentation = (im_softmax > 0.5).reshape(image.shape[0], image.shape[1], 1)        
+#        rospy.loginfo("fcn segmentation %s",segmentation)
+        return segmentation
+    
 if __name__ == '__main__':
     test()

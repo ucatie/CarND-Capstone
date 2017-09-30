@@ -36,9 +36,6 @@ class TLDetector_Train(object):
         self.ground_truth_dir = os.path.join(self.run_dir, rospy.get_param('~ground_truth_dir'))
         rospy.loginfo("ground_truth_dir:%s",self.ground_truth_dir)
             
-        self.train_data_dir = os.path.join(self.run_dir,rospy.get_param('~train_data_dir'))
-        rospy.loginfo("train_data_dir:%s",self.train_data_dir)
-        
         self.task = rospy.get_param('~task','best')
         rospy.loginfo("task:%s",self.task)
         

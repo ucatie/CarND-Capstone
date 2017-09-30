@@ -51,26 +51,17 @@ class TLDetector(object):
                 os.makedirs(os.path.join(self.ground_truth_dir,'2'))        
                 os.makedirs(os.path.join(self.ground_truth_dir,'4'))        
 
-        self.create_train_data = rospy.get_param('~create_train_data', False) 
-        rospy.loginfo("create_train_data:%s",self.create_train_data)
-
-        if self.create_train_data:               
-            self.train_data_dir = os.path.join(self.run_dir,rospy.get_param('~train_data_dir'))
-            rospy.loginfo("train_data_dir:%s",self.train_data_dir)
-            
-            self.train_data_start_number = rospy.get_param('~train_data_start_number', 1)
-            rospy.loginfo("train_data_start_number:%s",self.train_data_start_number)
-            
-            if self.create_train_data == True and not os.path.exists(self.train_data_dir):
-                os.makedirs(self.train_data_dir)        
-                
         self.traffic_light_is_close = rospy.get_param('~traffic_light_is_close', 50)
         rospy.loginfo("traffic_light_is_close:%f",self.traffic_light_is_close)
                 
-        self.SVC_PATH =  os.path.join(self.run_dir,rospy.get_param('~SVC_PATH','svc.p'))       
-        rospy.loginfo("SVC_PATH:%s",self.SVC_PATH)
         self.is_simulator = rospy.get_param('~is_simulator', True)
         rospy.loginfo("is_simulator:%s",self.is_simulator)
+        
+        self.SVC_PATH =  os.path.join(self.run_dir,rospy.get_param('~SVC_PATH','svc.p'))       
+        rospy.loginfo("SVC_PATH:%s",self.SVC_PATH)
+        
+        self.FCN_PATH =  os.path.join(self.run_dir,rospy.get_param('~FCN_PATH','fcn'))       
+        rospy.loginfo("FCN_PATH:%s",self.FCN_PATH)
 
         sub1 = rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         sub2 = rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
@@ -99,7 +90,7 @@ class TLDetector(object):
 
         
         self.bridge = CvBridge()
-        self.light_classifier = TLClassifier(self.SVC_PATH,self.is_simulator)
+        self.light_classifier = TLClassifier(self.SVC_PATH,self.is_simulator,self.FCN_PATH)
         self.listener = tf.TransformListener()
 
         self.state = TrafficLight.UNKNOWN
@@ -298,7 +289,7 @@ class TLDetector(object):
 
         image_age = time.time() - self.camera_image.header.stamp.secs-(self.camera_image.header.stamp.nsecs/100000000)
         if self.camera_image.header.stamp.secs > 0 and image_age > 0.1:
-            rospy.logwarn("image message delay %s %s %s",time.time(),self.camera_image.header.stamp,image_age)
+            rospy.logdebug("image message delay %s %s %s",time.time(),self.camera_image.header.stamp,image_age)
             
         cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "bgr8")
 
@@ -319,7 +310,7 @@ class TLDetector(object):
         shape = cv_image.shape
         if shape[0] != image_height or shape[1] !=  image_width:
             cv_image = cv2.resize(cv_image, (image_height, image_width), interpolation = cv2.INTER_AREA)
-#            rospy.loginfo("resize %s %s ", shape, (image_height, image_width))
+            rospy.loginfo("resize %s %s ", shape, (image_height, image_width))
             
         rgbimage = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
         (x,y) = self.light_classifier.find_classification(rgbimage)
@@ -331,18 +322,19 @@ class TLDetector(object):
         x2 = x+32 
         y2 = y+32
         
+        if not self.is_simulator:
+            x1 = x-64 
+            y1 = y-64
+            x2 = x+128 
+            y2 = y+128
+            
         region = cv_image[y1:y2, x1:x2]
-#        rospy.loginfo('region %s %s %s %s org: %s region:%s',x1,y1,x2,y2, cv_image.shape, region.shape)
+        rospy.loginfo('region %s %s %s %s org: %s region:%s',x1,y1,x2,y2, cv_image.shape, region.shape)
 
         traffic_image = self.bridge.cv2_to_imgmsg(region, "bgr8")
-#        self.upcoming_traffic_light_image_pub.publish(traffic_image);
-        
+        self.upcoming_traffic_light_image_pub.publish(traffic_image);
 #        rospy.loginfo('traffic light image published')
-        
-        
         #Get ground truth classification and save it as part of the image name 
-        #heads up the traffic light messages are received delayed, classifications are wrong at least the first 6 pictures
-        #dont forget to delete these mismatched images!!!!!
         if self.create_ground_truth:
             state = TrafficLight.UNKNOWN
             for i in range(len(self.gt_lights)):
@@ -360,13 +352,6 @@ class TLDetector(object):
             rospy.loginfo('saved gt data %s',gt_image_path)
             self.ground_truth_start_number = self.ground_truth_start_number + 1
 
-        #save the image as training data 
-        if self.create_train_data:
-            train_image_path = os.path.join(self.train_data_dir,'{0}.jpg'.format(self.train_data_start_number))
-            cv2.imwrite(train_image_path, region)
-            rospy.loginfo('saved train data %s',train_image_path)
-            self.train_data_start_number = self.train_data_start_number + 1
-            
         rgbregion = cv2.cvtColor(region, cv2.COLOR_BGR2RGB)
         return self.light_classifier.get_classification(rgbregion)
         

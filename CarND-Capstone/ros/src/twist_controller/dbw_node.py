@@ -171,6 +171,7 @@ class DBWNode(object):
 
         bcmd = BrakeCmd()
         bcmd.enable = True
+        bcmd.boo_cmd = True
         bcmd.pedal_cmd_type = BrakeCmd.CMD_TORQUE
         bcmd.pedal_cmd = brake
         #rospy.loginfo('DBWNode::publish - publishing brake command')

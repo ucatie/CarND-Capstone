@@ -20,7 +20,6 @@ import base64
 
 import math
 import time
-import rospy
 
 TYPE = {
     'bool': Bool,
@@ -137,6 +136,7 @@ class Bridge(object):
         if data['x'] != self.old_data['x'] or data['y'] != self.old_data['y'] or data['z'] != self.old_data['z'] or data['yaw'] != self.old_data['yaw']:
           self.old_data = data
           return True
+        return False
           
     def publish_odometry(self, data):
     

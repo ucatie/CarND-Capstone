@@ -9,17 +9,7 @@ import time
 import tensorflow as tf
 import yaml
 from glob import glob
-#from urllib.request import urlretrieve
-#from tqdm import tqdm
 
-
-#class DLProgress(tqdm):
-#    last_block = 0
-
-#    def hook(self, block_num=1, block_size=1, total_size=None):
-#        self.total = total_size
-#        self.update((block_num - self.last_block) * block_size)
-#        self.last_block = block_num
 
 
 def gen_batch_function(data_folder, image_shape):
@@ -74,7 +64,7 @@ def gen_batch_function(data_folder, image_shape):
                 #shape (256, 512)
                 gt_bg = gt_image[:,:,0]
                 #shape (256, 512, 1)
-                gt_bg = gt_bg.reshape(*gt_bg.shape, 1)
+                gt_bg = gt_bg.reshape(*(gt_bg.shape+[1]))
                 #shape (256, 512, 2)
                 gt_image = np.concatenate((gt_bg, np.invert(gt_bg)), axis=2)
                 
@@ -162,7 +152,7 @@ def test_yaml():
                 #shape (512, 512)
                 gt_bg = gt_image[:,:,0]
                 #shape (512, 512, 1)
-                gt_bg = gt_bg.reshape(*gt_bg.shape, 1)
+                gt_bg = gt_bg.reshape(*(gt_bg.shape+[1]))
                 #shape (512, 512, 3)
                 gt_image = np.concatenate((gt_bg, gt_bg,gt_bg), axis=2)
                  
