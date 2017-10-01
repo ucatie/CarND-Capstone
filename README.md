@@ -206,7 +206,7 @@ If task "best" is executed a trained svc_real.p file is written, which is used i
 
 #### TLClassifier class (tl_classifier.py)
 
-This class is used by _Traffic light detection node_. This class is used to classify traffic lights and uses a trained SVM model to do that. It starts by loading the trained SVC model, trained FCN and flag indidcating whether code is running in simulator or not as classification model is different for simulator (binary images + SVM) and real world (FCN + SVM).
+This class is used by _Traffic light detection node_. This class is used to classify traffic lights and uses a trained SVM model to do that. It starts by loading the trained SVC model, trained FCN and flag indicating whether code is running in simulator or not as classification model is different for simulator (binary images + SVM) and real world (FCN + SVM).
 
 Classification is done in 2 steps.
 
@@ -215,7 +215,7 @@ Classification is done in 2 steps.
 	As we are using two different models (SVM and FCN) for simulator and real world respectively so process is different for simulator and real world.
 	
 	- **For Simulator:** 
-		- Three binary images are created with each containing pixels that have value that lies in range of red, green and yellow color and rest of the pixels are zerod out. 
+		- Three binary images are created with each containing pixels that have value that lies in range of red, green and yellow color and rest of the pixels are zeroed out. 
 		- After that, from these three binary images (red, green, yellow), binary image with maximum on pixels is selected.
 		- Then sliding window technique is used to make up multiple windows to scan through region of interest in selected binary image. Windows with maximum on pixels are selected and a mean window of the selected windows is returned as region containing the traffic light.
 		
