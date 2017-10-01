@@ -47,11 +47,11 @@ A demo video can be viewed at [this link](https://youtu.be/zid5BqIE600)
 	```
 4. Run the simulator
 
-5. In order to run the code on CARLA, it will be necessary to use a different classifier: a SVM is used in the simulator environment, while a FCN is used to detect traffic lights in the real world. Therefore, it is necessary to download the trained FCN network (based on VGG) snapshot. Due to the size of the file, it cannot be hosted in Github, so please use the followig link to download: [trained FCN snapshot](https://drive.google.com/open?id=0B-varHdnnrqsMDI2QVM4bEo3VUU)
+5. In order to run the code on CARLA, it is necessary to use a different classifier: A SVM is used in the simulator environment, while a FCN is used to detect traffic lights in the real world. Therefore, it is necessary to download the trained FCN network (based on VGG) snapshot. Due to the size of the file, it cannot be hosted in GitHub, so please use the following link to download: [Trained FCN snapshot](https://drive.google.com/open?id=0B-varHdnnrqsMDI2QVM4bEo3VUU)
 
 ### Real world testing
 
-1. Download [training bag](https://drive.google.com/file/d/0B2_h37bMVw3iYkdJTlRSUlJIamM/view?usp=sharing) that was recorded on the Udacity self-driving car (a bag demonstraing the correct predictions in autonomous mode can be found [here](https://drive.google.com/open?id=0B2_h37bMVw3iT0ZEdlF4N01QbHc))
+1. Download [training bag](https://drive.google.com/file/d/0B2_h37bMVw3iYkdJTlRSUlJIamM/view?usp=sharing) that was recorded on the Udacity self-driving car (a bag demonstrating the correct predictions in autonomous mode can be found [here](https://drive.google.com/open?id=0B2_h37bMVw3iT0ZEdlF4N01QbHc))
 2. Unzip the file
 ```bash
 unzip traffic_light_bag_files.zip
@@ -71,21 +71,20 @@ roslaunch launch/site.launch
 
 #### Waypoint Updater node (waypoint_updater)
 
-This node publishes next 100 waypoints that are closest to vehicle's current location and are ahead of vehicle.This node also considers obstacles and traffic lights to set the velocity for each waypoint.
+This node publishes the next 100 waypoints that are closest to vehicle's current location and are ahead of the vehicle. This node also considers obstacles and traffic lights to set the velocity for each waypoint.
 
 This node subscribes to following topics:
 
-1. **/base_waypoints:** Waypoints for whole track are published to this topic. This publish operation is a one time only operation. Waypoint updater node receives these waypoints, stores them for later use and uses these points to extract next 100 points ahead of vehicle.
+1. **/base_waypoints:** Waypoints for the whole track are published to this topic. This publication is a one-time only operation. The waypoint updater node receives these waypoints, stores them for later use and uses these points to extract the next 100 points ahead of the vehicle.
+2. **/traffic_waypoint:** To receive the index of the waypoint in the base_waypoints list, which is closest to the red traffic light so that the vehicle can be stopped. The waypoint updater node uses this index to calculate the distance from the vehicle to the traffic light if the traffic light is red and the car needs to be stopped.
+3. **/current_pose:** To receive current position of vehicle.
+4. **/current_velocity:** To receive current velocity of the vehicle which is used to estimate the time the car needs to reach the traffic light’s stop line.
 
-2. **/traffic_waypoint:** to receive the index of the waypoint in the base_waypoints list, which is closest to the red traffic light so that vehicle can be stopped. Waypoint updater node uses this index to find out distance vehicle from light in case traffic light is red and car needs to be stopped.
-3. **/current_pose:** to receive cuurrent position of vehicle.
-4. **/current_velocity:** to receive current velocity of the vehicle which is used to estimate time to reach the traffic light.
-
-Waypoint updater node first converts all the waypoints to vehicle coordinate system then picks 100 points that are closest and ahead (x >=0) of vehicle. It also sets the velocity of those waypoints so if a red light is ahead it sets the velocity of those waypoints so that vehicle stops before the signal stop line. **The threshold for traffic light distance is 3**.
+The waypoint updater node finds the closest waypoint to the vehicle’s current position and converts it to the vehicle’s coordinate system to find out of this waypoint is ahead (x >= 0) of the vehicle. Then it sets the velocity of the next 100 waypoints and publishes them as final_waypoints. If the car approaches a red traffic light, it lowers the velocity of these 100 waypoints to stop the vehicle at the stop line.
 
 This node publishes to following topics:
 
-1. **/final_waypoints:** Selected 100 waypoints are published to this topic.  
+1. **/final_waypoints:** Selected 100 waypoints including their velocity information are published to this topic.
 
 
 #### DBW Node (dbw_node)
