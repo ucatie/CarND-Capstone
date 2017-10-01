@@ -143,7 +143,7 @@ class TLClassifier(object):
                 center = (int(window[0][0] + shape[0]*0.5),int(window[0][1] + shape[1]*0.5))
                 #could be two traffic lights in one image
                 if abs(center[0]- best_pos[0][0]) <10 and abs(center[1]- best_pos[0][1]) < 10: 
- #                   rospy.loginfo("add window %s bsum %s",window, bsum)
+#                    rospy.loginfo("add window %s bsum %s",window, bsum)
                     best_pos.append(center)             
                              
         if best_pos is None:
