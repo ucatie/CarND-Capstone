@@ -5,8 +5,8 @@ python-socketio>=1.6.1
 numpy>=1.13.1
 Pillow>=2.2.1
 scipy
-keras
-tensorflow
+tensorflow=1.0.0
+tdmq
 h5py
 scikit-image
 sklearn
