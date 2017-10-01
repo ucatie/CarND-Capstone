@@ -148,7 +148,7 @@ class TLDetector(object):
             if self.state != state:
                 self.state_count = 0
                 self.state = state
-                rospy.loginfo('state change %s',state) 
+                rospy.logdebug('state change %s',state) 
                 
             if self.state_count >= STATE_COUNT_THRESHOLD:
 
@@ -164,7 +164,7 @@ class TLDetector(object):
                 self.last_state = self.state
                
                 if self.green_to_yellow_or_red:
-                    rospy.loginfo('green_to_yellow_or_red %s %s',light_wp,state)
+                    rospy.logdebug('green_to_yellow_or_red %s %s',light_wp,state)
                 else:
                     light_wp = -1
  #               rospy.loginfo('light_wp %s %s',light_wp,state)
@@ -299,18 +299,11 @@ class TLDetector(object):
         image_height = self.config['camera_info']['image_height']
 		
         #use light location to zoom in on traffic light in image
-#        x1 = x-128 
-#        y1 = y-128
-#        x2 = x+128 
-#        y2 = y+128
-#        if x1 < 0 or x2 > image_width or y1 < 0 or y2 > image_height:
-#        	rospy.loginfo('outside image %s',world_light.pose.position)
-#        	return TrafficLight.UNKNOWN
         	
         shape = cv_image.shape
         if (shape[0] != image_height or shape[1] !=  image_width):
             cv_image = cv2.resize(cv_image, (image_height, image_width), interpolation = cv2.INTER_AREA)
-            rospy.loginfo("resize %s %s ", shape, (image_height, image_width))
+#            rospy.loginfo("resize %s %s ", shape, (image_height, image_width))
             
         rgbimage = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
         (x,y) = self.light_classifier.find_classification(rgbimage)
@@ -419,7 +412,7 @@ class TLDetector(object):
         #nothing ahead
         if world_light is None:
             return -1, TrafficLight.UNKNOWN        
-        rospy.loginfo('stop line distance: %s pose %s', min_distance,(pose.pose.position.x,pose.pose.position.y)) 
+#        rospy.loginfo('stop line distance: %s pose %s', min_distance,(pose.pose.position.x,pose.pose.position.y)) 
         
         if min_distance < self.traffic_light_is_close and min_distance >=0:
             rospy.logdebug('stop line close: %s dir %s', min_distance,dir) 

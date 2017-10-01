@@ -139,7 +139,7 @@ class WaypointUpdater(object):
 
             # If the last traffic_waypoint message is newer than the threshold, we might need to the car.
             if self.light_waypoint_index >= 0: 
-                rospy.loginfo('should stopp the car %s', self.light_waypoint_index)
+                rospy.logdebug('should stopp the car %s', self.light_waypoint_index)
 
                 
                 self.waypoints.waypoints[self.light_waypoint_index].pose.header.frame_id = self.waypoints.header.frame_id
@@ -154,7 +154,7 @@ class WaypointUpdater(object):
                     if self.car_distance_to_sl_when_car_started_to_slow_down is None:
                         self.car_distance_to_sl_when_car_started_to_slow_down = car_distance_to_stop_line
                         self.car_velocity_when_car_started_to_slow_down = self.velocity
-                    rospy.loginfo('Stopping the car')
+                    rospy.logdebug('Stopping the car')
                     planned_velocity = min(max(abs(car_distance_to_stop_line*0.2),0.0),self.default_velocity)
                     # Stop the car in a safe distance before the stop line to give the simulator space to adapt velocity
                 #we are close to the stop line and slow
@@ -166,7 +166,7 @@ class WaypointUpdater(object):
                         planned_velocity = 0.0
                         reached_zero_velocity = True
                 else:
-                    rospy.loginfo('too late to stopp the car')
+                    rospy.logwarn('too late to stopp the car')
                     self.car_distance_to_tl_when_car_started_to_slow_down = None
                     self.car_velocity_when_car_started_to_slow_down = None
                 

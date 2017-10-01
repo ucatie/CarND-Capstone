@@ -11,7 +11,6 @@ import yaml
 from glob import glob
 
 
-
 def gen_batch_function(data_folder, image_shape):
     """
     Generate function to create batches of training data

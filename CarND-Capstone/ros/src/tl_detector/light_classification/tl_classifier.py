@@ -259,7 +259,7 @@ class TLClassifier(object):
         #implement light color prediction
         
         state = self.processColoredImage(image,False,self.X_scaler, self.svc, self.param)
-        rospy.loginfo("classifier state %s",state)
+#        rospy.loginfo("classifier state %s",state)
         return  state       
 
     def find_classification(self, image):        
