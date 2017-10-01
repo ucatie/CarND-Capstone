@@ -185,7 +185,7 @@ Parameters are used to define and create ground truth and/or training data. Plea
 
 The classification model used for real world is different than that of simulator.
 
-#####For Simulator
+##### For Simulator
 
 Node to train an SVM for four states (red, green, yellow). Features like HOG, spatial and histogram are collected and in different color spaces. 
 Data is read as defined by parameters in launch file so that different techniques, features and color space selection can be tried just by changing parameters as parameters allow different operations on the SVM training. Run it with following command.
@@ -211,7 +211,7 @@ Data is read as defined by parameters in launch file so that different technique
 roslaunch tl_detector train_real_svm.launch
 ```
 
-If task "best" is executed a trained svc_real.p file is written, which is used in the tl_classifier. Using YCrCb color space, all channels, and spatial and histogram only features for feature space we got `99% accuracy` on red 183 green 325 yellow 131 images.
+If task "best" is executed a trained svc_real.p file is written, which is used in the tl_classifier. Using YCrCb color space, all channels, and spatial and histogram only features for feature space we got `100% accuracy` on red 183 green 325 yellow 131 images.
 
 
 
@@ -279,10 +279,4 @@ Task break down and management has been done at:
 
 [https://waffle.io/ucatie/CarND-Capstone](https://waffle.io/ucatie/CarND-Capstone)
 
-## Contributing
 
-1. Fork it (<https://github.com/ucatie/CarND-Capstone/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
