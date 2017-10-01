@@ -94,91 +94,80 @@ This node publishes to following topics:
 
 This node is responsible for vehicle control (acceleration, steering, brake). 
 
-This node subscribes to following topics:
+This node subscribes to the following topics:
 
-1. **/final_waypoints:** Next 100 waypoints ahead of vehicle's current position are published to this topic. DBW node uses these points to fit a polynomial and to calculate cross track error based on that polynomial and vehicle's current location.
-2. **/current_pose:** to receive current position of vehicle.
-3. **/current_velocity:** to receive current velocity of the vehicle.
+1. **/final_waypoints:** Next 100 waypoints ahead of the vehicle's current position are published to this topic. DBW node uses these points to fit a polynomial and to calculate the cross track error based on that polynomial and the vehicle's current location.
+2. **/current_pose:** To receive the current position of the vehicle.
+3. **/current_velocity:** To receive the current velocity of the vehicle.
 4. **/twist_cmd:** Target vehicle linear and angular velocities in the form of twist commands are published to this topic.
 5. **/vehicle/dbw_enabled:** Indicates if the car is under dbw or driver control.
 
-And publishes to following topics:
+This node publishes to following topics:
 
 1. **/vehicle/steering_cmd:** Steering commands are published to this topic.
 2. **/vehicle/throttle_cmd:** Throttle commands are published to this topic.
 3. **/vehicle/brake_cmd:** Brake commands are published to this topic.
 
-To calculate vehicle control commands steering value, throttle and brake this node makes use of _Controller_ which in turn use following 4 PID controllers and a low pass filter.
+To calculate vehicle control commands for steering, throttle and brake this node makes use of _Controller_ which in turn uses the following four PID controllers and a low pass filter.
 
-1. **PID Controller for velocity** to drive vehicle with target velocity and it uses this PID controller with following parameters.
- 
+1. **PID Controller for velocity** to drive the vehicle with target velocity. It uses this PID controller with the following parameters.
 	```
 	VELOCITY_Kp = 2.0
 	VELOCITY_Ki = 0.0
 	VELOCITY_Kd = 0.0
 	```
-2. **PID Controller for acceleration** to accelerate vehicle smoothly and it uses this PID controller with following parameters
- 
+2. **PID Controller for acceleration** to accelerate the vehicle smoothly. It uses this PID controller with the following parameters
 	```
 	ACCEL_Kp = 0.4
 	ACCEL_Ki = 0.1
 	ACCEL_Kd = 0.0
 	```
-	
-3. **PID Controller for steering angle** to reduce error from target steering angle calculated using _Yaw Controller_ and it uses it with following parameters
- 
+3. **PID Controller for steering angle** to reduce the error of target steering angle calculated using _Yaw Controller_. It uses the following parameters
 	```
 	STEER_Kp = 0.8
 	STEER_Ki = 0.1
 	STEER_Kd = 0.3
 	```
-4. **Yaw Controller** to calculate steering angle based on current linear velocity and target linear and angular velocity. The result of this controller is added to error value received from _PID Controller for steering angle_.
-
-5. **Low pass filter for acceleration** is used in conjuction with _PID controller for acceleration_ to calculate acceleration commands. It uses following parameters
-
+4. **Yaw Controller** to calculate the steering angle based on the current linear velocity and the target linear and angular velocity. The result of this controller is added to the error value received from _PID Controller for steering angle_.
+5. **Low pass filter for acceleration** is used in conjunction with _PID controller for acceleration_ to calculate acceleration commands. It uses following parameters
 	```
 	ACCEL_Tau = 0.5
 	ACCEL_Ts = 0.02
 	```
-
-PID controllers are reset if a DBW status is changed like for example if safety driver takes over.
+The PID controllers are reset when the DBW status changes. For example when a safety driver takes over.
 
 #### Traffic light detection node (tl_detector)
 
-This node is reponsible for detecting and classifying traffic lights. If the traffic light is identified as red then it finds the closest waypoint to that red light and publishes the index of that waypoint to _/traffic_waypoint_ topic. 
+This node is responsible for detecting and classifying traffic lights. If the traffic light is identified as red then it finds the closest waypoint to that red light's stop line and publishes the index of that waypoint to the _/traffic_waypoint_ topic. 
 
-This node subscribes to following topics:
+This node subscribes to the following topics:
 
-1. **/base_waypoints:** Waypoints for whole track are published to this topic. This publish operation is a one time only operation.
+1. **/base_waypoints:** Waypoints for the whole track are published to this topic. This publication is a one-time only operation.
+2. **/current_pose:** To receive the current position of the vehicle.
+3. **/image_color:** To receive camera images to identify red lights from. Every time a new image is received, the traffic light detection node saves it so that it can process it in the next iteration of its processing loop which runs at a rate of 5Hz.
+4. **/vehicle/traffic_lights:** If ground truth data has been created. This topic provides the location of the traffic light in 3D map space and helps acquiring an accurate ground truth data source for the traffic light classifier by sending the current color state of all traffic lights in the simulator. When testing on the vehicle, the color state will not be available. You'll need to rely on the position of the light and the camera image to predict it.
 
-2. **/current_pose:** to receive current position of vehicle.
+This node publishes to the following topics:
 
-3. **/image_color:** To receive camera images to identify red lights from. Every time a new image is received, traffic light detection node saves it so that it can process it in next iteration of its processing loop which runs at rate of 5Hz.
+1. **/traffic_waypoint:** To publish the index of the closest waypoint to the red traffic light's stop line.
+2. **/traffic_light:** To publish upcoming traffic light information (TrafficLight)
+3. **/traffic_light_image:** To publish cropped images of traffic lights for testing. This topic is just for testing purposes in case someone wants to view the images with a tools like rviz.
 
-3. **/vehicle/traffic_lights:** if ground truth data has been created. This topic provides you with the location of the traffic light in 3D map space and helps you acquire an accurate ground truth data source for the traffic light classifier by sending the current color state of all traffic lights in the simulator. When testing on the vehicle, the color state will not be available. You'll need to rely on the position of the light and the camera image to predict it.
+Parameters are used to define and create ground truth and/or training data. Please check the launch file.
 
-And this node publishes to following topics:
+- The node starts with loading the parameters from the parameter server to check if ground truth images need to be created and if the node is running in the simulator or the real world to use classes accordingly.
+- The traffic light detection node runs at rate of 5Hz.
+- Each traffic light state must be detected `STATE_COUNT_THRESHOLD=3` times before it will be used, otherwise the previous predicted light state will be used.
 
-1. **/traffic_waypoint:** to publish the index of the red traffic light waypoint.
-2. **/traffic_light:** to publish upcoming traffic light info (TrafficLight)
-3. **/traffic_light_image:** to publish cropped images of traffic lights for testing. This topic is just for testing purposes in case someone wants to view the images with tools like rviz.
-
-Parameters are used to define and create ground truth and/or training data. Please check launch file
-
-- Node starts by loading parameters from parameter server to check if ground truth images needs to be created and if node is running with simulator or real world to use classes accordingly.
-- Traffic light detection node runs at rate of 5Hz.
-- Each traffic light has to be detected `STATE_COUNT_THRESHOLD=3` times before we can start using it otherwise we will keep using the previous predicted light.
-
-
-- In each iteration of processing loop
-	- It extracts all the waypoints where the traffic lights are at
-	- Transform each traffic light waypoint to vehicle coordinate system
-	- Find the traffic light waypoint that is closest to the vehicle. It finds the closest waypoint by transforming the waypoints to vehicle coordinates.
+- In each iteration of the processing loop
+	- It extracts all the traffic light waypoints.
+	- It transforms each traffic light waypoint to the vehicle's coordinate system.
+	- It finds the traffic light waypoint that is closest to the vehicle. It finds the closest waypoint by transforming the waypoints to the vehicle's coordinate system.
 	- After finding the traffic light waypoint if the distance from that traffic light waypoint is less than a certain threshold then it is considered otherwise discarded.
 	- If traffic light is close then traffic light state (red, green, yellow) is identified using the last image received from on vehicle camera and the `TLClassifier` class present in `tl_detector/light_classification/tl_classifier.py`. 
-	- This identified state of traffic light has to be detected for a certain threshold `STATE_COUNT_THRESHOLD` for it to be accepted.
-	- If the new traffic light state is detectd more than `STATE_COUNT_THRESHOLD` times then we check previous light state also to classify new light state as _green to yellow or red light_
-	- If red light (green to yellow or red light) state is detected then its corresponind waypoint is published to `/traffic_waypoint`
+	- This identified state of traffic light must be detected for a certain threshold `STATE_COUNT_THRESHOLD` for it to be accepted.
+	- If the new traffic light state is detected more than `STATE_COUNT_THRESHOLD` times then we check previous light state also to classify new light state as _green to yellow or red light_
+	- If red light (green to yellow or red light) state is detected then its corresponding waypoint is published to `/traffic_waypoint`
 
 
 #### SVM Training Node for Traffic Light Detection and Classification (tl\_detector\_train)
