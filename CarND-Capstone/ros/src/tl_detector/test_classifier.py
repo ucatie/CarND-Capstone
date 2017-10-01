@@ -4,6 +4,8 @@ import os
 import glob
 import matplotlib.image as mpimg
 import scipy.misc
+import cv2
+
 from light_classification.tl_classifier import TLClassifier
 
 if __name__ == '__main__':
@@ -18,7 +20,7 @@ if __name__ == '__main__':
     output_data_dir = os.path.join(run_dir,rospy.get_param('~output_data_dir'))
     rospy.loginfo("output_data_dir:%s",test_data_dir)
 
-    is_simulator = rospy.get_param('~is_simulator', True)
+    is_simulator = rospy.get_param('~is_simulator')
     rospy.loginfo("is_simulator:%s",is_simulator)
         
     SVC_PATH =  os.path.join(run_dir,rospy.get_param('~SVC_PATH','svc.p'))       
@@ -37,6 +39,7 @@ if __name__ == '__main__':
     counter = 1
     for image_name in test_images:
         image = mpimg.imread(image_name)
+        image = cv2.resize(image, (600, 800), interpolation = cv2.INTER_AREA)
         
         state = tc.find_classification(image)
         if state[0] is None:
@@ -47,8 +50,11 @@ if __name__ == '__main__':
         rospy.loginfo("image_name:%s state %s -> %s",image_name, state, (x,y))
         
         if create_small_images:
-                
-            small_image = scipy.misc.imresize(image[y-128:y+128,x-64:x+64], (128,128))
+            small_image = scipy.misc.imresize(image[y-32:y+32,x-32:x+32], (64,64))
+            if not is_simulator:
+                if x < 32:
+                    x = 32    
+                small_image = scipy.misc.imresize(image[y-64:y+64,x-32:x+32], (128,128))
             path_to_image = os.path.join(run_dir,"{0}/{1}.jpg".format(output_data_dir,counter))
             scipy.misc.imsave(path_to_image, small_image)    
             counter=counter+1

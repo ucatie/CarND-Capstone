@@ -308,14 +308,18 @@ class TLDetector(object):
 #        	return TrafficLight.UNKNOWN
         	
         shape = cv_image.shape
-        if shape[0] != image_height or shape[1] !=  image_width:
+        if (shape[0] != image_height or shape[1] !=  image_width):
             cv_image = cv2.resize(cv_image, (image_height, image_width), interpolation = cv2.INTER_AREA)
-#            rospy.loginfo("resize %s %s ", shape, (image_height, image_width))
+            rospy.loginfo("resize %s %s ", shape, (image_height, image_width))
             
         rgbimage = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
         (x,y) = self.light_classifier.find_classification(rgbimage)
         if x is None:
             return TrafficLight.UNKNOWN
+
+        #outdside image
+        y = min(y,image_height-32)
+        x = max(min(x,image_width-32),32)
        
         x1 = x-32 
         y1 = y-32
@@ -327,13 +331,17 @@ class TLDetector(object):
             y1 = y-64
             x2 = x+32 
             y2 = y+64
-            
+                        
         region = cv_image[y1:y2, x1:x2]
-        rospy.loginfo('region %s %s %s %s org: %s region:%s',x1,y1,x2,y2, cv_image.shape, region.shape)
+        if not self.is_simulator:
+            region = cv2.resize(region, (128, 128), interpolation = cv2.INTER_AREA)
+            
+#        rospy.loginfo('region %s %s %s %s org: %s region:%s',x1,y1,x2,y2, rgbimage.shape, region.shape)
 
-        traffic_image = self.bridge.cv2_to_imgmsg(region, "bgr8")
-        self.upcoming_traffic_light_image_pub.publish(traffic_image);
+#        traffic_image = self.bridge.cv2_to_imgmsg(region, "bgr8")
+#        self.upcoming_traffic_light_image_pub.publish(traffic_image);     
 #        rospy.loginfo('traffic light image published')
+
         #Get ground truth classification and save it as part of the image name 
         if self.create_ground_truth:
             state = TrafficLight.UNKNOWN
@@ -352,8 +360,8 @@ class TLDetector(object):
             rospy.loginfo('saved gt data %s',gt_image_path)
             self.ground_truth_start_number = self.ground_truth_start_number + 1
 
-        rgbregion = cv2.cvtColor(region, cv2.COLOR_BGR2RGB)
-        return self.light_classifier.get_classification(rgbregion)
+        region = cv2.cvtColor(region, cv2.COLOR_BGR2RGB)
+        return self.light_classifier.get_classification(region)
         
     def process_traffic_lights(self):
         """Finds closest visible traffic light, if one exists, and determines its

@@ -43,9 +43,10 @@ class TLClassifier(object):
       return data
   
         #define search parameter for window search.
-    def getSearchParam(self):
+    def getSearchParam(self,shape):
         search_param = []
-        search_param.append((64,0,64,0,64,1))  
+        search_param.append((shape[0],0,shape[0],0,shape[1],1))  #simulator
+#        search_param.append((64,0,64,0,64,1))  
         return search_param
   
     #the process chain for an image. 
@@ -61,7 +62,7 @@ class TLClassifier(object):
         result = image
         debugImg = image
     
-        search_param = self.getSearchParam()
+        search_param = self.getSearchParam(image.shape)
 #        all_hot_windows = []
         #  create the windows list sliding ofver the search area
         for i in range(len(search_param)):  
@@ -132,7 +133,7 @@ class TLClassifier(object):
             bsum = np.sum(bitmap[window[0][1]:window[1][1],window[0][0]:window[1][0]])
 #            rospy.loginfo("window %s bsum %s",window, bsum)
             if max_sum < bsum:
-#                rospy.loginfo("window %s bsum %s",window, bsum)
+#                rospy.loginfo("add window %s bsum %s",window, bsum)
                 max_sum = bsum
                 best_pos = []
                 center = (int(window[0][0] + shape[0]*0.5),int(window[0][1] + shape[1]*0.5))
@@ -140,12 +141,16 @@ class TLClassifier(object):
                              
             elif max_sum == bsum:
                 center = (int(window[0][0] + shape[0]*0.5),int(window[0][1] + shape[1]*0.5))
-                best_pos.append(center)             
+                #could be two traffic lights in one image
+                if abs(center[0]- best_pos[0][0]) <10 and abs(center[1]- best_pos[0][1]) < 10: 
+ #                   rospy.loginfo("add window %s bsum %s",window, bsum)
+                    best_pos.append(center)             
                              
         if best_pos is None:
             return None
         
         center = np.mean(best_pos,axis = 0).astype(int)
+#        rospy.loginfo("center %s ",center)
         
 #        if debug:
 #            debugImg = fd.drawBoxes(image, filtered_windows, color=(0, 0, 255), thick=1)
@@ -180,7 +185,7 @@ class TLClassifier(object):
         all_bm = fcn.classify(self.session,keep_prob, input, logits,image)
  #       all_bm = image#dummy
           
-        rospy.loginfo("tl light %s %s",all_bm.shape, np.sum(all_bm))
+#        rospy.loginfo("tl light %s %s",all_bm.shape, np.sum(all_bm))
         bitmap = None
         if np.sum(all_bm) > 50:
 #            rospy.loginfo("found tl light")
@@ -190,10 +195,13 @@ class TLClassifier(object):
             return None
         
         center = self.find_center(windows,bitmap)
-        rospy.loginfo("found %s",center)
+        if center is None:
+            return None
+#        rospy.loginfo("found %s",center)
 
 #        rospy.loginfo("best state %s count %s",center, max_count)
         x,y = (int(center[0]*orig_image.shape[1]/256),int(center[1]*orig_image.shape[0]/256))
+#        rospy.loginfo("found tl at %s %s",center,(x,y))
         return (x,y)                                   
         
     #the process chain for an image for the simulator 
@@ -272,7 +280,6 @@ class TLClassifier(object):
             pos = self.find_real_class_position(image,False)
             
         if pos is not None:
-            rospy.loginfo("classifier pos %s",pos)
             return  pos
         return (None,None)       
 

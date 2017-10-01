@@ -305,7 +305,7 @@ class TLDetector_Train(object):
       (X_train, X_test, y_train, y_test,X_scaler) = self.getFeatures(param,red,green,yellow)
     
     #train
-      svc = SGDClassifier(fit_intercept=False, loss="squared_hinge", n_jobs=-1, learning_rate="optimal", penalty="elasticnet", class_weight="balanced",n_iter=10, alpha=0.01)
+      svc = SGDClassifier(fit_intercept=False, loss="squared_hinge", n_jobs=-1, learning_rate="optimal", penalty="elasticnet", class_weight="balanced",max_iter=10, alpha=0.01)
       svc.fit(X_train, y_train)
     
     #get the accuracy      
@@ -388,7 +388,7 @@ class TLDetector_Train(object):
         #read all
         (red,green,yellow) = self.readDatabase(False)
         #train the best choice
-        param = ("RGB","ALL",True,True,False,3)
+        param = ("YCrCb","ALL",True,True,False,3)
         (X_scaler,svc,acccuracy) = self.train(param,red,green,yellow)
     
         #save the calibration in a pickle file
