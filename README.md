@@ -151,7 +151,7 @@ This node publishes to the following topics:
 
 1. **/traffic_waypoint:** To publish the index of the closest waypoint to the red traffic light's stop line.
 2. **/traffic_light:** To publish upcoming traffic light information (TrafficLight)
-3. **/traffic_light_image:** To publish cropped images of traffic lights for testing. This topic is just for testing purposes in case someone wants to view the images with a tools like rviz.
+3. **/traffic_light_image:** To publish cropped images of traffic lights for testing. This topic is just for testing purposes in case someone wants to view the images with tools like rviz.
 
 Parameters are used to define and create ground truth and/or training data. Please check the launch file.
 
@@ -187,7 +187,7 @@ If task "best" is executed a trained svc.p file is written, which is used in the
 
 ##### For Real World
 A Fully Convolutional Neural Network is trained for segmentation of real world images to find a bitmap that contains a traffic light.
-The classification of traffic light using the subimage of the segmentated image is done using an SVM as multiple class segmentation of the FCN was accurate enough. `light_classification\tl_fcn_classifier.py` contains the code for FCN segmentation.
+The classification of traffic light using the subimage of the segmented image is done using an SVM as multiple class segmentation of the FCN was accurate enough. `light_classification\tl_fcn_classifier.py` contains the code for FCN segmentation.
 
 The training of the FCN is started by calling tl\_detector\light\_classification\main1\_class.py
 
