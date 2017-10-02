@@ -32,7 +32,7 @@ A demo video can be viewed at [this link](https://youtu.be/zid5BqIE600)
 	```
 
 2. Install python dependencies
- 
+
 	```bash
 	cd CarND-Capstone/CarND-Capstone
 	pip install -r requirements.txt
@@ -92,7 +92,7 @@ This node publishes to following topics:
 
 #### DBW Node (dbw_node)
 
-This node is responsible for vehicle control (acceleration, steering, brake). 
+This node is responsible for vehicle control (acceleration, steering, brake).
 
 This node subscribes to the following topics:
 
@@ -116,12 +116,21 @@ To calculate vehicle control commands for steering, throttle and brake this node
 	VELOCITY_Ki = 0.0
 	VELOCITY_Kd = 0.0
 	```
+Based on the output of this PID controller, the target linear acceleration will be calculated and used in the acceleration controller described below. When the linear velocity is below the target velocity, the controller will output a positive value and viceversa.
+
 2. **PID Controller for acceleration** to accelerate the vehicle smoothly. It uses this PID controller with the following parameters
 	```
 	ACCEL_Kp = 0.4
 	ACCEL_Ki = 0.1
 	ACCEL_Kd = 0.0
 	```
+This controller will generate the control value to drive both the throttle and brake of the car.
+
+Since the throttle command is given as a percentage, the output of this PID will be directly used to generate the throttle value.
+
+However, in the case of the brake command value, the needed units are given as braking torque. Therefore, the output of the acceleration PID will be multiplied by an estimate of the overall car mass and the wheel radius, both provided as initialization parameters for the controller.
+Furthermore, brake dead-band is also taken into account to avoid constant braking on situation on which the acceleration PID outputs values in the vicinity of zero.
+
 3. **PID Controller for steering angle** to reduce the error of target steering angle calculated using _Yaw Controller_. It uses the following parameters
 	```
 	STEER_Kp = 0.8
@@ -129,6 +138,13 @@ To calculate vehicle control commands for steering, throttle and brake this node
 	STEER_Kd = 0.3
 	```
 4. **Yaw Controller** to calculate the steering angle based on the current linear velocity and the target linear and angular velocity. The result of this controller is added to the error value received from _PID Controller for steering angle_.
+
+This controller will simply use target angular velocity (rate of turn) and target linear speed to estimate the curvature radius of the road.
+
+It will then apply the bicycle model and use the steering wheel ratio, the wheel base and the road radius to calculate the needed steering wheel angle.
+
+All of the above will be done considering maximum/minimum limits of both steering wheel angle and lateral acceleration.
+
 5. **Low pass filter for acceleration** is used in conjunction with _PID controller for acceleration_ to calculate acceleration commands. It uses following parameters
 	```
 	ACCEL_Tau = 0.5
@@ -138,7 +154,7 @@ The PID controllers are reset when the DBW status changes. For example when a sa
 
 #### Traffic light detection node (tl_detector)
 
-This node is responsible for detecting and classifying traffic lights. If the traffic light is identified as red then it finds the closest waypoint to that red light's stop line and publishes the index of that waypoint to the _/traffic_waypoint_ topic. 
+This node is responsible for detecting and classifying traffic lights. If the traffic light is identified as red then it finds the closest waypoint to that red light's stop line and publishes the index of that waypoint to the _/traffic_waypoint_ topic.
 
 This node subscribes to the following topics:
 
@@ -164,7 +180,7 @@ Parameters are used to define and create ground truth and/or training data. Plea
 	- It transforms each traffic light waypoint to the vehicle's coordinate system.
 	- It finds the traffic light waypoint that is closest to the vehicle. It finds the closest waypoint by transforming the waypoints to the vehicle's coordinate system.
 	- After finding the traffic light waypoint if the distance from that traffic light waypoint is less than a certain threshold then it is considered otherwise discarded.
-	- If traffic light is close then traffic light state (red, green, yellow) is identified using the last image received from on vehicle camera and the `TLClassifier` class present in `tl_detector/light_classification/tl_classifier.py`. 
+	- If traffic light is close then traffic light state (red, green, yellow) is identified using the last image received from on vehicle camera and the `TLClassifier` class present in `tl_detector/light_classification/tl_classifier.py`.
 	- This identified state of traffic light must be detected for a certain threshold `STATE_COUNT_THRESHOLD` for it to be accepted.
 	- If the new traffic light state is detected more than `STATE_COUNT_THRESHOLD` times then we check previous light state also to classify new light state as _green to yellow or red light_
 	- If red light (green to yellow or red light) state is detected then its corresponding waypoint is published to `/traffic_waypoint`
@@ -176,7 +192,7 @@ The classification model used for real world is different than that of simulator
 
 ##### For Simulator
 
-Node to train an SVM for four states (red, green, yellow). Features like HOG, spatial and histogram are collected and in different color spaces. 
+Node to train an SVM for four states (red, green, yellow). Features like HOG, spatial and histogram are collected and in different color spaces.
 Data is read as defined by parameters in launch file so that different techniques, features and color space selection can be tried just by changing parameters as parameters allow different operations on the SVM training. Run it with following command.
 
 ```
@@ -186,14 +202,25 @@ roslaunch tl_detector train_sim_svm.launch
 If task "best" is executed a trained svc.p file is written, which is used in the tl_classifier. Using RGB color space, all channels, and spatial and histogram only features for feature space we got `99% accuracy` on red 1290 green 213 yellow 203 unknown 56 images.
 
 ##### For Real World
-A Fully Convolutional Neural Network is trained for segmentation of real world images to find a bitmap that contains a traffic light.
-The classification of traffic light using the subimage of the segmented image is done using an SVM as multiple class segmentation of the FCN was accurate enough. `light_classification\tl_fcn_classifier.py` contains the code for FCN segmentation.
+A Fully Convolutional Neural Network is trained for segmentation of real world images to find a bitmap that contains a traffic light. This fully convolutional networks follows exactly the same architecture as used in the Semantic Segmentation project in term 3 of the Nanodegree.
+The paper [Fully Convolutional Networks for Semantic Segmentation](https://arxiv.org/pdf/1605.06211.pdf) provides an excellent description of the network architecture in use, based on VGG. Nevertheless, the image below provides a synthetic view of the overall FCN idea.
+
+![](./CarND-Capstone/imgs/network_architecture.png)
+
+A FCN will basically be composed of a standard convolutional network (in our case based of VGG), where the fully connected layers will be removed and replaced by 1x1 convolutions, allowing the preservation of the spatial information. Successive transposed convolutions and upscaling layers will then be added, so that the output of the network is of the same size of the input image. The values of each of the output image "pixels" will be assigned as a function of the class to which each pixel belongs.
+The addition of skip layers (bypassing several layers), allows the output image resolution of the classifier to remain close to that of the original image.
+
+The figure below shows the exact architecture of the VGG-based FCN used to detect the presence of traffic lights (not their state, but only the overall location of the traffic lights within the image), including the use of the skip layers.
+
+![](./CarND-Capstone/imgs/network_detail.png)
+
+The classification of traffic light using the sub-image of the segmented image is done using an SVM as multiple class segmentation of the FCN was accurate enough. `light_classification\tl_fcn_classifier.py` contains the code for FCN segmentation.
 
 The training of the FCN is started by calling tl\_detector\light\_classification\main1\_class.py
 
 ![segmentation example](left0140.jpg)
 
-Node to train an SVM for four states (red, green, yellow). Features like HOG, spatial and histogram are collected and in different color spaces. 
+Node to train an SVM for four states (red, green, yellow). Features like HOG, spatial and histogram are collected and in different color spaces.
 Data is read as defined by parameters in launch file so that different techniques, features and color space selection can be tried just by changing parameters as parameters allow different operations on the SVM training. Run it with following command.
 
 ```
@@ -213,14 +240,14 @@ Classification is done in 2 steps.
 1. **find_classification():** Given an image as input it returns the area containing the traffic light. This area of the image can then be fed to a classifier to classify.
 
 	As we are using two different models (SVM and FCN) for simulator and real world respectively so process is different for simulator and real world.
-	
-	- **For Simulator:** 
-		- Three binary images are created with each containing pixels that have value that lies in range of red, green and yellow color and rest of the pixels are zeroed out. 
+
+	- **For Simulator:**
+		- Three binary images are created with each containing pixels that have value that lies in range of red, green and yellow color and rest of the pixels are zeroed out.
 		- After that, from these three binary images (red, green, yellow), binary image with maximum on pixels is selected.
 		- Then sliding window technique is used to make up multiple windows to scan through region of interest in selected binary image. Windows with maximum on pixels are selected and a mean window of the selected windows is returned as region containing the traffic light.
-		
-	- **For Real World:** 
-		- The process is almost same for real world except instead of finding 3 binary images and then selecting one image, FCN is used to return segmented image. 
+
+	- **For Real World:**
+		- The process is almost same for real world except instead of finding 3 binary images and then selecting one image, FCN is used to return segmented image.
 		- Then sliding window technique is used to make up multiple windows to scan through region of interest in the segmented image. Windows with maximum on pixels are selected and a mean window of the selected windows is returned as region containing the traffic light.
 
 
@@ -228,14 +255,14 @@ Classification is done in 2 steps.
 	- Image is normalized first.
 	- Then sliding window technique is used with sliding window size of 64 and stride 1.
 	- `feature_detection.py` is used to collect features like HOG, spatial features and histogram. Feature detection is done with following parameters.
-	
+
 	```
 	orient = 9  # HOG orientations
 	pix_per_cell = 8 # HOG pixels per cell
 	spatial_size = (16, 16) # Spatial binning dimensions
 	hist_bins = 16    # Number of histogram bins
 	```
-	
+
 	- SVM is used to classify all those windows into desired classes (red, green, yellow)
 	- Class with maximum windows votes is selected as the final class.
 
@@ -267,5 +294,3 @@ The node publishes transformation messages required by the tl\_detection node an
 Task break down and management has been done at:
 
 [https://waffle.io/ucatie/CarND-Capstone](https://waffle.io/ucatie/CarND-Capstone)
-
-
