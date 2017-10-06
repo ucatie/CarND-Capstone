@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <launch>
+    <param name="run_dir" value="$(env PWD)"/>
+    
     <!--DBW Node -->
     <include file="$(find twist_controller)/launch/dbw.launch"/>
 
