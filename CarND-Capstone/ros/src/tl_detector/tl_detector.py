@@ -28,8 +28,6 @@ class TLDetector(object):
         self.lane = None
         self.camera_image = None
         self.gt_lights = []
-        self.run_dir = rospy.get_param('/run_dir')
-        rospy.loginfo("run_dir:%s",self.run_dir)
 
         # first waypoint index at the previous iteration
         self.prev_first_wpt_index = 0
@@ -57,10 +55,10 @@ class TLDetector(object):
         self.is_simulator = rospy.get_param('~is_simulator', True)
         rospy.loginfo("is_simulator:%s",self.is_simulator)
         
-        self.SVC_PATH =  os.path.join(self.run_dir,rospy.get_param('~SVC_PATH','svc.p'))       
+        self.SVC_PATH =  rospy.get_param('~SVC_PATH','svc.p')       
         rospy.loginfo("SVC_PATH:%s",self.SVC_PATH)
         
-        self.FCN_PATH =  os.path.join(self.run_dir,rospy.get_param('~FCN_PATH','fcn'))       
+        self.FCN_PATH =  rospy.get_param('~FCN_PATH','fcn')       
         rospy.loginfo("FCN_PATH:%s",self.FCN_PATH)
 
         sub1 = rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)

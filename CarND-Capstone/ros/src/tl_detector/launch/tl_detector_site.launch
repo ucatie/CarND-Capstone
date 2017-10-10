@@ -6,7 +6,7 @@
         <param name="ground_truth_dir" value="real_data_gt" />        
         <param name="ground_truth_start_number" value="1" />        
         <param name="is_simulator" value="False" />        
-        <param name="SVC_PATH" value="svc_real.p" />
-        <param name="FCN_PATH" value="fcn" />
+        <param name="SVC_PATH" value="$(find tl_detector)/svc_real.p" />
+        <param name="FCN_PATH" value="$(find tl_detector)/../../fcn" />
     </node>        
 </launch>
